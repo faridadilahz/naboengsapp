@@ -76,13 +76,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
 fonts:
-  - family: GoogleSans
-    fonts:
-      - asset: font/googlesans/GoogleSans-VariableFont_GRAD,opsz,wght.ttf
-
-  - family: Inter
-    fonts:
-      - asset: font/inter/Inter-VariableFont_opsz,wght.ttf
+    - family: Inter
+      fonts:
+        - asset: font/inter/Inter.ttf
 
   #   - family: Trajan Pro
   #     fonts:

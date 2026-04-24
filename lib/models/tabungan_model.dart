@@ -2,14 +2,16 @@ class Tabungan {
   String nama;
   int target;
   int perHari;
+  String tipe;
   String? imagePath;
-  bool isDone; // 🔥 TAMBAH INI
+  bool isDone;
 
   Tabungan({
     required this.nama,
     required this.target,
     required this.perHari,
+    required this.tipe,
     this.imagePath,
-    this.isDone = false, // default masih proses
+    this.isDone = false,
   });
 }

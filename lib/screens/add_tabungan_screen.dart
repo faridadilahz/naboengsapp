@@ -160,7 +160,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
               /// NOMINAL PERHARI
               const Text(
-                "Nominal tabungan perhari",
+                "Nominal tabungan",
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
@@ -213,7 +213,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   FilteringTextInputFormatter.digitsOnly,
                   RupiahFormatter(),
                 ],
-                decoration: inputDecoration("Nominal tabungan perhari"),
+                decoration: inputDecoration("Rencana nominal tabungan"),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return "Nominal wajib diisi!";
@@ -257,6 +257,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                         perHari: int.parse(
                           nominalController.text.replaceAll('.', ''),
                         ),
+                        tipe: selectedType,
                         imagePath: imageFile?.path,
                       );
 

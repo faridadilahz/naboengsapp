@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Target",
+                                    "Target tabungan",
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Color(0xffaaaaaa),
@@ -196,10 +196,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
 
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 6),
 
                                   Text(
-                                    "Per hari",
+                                    "Nominal tabungan ${item.tipe}",
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: Color(0xffaaaaaa),
@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
-                                      color: Color(0xFF555555),
+                                      color: Color(0xff555555),
                                     ),
                                   ),
                                 ],
