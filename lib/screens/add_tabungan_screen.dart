@@ -185,7 +185,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                         decoration: BoxDecoration(
                           color: isActive
                               ? const Color(0xFF1B6B5A)
-                              : Color(0xfffafafa),
+                              : Color(0xfff2f2f2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
@@ -290,9 +290,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
   InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(
+      color: Color(0xFFAAAAAA),
+    ),
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
-      fillColor: Color(0xfffafafa),
+      fillColor: Color(0xFFF2F2F2),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

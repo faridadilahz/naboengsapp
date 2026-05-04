@@ -5,6 +5,7 @@ import '../screens/add_tabungan_screen.dart';
 import '../models/tabungan_model.dart';
 import 'dart:io';
 import '../utils/format_rupiah.dart';
+import '../screens/detail_tabungan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -142,80 +143,88 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         final item = filteredList[index];
 
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffffffff),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Color(0xffeeeeee),
-                              width: 0.7,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailTabunganScreen(item: item),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Color(0xffeeeeee),
+                                width: 0.7,
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (item.imagePath != null)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.file(
-                                    File(item.imagePath!),
-                                    height: 144,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (item.imagePath != null)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.file(
+                                      File(item.imagePath!),
+                                      height: 144,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+
+                                const SizedBox(height: 8),
+
+                                Text(
+                                  item.nama,
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff222222),
                                   ),
                                 ),
 
-                              const SizedBox(height: 8),
-                              Text(
-                                item.nama,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff222222),
+                                const SizedBox(height: 8),
+
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      formatRupiah(item.target),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color: Color(0xFF555555),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 8),
+
+                                    Text(
+                                      "Tabungan per ${item.tipe}",
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xffaaaaaa),
+                                      ),
+                                    ),
+
+                                    Text(
+                                      formatRupiah(item.perHari),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Color(0xff555555),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Target tabungan",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Color(0xffaaaaaa),
-                                    ),
-                                  ),
-                                  Text(
-                                    formatRupiah(item.target),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Color(0xFF555555),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 6),
-
-                                  Text(
-                                    "Nominal tabungan ${item.tipe}",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Color(0xffaaaaaa),
-                                    ),
-                                  ),
-                                  Text(
-                                    formatRupiah(item.perHari),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Color(0xff555555),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
