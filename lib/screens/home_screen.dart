@@ -15,20 +15,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // 1. Deklarasi variabel harus di sini (di dalam State, di luar build)
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
+
   @override
   Widget build(BuildContext context) {
+    // 2. Logika filter harus di DALAM fungsi build sebelum return Scaffold
     List<Tabungan> filteredList = tabunganList.where((item) {
+      // Cek otomatis: kalau duit pas/lebih, status jadi true
+      if (item.terkumpul >= item.target) {
+        item.isDone = true;
+      } else {
+        item.isDone = false;
+      }
+
       if (selectedTab == 0) {
         return item.isDone == false;
       } else {
         return item.isDone == true;
       }
     }).toList();
-    return Scaffold(
-      backgroundColor: Color(0xffFDFFFF),
 
+    return Scaffold(
+      backgroundColor: const Color(0xffFDFFFF),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1B6B5A),
         elevation: 0,
@@ -52,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -74,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Dalam Proses",
                           style: TextStyle(
                             color: selectedTab == 0
-                                ? Color(0xFF1B6B5A)
+                                ? const Color(0xFF1B6B5A)
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
                             fontWeight: selectedTab == 0
@@ -86,14 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-
                 Container(
                   width: 1,
                   height: 16,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   color: Colors.grey.shade300,
                 ),
-
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
@@ -108,10 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           "Tercapai",
                           style: TextStyle(
                             color: selectedTab == 1
-                                ? Color(0xFF1B6B5A)
+                                ? const Color(0xFF1B6B5A)
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
-
                             fontWeight: selectedTab == 1
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -132,9 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Color(0xff777777),
               ),
             ),
-
             const SizedBox(height: 12),
-
             Expanded(
               child: tabunganList.isEmpty
                   ? const EmptyState()
@@ -151,7 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (context) =>
                                     DetailTabunganScreen(item: item),
                               ),
-                            );
+                            ).then((_) {
+                              setState(() {});
+                            });
                           },
                           child: Container(
                             margin: const EdgeInsets.only(bottom: 16),
@@ -160,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: const Color(0xffffffff),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: Color(0xffeeeeee),
+                                color: const Color(0xffeeeeee),
                                 width: 0.7,
                               ),
                             ),
@@ -177,9 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-
                                 const SizedBox(height: 8),
-
                                 Text(
                                   item.nama,
                                   style: const TextStyle(
@@ -188,9 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Color(0xff222222),
                                   ),
                                 ),
-
                                 const SizedBox(height: 8),
-
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -202,25 +204,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Color(0xFF555555),
                                       ),
                                     ),
-
                                     const SizedBox(height: 8),
-
-                                    Text(
-                                      "Tabungan per ${item.tipe}",
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Color(0xffaaaaaa),
+                                    // LOGIKA SWITCH UI CARD
+                                    if (selectedTab == 1) ...[
+                                      const Text(
+                                        "Tercapai!",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1B6B5A),
+                                          fontStyle: FontStyle.italic,
+                                        ),
                                       ),
-                                    ),
-
-                                    Text(
-                                      formatRupiah(item.perHari),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Color(0xff555555),
+                                    ] else ...[
+                                      Text(
+                                        "Tabungan per ${item.tipe}",
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color(0xffaaaaaa),
+                                        ),
                                       ),
-                                    ),
+                                      Text(
+                                        formatRupiah(item.perHari),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color(0xff555555),
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ],
@@ -233,7 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
       floatingActionButton: SizedBox(
         width: 72,
         height: 72,

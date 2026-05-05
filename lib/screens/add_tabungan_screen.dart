@@ -222,24 +222,6 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 },
               ),
 
-              const SizedBox(height: 16),
-
-              /// CATATAN
-              const Text(
-                "Catatan (Opsional)",
-                style: TextStyle(
-                  color: Color(0xff777777),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: catatanController,
-                maxLines: 3,
-                decoration: inputDecoration("Masukkan catatan tabungan disini"),
-              ),
-
               const SizedBox(height: 24),
 
               /// BUTTON SIMPAN
