@@ -142,33 +142,35 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD35D5D),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            child: const Text("Batal"),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (nominalController.text.isNotEmpty) {
-                                _prosesTransaksi(nominalController.text, catatanController.text, isTambah);
-                                Navigator.pop(context);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1B6B5A),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            child: const Text("Tambah"),
-                          ),
-                        ),
+  child: ElevatedButton(
+    onPressed: () => Navigator.pop(context),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFFD35D5D),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 48), // <-- Tingginya jadi 48
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    child: const Text("Batal"),
+  ),
+),
+const SizedBox(width: 12),
+Expanded(
+  child: ElevatedButton(
+    onPressed: () {
+      if (nominalController.text.isNotEmpty) {
+        _prosesTransaksi(nominalController.text, catatanController.text, isTambah);
+        Navigator.pop(context);
+      }
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF1B6B5A),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 48), // <-- Tingginya sama 48
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    child: const Text("Tambah"),
+  ),
+),
                       ],
                     ),
                   ],
@@ -269,7 +271,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Center(
-                    child: Text("Edit Riwayat Tabungan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF1B6B5A))),
+                    child: Text("Edit Riwayat Tabungan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Color(0xFF1B6B5A))),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -337,51 +339,52 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   Row(
   children: [
     Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.pop(context);
-          showPreviewRiwayat(context, index);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD35D5D),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          elevation: 0, // Biar clean kayak di gambar
-        ),
-        child: const Text("Batal"),
-      ),
+  child: ElevatedButton(
+    onPressed: () {
+      Navigator.pop(context);
+      showPreviewRiwayat(context, index);
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFFD35D5D),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 48), // <-- Tambahin ini (sesuaikan tingginya)
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 0,
     ),
-    
-    // NAH, INI KUNCINYA CUI, KASIH JARAK DI SINI
-    const SizedBox(width: 12), 
-    
-    Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          if (nominalController.text.isEmpty) return;
-          int nominalLama = data['nominal'];
-          int nominalInput = int.parse(nominalController.text.replaceAll(RegExp(r'[^0-9]'), ''));
-          int nominalBaru = isTambah ? nominalInput : -nominalInput;
+    child: const Text("Batal"),
+  ),
+),
 
-          setState(() {
-            widget.item.terkumpul = (widget.item.terkumpul - nominalLama) + nominalBaru;
-            widget.item.riwayat[index] = {
-              "nominal": nominalBaru,
-              "catatan": catatanController.text,
-              "tanggal": data['tanggal'],
-            };
-          });
-          Navigator.pop(context);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1B6B5A),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          elevation: 0,
-        ),
-        child: const Text("Simpan"),
-      ),
+const SizedBox(width: 12), 
+
+Expanded(
+  child: ElevatedButton(
+    onPressed: () {
+      if (nominalController.text.isEmpty) return;
+      int nominalLama = data['nominal'];
+      int nominalInput = int.parse(nominalController.text.replaceAll(RegExp(r'[^0-9]'), ''));
+      int nominalBaru = isTambah ? nominalInput : -nominalInput;
+
+      setState(() {
+        widget.item.terkumpul = (widget.item.terkumpul - nominalLama) + nominalBaru;
+        widget.item.riwayat[index] = {
+          "nominal": nominalBaru,
+          "catatan": catatanController.text,
+          "tanggal": data['tanggal'],
+        };
+      });
+      Navigator.pop(context);
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF1B6B5A),
+      foregroundColor: Colors.white,
+      minimumSize: const Size(double.infinity, 48), // <-- Samain tingginya di sini juga
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 0,
     ),
+    child: const Text("Simpan"),
+  ),
+),
   ],
 )
                 ],
