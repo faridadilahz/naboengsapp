@@ -20,15 +20,29 @@ class DetailTabunganScreen extends StatelessWidget {
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text("Edit", style: TextStyle(color: Colors.green)),
+  Padding(
+    padding: const EdgeInsets.only(right: 8), // 🔥 atur jaraknya di sini
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextButton(
+          onPressed: () {},
+          child: const Text(
+            "Edit",
+            style: TextStyle(color: Color(0xFF1B6B5A)),
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+        ),
+        TextButton(
+          onPressed: () {},
+          child: const Text(
+            "Hapus",
+            style: TextStyle(color: Colors.red),
           ),
-        ],
+        ),
+      ],
+    ),
+  ),
+],
       ),
 
       body: SingleChildScrollView(
@@ -105,36 +119,39 @@ class DetailTabunganScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             /// TERKUMPUL & SISA
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    const Text("Uang Terkumpul"),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatRupiah(0),
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      const Text("Uang Terkumpul"),
+                      const SizedBox(height: 4),
+                      Text(
+                        formatRupiah(0),
+                        style: const TextStyle(
+                          color: Color(0xFF1B6B5A),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Text("Uang Tersisa"),
-                    const SizedBox(height: 4),
-                    Text(
-                      formatRupiah(sisa),
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text("Uang Tersisa"),
+                      const SizedBox(height:   4),
+                      Text(
+                        formatRupiah(sisa),
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
 
             const SizedBox(height: 16),
@@ -154,27 +171,24 @@ class DetailTabunganScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 100), // placeholder kosong
-
-            /// BUTTON
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1B6B5A),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "Tambah nominal",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+            const SizedBox(height: 100),
           ],
+        ),
+      ),
+
+      /// 🔥 FAB (bener posisinya)
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // nanti logic tambah nominal
+        },
+        backgroundColor: const Color(0xFF1B6B5A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          "Tambah nominal",
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );

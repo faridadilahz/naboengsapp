@@ -68,7 +68,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 8),
@@ -113,7 +113,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 8),
@@ -136,7 +136,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 8),
@@ -164,7 +164,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 8),
@@ -230,7 +230,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 8),
@@ -245,7 +245,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               /// BUTTON SIMPAN
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: 56,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -295,7 +295,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
     ),
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
-      fillColor: Color(0xFFF2F2F2),
+      fillColor: Color(0xFFFAFAFA),
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
