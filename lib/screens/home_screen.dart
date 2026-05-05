@@ -141,25 +141,44 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Expanded(
               child: tabunganList.isEmpty
-                  ? const EmptyState()
-                  : ListView.builder(
-                      itemCount: filteredList.length,
-                      itemBuilder: (context, index) {
-                        final item = filteredList[index];
+    ? const EmptyState()
+    : ListView.builder(
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) {
+          final item = filteredList[index];
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailTabunganScreen(item: item),
-                              ),
-                            ).then((_) {
-                              setState(() {});
-                            });
-                          },
-                          child: Container(
+          return GestureDetector(
+            onTap: () async { // Tambahkan async di sini
+              // 1. Ambil result dari DetailTabunganScreen
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailTabunganScreen(item: item),
+                ),
+              );
+
+              // 2. Cek kalau result-nya adalah "delete"
+              if (result == "delete") {
+                setState(() {
+                  // Kita hapus berdasarkan objek 'item', 
+                  // karena kalau pake 'index' takutnya salah hapus 
+                  // akibat data yang sudah di-filter (Tercapai vs Dalam Proses)
+                  tabunganList.remove(item); 
+                });
+
+                // 3. Notifikasi biar user tau udah kehapus
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Tabungan '${item.nama}' berhasil dihapus!"),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+              } else {
+                // Ini logika lama lu, tetap dijaga buat update nominal/data
+                setState(() {});
+              }
+            },
+            child: Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(

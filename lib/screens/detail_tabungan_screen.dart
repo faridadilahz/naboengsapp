@@ -421,8 +421,31 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           }),
           const SizedBox(width: 8),
           _buildAppBarButton("Hapus", Icons.delete_outline, const Color(0xFFD35D5D), () {
-             Navigator.pop(context, "delete");
-          }),
+  // Tampilkan dialog konfirmasi sebelum hapus
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: const Text("Hapus Tabungan?"),
+        content: Text("Apakah Anda yakin ingin menghapus tabungan '${widget.item.nama}'?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Tutup dialog doang
+            child: const Text("Batal", style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Tutup dialog
+              Navigator.pop(context, "delete"); // Balik ke Home sambil kirim perintah delete
+            },
+            child: const Text("Hapus", style: TextStyle(color: Color(0xFFD35D5D), fontWeight: FontWeight.bold)),
+          ),
+        ],
+      );
+    },
+  );
+}),
           const SizedBox(width: 16),
         ],
       ),
