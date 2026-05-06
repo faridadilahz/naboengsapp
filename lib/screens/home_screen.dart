@@ -15,6 +15,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _hitungSisaHari(Tabungan item) {
+    // 1. Hitung sisa uang yang harus dikumpulkan
+    int sisaUang = item.target - item.terkumpul;
+
+    // 2. Kalau sudah lunas, langsung return selesai
+    if (sisaUang <= 0) return "Selesai hari ini";
+
+    // 3. Hitung berapa hari lagi berdasarkan nominal harian (perHari)
+    // Misal: Sisa 100rb, nabung 20rb/hari = 5 hari lagi.
+    int sisaHari = (sisaUang / item.perHari).ceil();
+
+    return "$sisaHari hari lagi";
+  }
+
   // 1. Deklarasi variabel harus di sini (di dalam State, di luar build)
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
@@ -141,44 +155,48 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Expanded(
               child: tabunganList.isEmpty
-    ? const EmptyState()
-    : ListView.builder(
-        itemCount: filteredList.length,
-        itemBuilder: (context, index) {
-          final item = filteredList[index];
+                  ? const EmptyState()
+                  : ListView.builder(
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        final item = filteredList[index];
 
-          return GestureDetector(
-            onTap: () async { // Tambahkan async di sini
-              // 1. Ambil result dari DetailTabunganScreen
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailTabunganScreen(item: item),
-                ),
-              );
+                        return GestureDetector(
+                          onTap: () async {
+                            // Tambahkan async di sini
+                            // 1. Ambil result dari DetailTabunganScreen
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailTabunganScreen(item: item),
+                              ),
+                            );
 
-              // 2. Cek kalau result-nya adalah "delete"
-              if (result == "delete") {
-                setState(() {
-                  // Kita hapus berdasarkan objek 'item', 
-                  // karena kalau pake 'index' takutnya salah hapus 
-                  // akibat data yang sudah di-filter (Tercapai vs Dalam Proses)
-                  tabunganList.remove(item); 
-                });
+                            // 2. Cek kalau result-nya adalah "delete"
+                            if (result == "delete") {
+                              setState(() {
+                                // Kita hapus berdasarkan objek 'item',
+                                // karena kalau pake 'index' takutnya salah hapus
+                                // akibat data yang sudah di-filter (Tercapai vs Dalam Proses)
+                                tabunganList.remove(item);
+                              });
 
-                // 3. Notifikasi biar user tau udah kehapus
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Tabungan '${item.nama}' berhasil dihapus!"),
-                    backgroundColor: Colors.redAccent,
-                  ),
-                );
-              } else {
-                // Ini logika lama lu, tetap dijaga buat update nominal/data
-                setState(() {});
-              }
-            },
-            child: Container(
+                              // 3. Notifikasi biar user tau udah kehapus
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Tabungan '${item.nama}' berhasil dihapus!",
+                                  ),
+                                  backgroundColor: Colors.redAccent,
+                                ),
+                              );
+                            } else {
+                              // Ini logika lama lu, tetap dijaga buat update nominal/data
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
@@ -249,6 +267,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           color: Color(0xff555555),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
+                                        child: Divider(
+                                          color: Color(0xffeeeeee),
+                                          thickness: 1,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          _hitungSisaHari(
+                                            item,
+                                          ), // Pastikan nama variabel di model sesuai
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xffaaaaaa),
+                                          ),
                                         ),
                                       ),
                                     ],

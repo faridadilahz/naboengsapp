@@ -16,7 +16,31 @@ class DetailTabunganScreen extends StatefulWidget {
 }
 
 class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
-  
+  String get estimasiSelesai {
+    int sisaUang = widget.item.target - widget.item.terkumpul;
+    if (sisaUang <= 0) return "Tercapai!";
+    if (widget.item.perHari <= 0) return "-";
+
+    int sisaHari = (sisaUang / widget.item.perHari).ceil();
+    DateTime tglSelesai = DateTime.now().add(Duration(days: sisaHari));
+
+    List<String> bulan = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
+    ];
+    return "${tglSelesai.day} ${bulan[tglSelesai.month - 1]} ${tglSelesai.year}";
+  }
+
   // LOGIKA PROSES (Bisa nambah / ngurang)
   void _prosesTransaksi(String nominalRaw, String catatan, bool isTambah) {
     try {
@@ -28,7 +52,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       int nominalFinal = isTambah ? nominal : -nominal;
 
       DateTime now = DateTime.now();
-      String formattedDate = "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year.toString().substring(2)}";
+      String formattedDate =
+          "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year.toString().substring(2)}";
 
       setState(() {
         widget.item.terkumpul += nominalFinal;
@@ -52,11 +77,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder( // WAJIB ada biar tombol bisa ganti warna pas diklik
+        return StatefulBuilder(
+          // WAJIB ada biar tombol bisa ganti warna pas diklik
           builder: (context, setDialogState) {
             return Dialog(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -66,11 +94,15 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     const Center(
                       child: Text(
                         "Tambah Nominal Tabungan",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF1B6B5A)),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Color(0xFF1B6B5A),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
+
                     // TOMBOL PILIHAN TAMBAH / KURANGI (Toggle UI)
                     Row(
                       children: [
@@ -80,12 +112,24 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: isTambah ? const Color(0xFF1B6B5A) : Colors.white,
+                                color: isTambah
+                                    ? const Color(0xFF1B6B5A)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: const Color(0xFF1B6B5A)),
+                                border: Border.all(
+                                  color: const Color(0xFF1B6B5A),
+                                ),
                               ),
                               child: Center(
-                                child: Text("+ Tambah", style: TextStyle(color: isTambah ? Colors.white : const Color((0xFF1B6B5A)), fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  "+ Tambah",
+                                  style: TextStyle(
+                                    color: isTambah
+                                        ? Colors.white
+                                        : const Color((0xFF1B6B5A)),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -97,36 +141,60 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: !isTambah ? const Color(0xFFD35D5D) : Colors.white,
+                                color: !isTambah
+                                    ? const Color(0xFFD35D5D)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: const Color(0xFFD35D5D)),
+                                border: Border.all(
+                                  color: const Color(0xFFD35D5D),
+                                ),
                               ),
                               child: Center(
-                                child: Text("- Kurangi", style: TextStyle(color: !isTambah ? Colors.white : const Color(0xFFD35D5D), fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  "- Kurangi",
+                                  style: TextStyle(
+                                    color: !isTambah
+                                        ? Colors.white
+                                        : const Color(0xFFD35D5D),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 20),
-                    const Text("Nominal tabungan", style: TextStyle(fontWeight: FontWeight.w500)),
+                    const Text(
+                      "Nominal tabungan",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: nominalController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, RupiahFormatter()],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        RupiahFormatter(),
+                      ],
                       decoration: InputDecoration(
                         hintText: "Masukkan Nominal",
                         filled: true,
                         fillColor: const Color(0xfff5f5f5),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    const Text("Catatan (Opsional)", style: TextStyle(fontWeight: FontWeight.w500)),
+                    const Text(
+                      "Catatan (Opsional)",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: catatanController,
@@ -134,43 +202,60 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         hintText: "Catatan",
                         filled: true,
                         fillColor: const Color(0xfff5f5f5),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
                     Row(
                       children: [
                         Expanded(
-  child: ElevatedButton(
-    onPressed: () => Navigator.pop(context),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFFD35D5D),
-      foregroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, 48), // <-- Tingginya jadi 48
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    ),
-    child: const Text("Batal"),
-  ),
-),
-const SizedBox(width: 12),
-Expanded(
-  child: ElevatedButton(
-    onPressed: () {
-      if (nominalController.text.isNotEmpty) {
-        _prosesTransaksi(nominalController.text, catatanController.text, isTambah);
-        Navigator.pop(context);
-      }
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF1B6B5A),
-      foregroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, 48), // <-- Tingginya sama 48
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    ),
-    child: const Text("Tambah"),
-  ),
-),
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFD35D5D),
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(
+                                double.infinity,
+                                48,
+                              ), // <-- Tingginya jadi 48
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text("Batal"),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (nominalController.text.isNotEmpty) {
+                                _prosesTransaksi(
+                                  nominalController.text,
+                                  catatanController.text,
+                                  isTambah,
+                                );
+                                Navigator.pop(context);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF1B6B5A),
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size(
+                                double.infinity,
+                                48,
+                              ), // <-- Tingginya sama 48
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text("Tambah"),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -200,13 +285,35 @@ Expanded(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Detail Tabungan", style: TextStyle(color: Color(0xFF1B6B5A), fontWeight: FontWeight.bold, fontSize: 18)),
+                  const Text(
+                    "Detail Tabungan",
+                    style: TextStyle(
+                      color: Color(0xFF1B6B5A),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                   const SizedBox(height: 16),
-                  Text("Nominal: ${formatRupiah(data['nominal'])}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: (data['nominal'] as int) < 0 ? Colors.red : const Color(0xFF1B6B5A))),
+                  Text(
+                    "Nominal: ${formatRupiah(data['nominal'])}",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: (data['nominal'] as int) < 0
+                          ? Colors.red
+                          : const Color(0xFF1B6B5A),
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  Text("Catatan: ${data['catatan']}", style: const TextStyle(color: Colors.grey)),
+                  Text(
+                    "Catatan: ${data['catatan']}",
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                   const SizedBox(height: 4),
-                  Text("Tanggal: ${data['tanggal']}", style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text(
+                    "Tanggal: ${data['tanggal']}",
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -214,9 +321,12 @@ Expanded(
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          showEditRiwayat(context, index); 
+                          showEditRiwayat(context, index);
                         },
-                        child: const Text("Edit", style: TextStyle(color: Color(0xFF1B6B5A))),
+                        child: const Text(
+                          "Edit",
+                          style: TextStyle(color: Color(0xFF1B6B5A)),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -226,7 +336,10 @@ Expanded(
                           });
                           Navigator.pop(context);
                         },
-                        child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+                        child: const Text(
+                          "Hapus",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ],
                   ),
@@ -252,9 +365,13 @@ Expanded(
     final data = widget.item.riwayat[index];
     int nominalAsli = (data['nominal'] as int).abs();
     bool isTambah = (data['nominal'] as int) >= 0;
-    
-    final TextEditingController nominalController = TextEditingController(text: nominalAsli.toString());
-    final TextEditingController catatanController = TextEditingController(text: data['catatan']);
+
+    final TextEditingController nominalController = TextEditingController(
+      text: nominalAsli.toString(),
+    );
+    final TextEditingController catatanController = TextEditingController(
+      text: data['catatan'],
+    );
 
     showDialog(
       context: context,
@@ -263,7 +380,9 @@ Expanded(
         builder: (context, setDialogState) {
           return Dialog(
             backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -271,7 +390,14 @@ Expanded(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Center(
-                    child: Text("Edit Riwayat Tabungan", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Color(0xFF1B6B5A))),
+                    child: Text(
+                      "Edit Riwayat Tabungan",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19,
+                        color: Color(0xFF1B6B5A),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -282,12 +408,24 @@ Expanded(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
-                              color: isTambah ? const Color(0xFF1B6B5A) : Colors.white,
+                              color: isTambah
+                                  ? const Color(0xFF1B6B5A)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(25),
-                              border: Border.all(color: const Color(0xFF1B6B5A)),
+                              border: Border.all(
+                                color: const Color(0xFF1B6B5A),
+                              ),
                             ),
                             child: Center(
-                              child: Text("+ Tambah", style: TextStyle(color: isTambah ? Colors.white : const Color(0xFF1B6B5A), fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "+ Tambah",
+                                style: TextStyle(
+                                  color: isTambah
+                                      ? Colors.white
+                                      : const Color(0xFF1B6B5A),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -299,12 +437,24 @@ Expanded(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
-                              color: !isTambah ? const Color(0xFFD35D5D) : Colors.white,
+                              color: !isTambah
+                                  ? const Color(0xFFD35D5D)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(25),
-                              border: Border.all(color: const Color(0xFFD35D5D)),
+                              border: Border.all(
+                                color: const Color(0xFFD35D5D),
+                              ),
                             ),
                             child: Center(
-                              child: Text("- Kurangi", style: TextStyle(color: !isTambah ? Colors.white : const Color(0xFFD35D5D), fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "- Kurangi",
+                                style: TextStyle(
+                                  color: !isTambah
+                                      ? Colors.white
+                                      : const Color(0xFFD35D5D),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -317,11 +467,17 @@ Expanded(
                   TextField(
                     controller: nominalController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly, RupiahFormatter()],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      RupiahFormatter(),
+                    ],
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xfff5f5f5),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -332,66 +488,88 @@ Expanded(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xfff5f5f5),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
                   Row(
-  children: [
-    Expanded(
-  child: ElevatedButton(
-    onPressed: () {
-      Navigator.pop(context);
-      showPreviewRiwayat(context, index);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFFD35D5D),
-      foregroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, 48), // <-- Tambahin ini (sesuaikan tingginya)
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      elevation: 0,
-    ),
-    child: const Text("Batal"),
-  ),
-),
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            showPreviewRiwayat(context, index);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFD35D5D),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(
+                              double.infinity,
+                              48,
+                            ), // <-- Tambahin ini (sesuaikan tingginya)
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text("Batal"),
+                        ),
+                      ),
 
-const SizedBox(width: 12), 
+                      const SizedBox(width: 12),
 
-Expanded(
-  child: ElevatedButton(
-    onPressed: () {
-      if (nominalController.text.isEmpty) return;
-      int nominalLama = data['nominal'];
-      int nominalInput = int.parse(nominalController.text.replaceAll(RegExp(r'[^0-9]'), ''));
-      int nominalBaru = isTambah ? nominalInput : -nominalInput;
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (nominalController.text.isEmpty) return;
+                            int nominalLama = data['nominal'];
+                            int nominalInput = int.parse(
+                              nominalController.text.replaceAll(
+                                RegExp(r'[^0-9]'),
+                                '',
+                              ),
+                            );
+                            int nominalBaru = isTambah
+                                ? nominalInput
+                                : -nominalInput;
 
-      setState(() {
-        widget.item.terkumpul = (widget.item.terkumpul - nominalLama) + nominalBaru;
-        widget.item.riwayat[index] = {
-          "nominal": nominalBaru,
-          "catatan": catatanController.text,
-          "tanggal": data['tanggal'],
-        };
-      });
-      Navigator.pop(context);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF1B6B5A),
-      foregroundColor: Colors.white,
-      minimumSize: const Size(double.infinity, 48), // <-- Samain tingginya di sini juga
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      elevation: 0,
-    ),
-    child: const Text("Simpan"),
-  ),
-),
-  ],
-)
+                            setState(() {
+                              widget.item.terkumpul =
+                                  (widget.item.terkumpul - nominalLama) +
+                                  nominalBaru;
+                              widget.item.riwayat[index] = {
+                                "nominal": nominalBaru,
+                                "catatan": catatanController.text,
+                                "tanggal": data['tanggal'],
+                              };
+                            });
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1B6B5A),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(
+                              double.infinity,
+                              48,
+                            ), // <-- Samain tingginya di sini juga
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text("Simpan"),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -410,45 +588,77 @@ Expanded(
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         actions: [
-          _buildAppBarButton("Edit", Icons.edit_note, const Color(0xFF1B6B5A), () async {
-            final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditTabunganScreen(item: widget.item)));
-            if (result != null && result is Tabungan) {
-              setState(() {
-                widget.item.nama = result.nama;
-                widget.item.target = result.target;
-                widget.item.perHari = result.perHari;
-                widget.item.tipe = result.tipe;
-                widget.item.imagePath = result.imagePath;
-              });
-            }
-          }),
-          const SizedBox(width: 8),
-          _buildAppBarButton("Hapus", Icons.delete_outline, const Color(0xFFD35D5D), () {
-  // Tampilkan dialog konfirmasi sebelum hapus
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text("Hapus Tabungan?"),
-        content: Text("Apakah Anda yakin ingin menghapus tabungan '${widget.item.nama}'?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context), // Tutup dialog doang
-            child: const Text("Batal", style: TextStyle(color: Colors.grey)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Tutup dialog
-              Navigator.pop(context, "delete"); // Balik ke Home sambil kirim perintah delete
+          _buildAppBarButton(
+            "Edit",
+            Icons.edit_note,
+            const Color(0xFF1B6B5A),
+            () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditTabunganScreen(item: widget.item),
+                ),
+              );
+              if (result != null && result is Tabungan) {
+                setState(() {
+                  widget.item.nama = result.nama;
+                  widget.item.target = result.target;
+                  widget.item.perHari = result.perHari;
+                  widget.item.tipe = result.tipe;
+                  widget.item.imagePath = result.imagePath;
+                });
+              }
             },
-            child: const Text("Hapus", style: TextStyle(color: Color(0xFFD35D5D), fontWeight: FontWeight.bold)),
           ),
-        ],
-      );
-    },
-  );
-}),
+          const SizedBox(width: 8),
+          _buildAppBarButton(
+            "Hapus",
+            Icons.delete_outline,
+            const Color(0xFFD35D5D),
+            () {
+              // Tampilkan dialog konfirmasi sebelum hapus
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    title: const Text("Hapus Tabungan?"),
+                    content: Text(
+                      "Apakah Anda yakin ingin menghapus tabungan '${widget.item.nama}'?",
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () =>
+                            Navigator.pop(context), // Tutup dialog doang
+                        child: const Text(
+                          "Batal",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Tutup dialog
+                          Navigator.pop(
+                            context,
+                            "delete",
+                          ); // Balik ke Home sambil kirim perintah delete
+                        },
+                        child: const Text(
+                          "Hapus",
+                          style: TextStyle(
+                            color: Color(0xFFD35D5D),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
           const SizedBox(width: 16),
         ],
       ),
@@ -457,13 +667,28 @@ Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.item.nama, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1B6B5A))),
+            Text(
+              widget.item.nama,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1B6B5A),
+              ),
+            ),
             const SizedBox(height: 12),
             if (widget.item.imagePath != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.file(File(widget.item.imagePath!), height: 160, width: double.infinity, fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(height: 160, color: Colors.grey.shade200, child: const Icon(Icons.broken_image)),
+                child: Image.file(
+                  File(widget.item.imagePath!),
+                  height: 160,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 160,
+                    color: Colors.grey.shade200,
+                    child: const Icon(Icons.broken_image),
+                  ),
                 ),
               ),
             const SizedBox(height: 16),
@@ -473,73 +698,185 @@ Expanded(
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(formatRupiah(widget.item.target), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1B6B5A))),
-                    Text("${formatRupiah(widget.item.perHari)}/${widget.item.tipe}", style: const TextStyle(color: Color(0xff777777))),
+                    Text(
+                      formatRupiah(widget.item.target),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1B6B5A),
+                      ),
+                    ),
+                    Text(
+                      "${formatRupiah(widget.item.perHari)}/${widget.item.tipe}",
+                      style: const TextStyle(color: Color(0xff777777)),
+                    ),
                   ],
                 ),
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    SizedBox(height: 50, width: 50, child: CircularProgressIndicator(value: persen, strokeWidth: 4, backgroundColor: Colors.grey.shade200, color: const Color(0xFF1B6B5A))),
-                    Text("$persenDisplay%", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey)),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CircularProgressIndicator(
+                        value: persen,
+                        strokeWidth: 4,
+                        backgroundColor: Colors.grey.shade200,
+                        color: const Color(0xFF1B6B5A),
+                      ),
+                    ),
+                    Text(
+                      "$persenDisplay%",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ],
-                )
+                ),
               ],
             ),
             const SizedBox(height: 24),
+            Column(
+              children: [
+                // Baris Tanggal Dibuat
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Tanggal dibuat",
+                      style: TextStyle(color: Color(0xffaaaaaa), fontSize: 15),
+                    ),
+                    Text(
+                      "${widget.item.tanggalDibuat.day} ${["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"][widget.item.tanggalDibuat.month - 1]} ${widget.item.tanggalDibuat.year}",
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF444444),
+                      ),
+                    ),
+                  ],
+                ),
+                // Baris Perkiraan Selesai
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Perkiraan selesai",
+                      style: TextStyle(color: Color(0xffaaaaaa), fontSize: 16),
+                    ),
+                    Text(
+                      estimasiSelesai,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF444444),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildSummaryItem("Uang Terkumpul", formatRupiah(uangTerkumpul), const Color(0xFF1B6B5A)),
-                _buildSummaryItem("Uang Tersisa", formatRupiah(sisa < 0 ? 0 : sisa), const Color(0xFFD35D5D)),
+                _buildSummaryItem(
+                  "Uang Terkumpul",
+                  formatRupiah(uangTerkumpul),
+                  const Color(0xFF1B6B5A),
+                ),
+                _buildSummaryItem(
+                  "Uang Tersisa",
+                  formatRupiah(sisa < 0 ? 0 : sisa),
+                  const Color(0xFFD35D5D),
+                ),
               ],
             ),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 12),
-            const Center(child: Text("Riwayat Tabungan", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1B6B5A)))),
-            const SizedBox(height: 16),
-            
-            widget.item.riwayat.isEmpty 
-              ? const Center(child: Text("Belum ada riwayat", style: TextStyle(color: Colors.grey)))
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.item.riwayat.length,
-                  itemBuilder: (context, index) {
-                    final data = widget.item.riwayat[index];
-                    int nominalRiwayat = data['nominal'];
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => showPreviewRiwayat(context, index), 
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  nominalRiwayat >= 0 ? "+${formatRupiah(nominalRiwayat)}" : formatRupiah(nominalRiwayat), 
-                                  style: TextStyle(fontWeight: FontWeight.bold, color: nominalRiwayat >= 0 ? const Color(0xFF1B6B5A) : Colors.red, fontSize: 16)
-                                ),
-                                Text(data['catatan'], style: const TextStyle(color: Colors.grey, fontSize: 13)),
-                              ],
-                            ),
-                            Text(data['tanggal'], style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+            const SizedBox(height: 8),
+
+            const Divider(color: Color(0xffeeeeee), thickness: 0.7, height: 32),
+
+            const SizedBox(height: 8),
+            const Center(
+              child: Text(
+                "Riwayat Tabungan",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF1B6B5A),
                 ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            widget.item.riwayat.isEmpty
+                ? const Center(
+                    child: Text(
+                      "Belum ada riwayat",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.item.riwayat.length,
+                    itemBuilder: (context, index) {
+                      final data = widget.item.riwayat[index];
+                      int nominalRiwayat = data['nominal'];
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => showPreviewRiwayat(context, index),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    nominalRiwayat >= 0
+                                        ? "+${formatRupiah(nominalRiwayat)}"
+                                        : formatRupiah(nominalRiwayat),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: nominalRiwayat >= 0
+                                          ? const Color(0xFF1B6B5A)
+                                          : Colors.red,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    data['catatan'],
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                data['tanggal'],
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
             const SizedBox(height: 100),
           ],
         ),
@@ -549,19 +886,33 @@ Expanded(
         backgroundColor: const Color(0xFF1B6B5A),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         icon: const Icon(Icons.edit_note, color: Colors.white),
-        label: const Text("Tambah nominal", style: TextStyle(color: Colors.white)),
+        label: const Text(
+          "Tambah nominal",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
 
-  Widget _buildAppBarButton(String label, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildAppBarButton(
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
-        onPressed: onTap, 
+        onPressed: onTap,
         icon: Icon(icon, size: 18),
         label: Text(label),
-        style: ElevatedButton.styleFrom(backgroundColor: color, foregroundColor: Colors.white, elevation: 0, padding: const EdgeInsets.symmetric(horizontal: 12), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        ),
       ),
     );
   }
@@ -571,7 +922,14 @@ Expanded(
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: valueColor, fontWeight: FontWeight.bold, fontSize: 15)),
+        Text(
+          value,
+          style: TextStyle(
+            color: valueColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+        ),
       ],
     );
   }

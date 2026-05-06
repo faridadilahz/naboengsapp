@@ -231,15 +231,31 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      // 1. Hitung dulu berapa hari yang dibutuhkan buat mencapai target
+                      int targetAngka = int.parse(
+                        targetController.text.replaceAll('.', ''),
+                      );
+                      int nominalAngka = int.parse(
+                        nominalController.text.replaceAll('.', ''),
+                      );
+
+                      // Target dibagi nominal harian = jumlah hari (dibulatkan ke atas pakai .ceil)
+                      int jumlahHari = (targetAngka / nominalAngka).ceil();
+
+                      // 2. Tentukan tanggal dibuat dan hitung estimasi selesainya
+                      DateTime sekarang = DateTime.now();
+                      DateTime tanggalEstimasi = sekarang.add(
+                        Duration(days: jumlahHari),
+                      );
                       final data = Tabungan(
                         nama: namaController.text,
-                        target: int.parse(
-                          targetController.text.replaceAll('.', ''),
-                        ),
-                        perHari: int.parse(
-                          nominalController.text.replaceAll('.', ''),
-                        ),
+                        target: targetAngka,
+                        perHari: nominalAngka,
                         tipe: selectedType,
+                        terkumpul: 0, // Inisialisasi awal 0
+                        tanggalDibuat: sekarang,
+                        estimasiSelesai:
+                            tanggalEstimasi, // MASUKIN VARIABEL INI
                         imagePath: imageFile?.path,
                       );
 
@@ -272,9 +288,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
   InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(
-      color: Color(0xFFAAAAAA),
-    ),
+      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
       fillColor: Color(0xFFFAFAFA),

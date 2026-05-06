@@ -5,18 +5,21 @@ class Tabungan {
   String tipe;
   String? imagePath;
   bool isDone;
-  // 🔥 TAMBAHKAN INI
-  int terkumpul; 
+  int terkumpul;
   List<Map<String, dynamic>> riwayat;
+  final DateTime tanggalDibuat; // Variabel penting buat track umur tabungan
+  DateTime estimasiSelesai;
 
   Tabungan({
     required this.nama,
     required this.target,
     required this.perHari,
     required this.tipe,
+    required this.tanggalDibuat,
+    required this.estimasiSelesai,
     this.imagePath,
     this.isDone = false,
-    this.terkumpul = 0, // 👈 Kasih default 0 biar gak null
-    List<Map<String, dynamic>>? riwayat, // 👈 Terima input riwayat tapi boleh kosong
-  }) : this.riwayat = riwayat ?? []; // 👈 Kalau kosong, kasih list []
+    this.terkumpul = 0,
+    List<Map<String, dynamic>>? riwayat,
+  }) : this.riwayat = riwayat ?? [];
 }
