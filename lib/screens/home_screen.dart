@@ -6,6 +6,8 @@ import '../models/tabungan_model.dart';
 import 'dart:io';
 import '../utils/format_rupiah.dart';
 import '../screens/detail_tabungan_screen.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,29 +17,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _hitungSisaHari(Tabungan item) {
-    // 1. Hitung sisa uang yang harus dikumpulkan
-    int sisaUang = item.target - item.terkumpul;
-
-    // 2. Kalau sudah lunas, langsung return selesai
-    if (sisaUang <= 0) return "Selesai hari ini";
-
-    // 3. Hitung berapa hari lagi berdasarkan nominal harian (perHari)
-    // Misal: Sisa 100rb, nabung 20rb/hari = 5 hari lagi.
-    int sisaHari = (sisaUang / item.perHari).ceil();
-
-    return "$sisaHari hari lagi";
-  }
-
-  // 1. Deklarasi variabel harus di sini (di dalam State, di luar build)
+  // 1. Deklarasi variabel
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
 
+  // --- TAMBAHAN BARU: Fungsi Load & Save Data ---
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadDataTabungan(); // Panggil data pas aplikasi dibuka
+  }
+
+  Future<void> _loadDataTabungan() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString('data_tabungan');
+
+    if (jsonString != null) {
+      List<dynamic> jsonList = jsonDecode(jsonString);
+      setState(() {
+        tabunganList = jsonList.map((item) => Tabungan.fromJson(item)).toList();
+      });
+    }
+  }
+
+  Future<void> _saveDataTabungan() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<Map<String, dynamic>> jsonList = tabunganList.map((item) => item.toJson()).toList();
+    String jsonString = jsonEncode(jsonList);
+    await prefs.setString('data_tabungan', jsonString);
+  }
+  // ---------------------------------------------
+
+  String _hitungSisaHari(Tabungan item) {
+    int sisaUang = item.target - item.terkumpul;
+    if (sisaUang <= 0) return "Selesai hari ini";
+    int sisaHari = (sisaUang / item.perHari).ceil();
+    return "$sisaHari hari lagi";
+  }
+
   @override
   Widget build(BuildContext context) {
-    // 2. Logika filter harus di DALAM fungsi build sebelum return Scaffold
+    // 2. Logika filter
     List<Tabungan> filteredList = tabunganList.where((item) {
-      // Cek otomatis: kalau duit pas/lebih, status jadi true
       if (item.terkumpul >= item.target) {
         item.isDone = true;
       } else {
@@ -163,26 +185,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return GestureDetector(
                           onTap: () async {
-                            // Tambahkan async di sini
-                            // 1. Ambil result dari DetailTabunganScreen
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailTabunganScreen(item: item),
+                                builder: (context) => DetailTabunganScreen(item: item),
                               ),
                             );
 
-                            // 2. Cek kalau result-nya adalah "delete"
                             if (result == "delete") {
                               setState(() {
-                                // Kita hapus berdasarkan objek 'item',
-                                // karena kalau pake 'index' takutnya salah hapus
-                                // akibat data yang sudah di-filter (Tercapai vs Dalam Proses)
                                 tabunganList.remove(item);
                               });
+                              
+                              _saveDataTabungan(); // <-- Simpan setelah dihapus
 
-                              // 3. Notifikasi biar user tau udah kehapus
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -192,8 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             } else {
-                              // Ini logika lama lu, tetap dijaga buat update nominal/data
                               setState(() {});
+                              _saveDataTabungan(); // <-- Simpan perubahan apapun (nambah nominal/edit tabungan)
                             }
                           },
                           child: Container(
@@ -242,7 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 8),
-                                    // LOGIKA SWITCH UI CARD
                                     if (selectedTab == 1) ...[
                                       const Text(
                                         "Tercapai!",
@@ -280,9 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Center(
                                         child: Text(
-                                          _hitungSisaHari(
-                                            item,
-                                          ), // Pastikan nama variabel di model sesuai
+                                          _hitungSisaHari(item),
                                           style: const TextStyle(
                                             fontSize: 14,
                                             color: Color(0xffaaaaaa),
@@ -319,6 +332,8 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 tabunganList.insert(0, result);
               });
+              
+              _saveDataTabungan(); // <-- Simpan setelah bikin tabungan baru
             }
           },
           child: const Icon(

@@ -68,7 +68,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     }
   }
 
-  // 1. DIALOG TAMBAH NOMINAL (LOGIKA PLUS MINUS)
+  // 1. DIALOG TAMBAH NOMINAL (UI POLISHED)
   void showTambahNominal(BuildContext context) {
     final TextEditingController nominalController = TextEditingController();
     final TextEditingController catatanController = TextEditingController();
@@ -78,15 +78,18 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       context: context,
       builder: (context) {
         return StatefulBuilder(
-          // WAJIB ada biar tombol bisa ganti warna pas diklik
           builder: (context, setDialogState) {
             return Dialog(
               backgroundColor: Colors.white,
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 24,
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16), // Radius lebih smooth
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(24), // Spacing lebih lega
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,27 +101,28 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           color: Color(0xFF1B6B5A),
+                          letterSpacing: 0.3,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
 
-                    // TOMBOL PILIHAN TAMBAH / KURANGI (Toggle UI)
+                    // TOMBOL PILIHAN TAMBAH / KURANGI (Modern Soft Toggle)
                     Row(
                       children: [
                         Expanded(
                           child: GestureDetector(
                             onTap: () => setDialogState(() => isTambah = true),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
                                 color: isTambah
                                     ? const Color(0xFF1B6B5A)
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(
-                                  color: const Color(0xFF1B6B5A),
-                                ),
+                                    : const Color(
+                                        0xFFE8F1EF,
+                                      ), // Soft green tint pas unselected
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: Center(
                                 child: Text(
@@ -126,28 +130,29 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   style: TextStyle(
                                     color: isTambah
                                         ? Colors.white
-                                        : const Color((0xFF1B6B5A)),
+                                        : const Color(0xFF1B6B5A),
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: GestureDetector(
                             onTap: () => setDialogState(() => isTambah = false),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
                                 color: !isTambah
                                     ? const Color(0xFFD35D5D)
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(
-                                  color: const Color(0xFFD35D5D),
-                                ),
+                                    : const Color(
+                                        0xFFFAEBEB,
+                                      ), // Soft red tint pas unselected
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: Center(
                                 child: Text(
@@ -157,6 +162,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                         ? Colors.white
                                         : const Color(0xFFD35D5D),
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
@@ -166,10 +172,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     const Text(
-                      "Nominal tabungan",
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      "Nominal Tabungan",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
@@ -179,54 +189,119 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         FilteringTextInputFormatter.digitsOnly,
                         RupiahFormatter(),
                       ],
+                      style: const TextStyle(fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: "Masukkan Nominal",
+                        hintStyle: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: 14,
+                        ),
                         filled: true,
-                        fillColor: const Color(0xfff5f5f5),
+                        fillColor: const Color(0xFFF8F9FA),
+                        prefixIcon: const Icon(
+                          Icons.payments_outlined,
+                          color: Color(0xFF1B6B5A),
+                          size: 22,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF1B6B5A),
+                            width: 1.5,
+                          ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const Text(
                       "Catatan (Opsional)",
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: catatanController,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
-                        hintText: "Catatan",
+                        hintText: "Contoh: Uang jajan, Sisa gajian",
+                        hintStyle: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: 14,
+                        ),
                         filled: true,
-                        fillColor: const Color(0xfff5f5f5),
+                        fillColor: const Color(0xFFF8F9FA),
+                        prefixIcon: const Icon(
+                          Icons.sticky_note_2_outlined,
+                          color: Colors.grey,
+                          size: 22,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF1B6B5A),
+                            width: 1.5,
+                          ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                     Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () => Navigator.pop(context),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD35D5D),
-                              foregroundColor: Colors.white,
-                              minimumSize: const Size(
-                                double.infinity,
-                                48,
-                              ), // <-- Tingginya jadi 48
+                              backgroundColor: Colors.white,
+                              foregroundColor: const Color(0xFFD35D5D),
+                              minimumSize: const Size(double.infinity, 48),
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
+                                side: const BorderSide(
+                                  color: Color(0xFFD35D5D),
+                                  width: 1,
+                                ),
                               ),
                             ),
-                            child: const Text("Batal"),
+                            child: const Text(
+                              "Batal",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -245,15 +320,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF1B6B5A),
                               foregroundColor: Colors.white,
-                              minimumSize: const Size(
-                                double.infinity,
-                                48,
-                              ), // <-- Tingginya sama 48
+                              minimumSize: const Size(double.infinity, 48),
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: const Text("Tambah"),
+                            child: const Text(
+                              "Tambah",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ],
@@ -330,15 +406,61 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          setState(() {
-                            widget.item.terkumpul -= (data['nominal'] as int);
-                            widget.item.riwayat.removeAt(index);
-                          });
-                          Navigator.pop(context);
+                          // Tampilkan dialog konfirmasi sebelum hapus riwayat
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext dialogContext) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                title: const Text("Hapus Riwayat?"),
+                                content: Text(
+                                  "Apakah Anda yakin ingin menghapus riwayat nominal ${formatRupiah(data['nominal'])}?",
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(
+                                      dialogContext,
+                                    ), // Tutup dialog konfirmasi aja
+                                    child: const Text(
+                                      "Batal",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      // 1. Tutup dialog konfirmasi
+                                      Navigator.pop(dialogContext);
+
+                                      // 2. Jalankan logika penghapusan
+                                      setState(() {
+                                        widget.item.terkumpul -=
+                                            (data['nominal'] as int);
+                                        widget.item.riwayat.removeAt(index);
+                                      });
+
+                                      // 3. Tutup dialog preview riwayat
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "Hapus",
+                                      style: TextStyle(
+                                        color: Color(0xFFD35D5D),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: const Text(
                           "Hapus",
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(
+                            color: Color(0xFFD35D5D),
+                          ), // Warna disamain biar konsisten
                         ),
                       ),
                     ],
@@ -360,7 +482,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     );
   }
 
-  // 3. DIALOG EDIT RIWAYAT
+  // 3. DIALOG EDIT RIWAYAT (UI POLISHED)
   void showEditRiwayat(BuildContext context, int index) {
     final data = widget.item.riwayat[index];
     int nominalAsli = (data['nominal'] as int).abs();
@@ -380,11 +502,15 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         builder: (context, setDialogState) {
           return Dialog(
             backgroundColor: Colors.white,
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 24,
+            ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,27 +520,28 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       "Edit Riwayat Tabungan",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 19,
+                        fontSize: 18,
                         color: Color(0xFF1B6B5A),
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
+
+                  // TOMBOL PILIHAN TAMBAH / KURANGI (Modern Soft Toggle)
                   Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
                           onTap: () => setDialogState(() => isTambah = true),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               color: isTambah
                                   ? const Color(0xFF1B6B5A)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                              border: Border.all(
-                                color: const Color(0xFF1B6B5A),
-                              ),
+                                  : const Color(0xFFE8F1EF),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(
@@ -424,26 +551,25 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                       ? Colors.white
                                       : const Color(0xFF1B6B5A),
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: GestureDetector(
                           onTap: () => setDialogState(() => isTambah = false),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               color: !isTambah
                                   ? const Color(0xFFD35D5D)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                              border: Border.all(
-                                color: const Color(0xFFD35D5D),
-                              ),
+                                  : const Color(0xFFFAEBEB),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(
@@ -453,6 +579,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                       ? Colors.white
                                       : const Color(0xFFD35D5D),
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -461,9 +588,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  const Text("Nominal tabungan"),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Nominal Tabungan",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   TextField(
                     controller: nominalController,
                     keyboardType: TextInputType.number,
@@ -471,30 +605,85 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                       RupiahFormatter(),
                     ],
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0xfff5f5f5),
+                      fillColor: const Color(0xFFF8F9FA),
+                      prefixIcon: const Icon(
+                        Icons.payments_outlined,
+                        color: Color(0xFF1B6B5A),
+                        size: 22,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF1B6B5A),
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text("Catatan"),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 18),
+                  const Text(
+                    "Catatan",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   TextField(
                     controller: catatanController,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: const Color(0xfff5f5f5),
+                      fillColor: const Color(0xFFF8F9FA),
+                      prefixIcon: const Icon(
+                        Icons.sticky_note_2_outlined,
+                        color: Colors.grey,
+                        size: 22,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF1B6B5A),
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                   Row(
                     children: [
                       Expanded(
@@ -504,23 +693,25 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             showPreviewRiwayat(context, index);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFD35D5D),
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(
-                              double.infinity,
-                              48,
-                            ), // <-- Tambahin ini (sesuaikan tingginya)
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFFD35D5D),
+                            minimumSize: const Size(double.infinity, 48),
                             elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(
+                                color: Color(0xFFD35D5D),
+                                width: 1,
+                              ),
+                            ),
                           ),
-                          child: const Text("Batal"),
+                          child: const Text(
+                            "Batal",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-
                       const SizedBox(width: 12),
-
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -551,16 +742,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF1B6B5A),
                             foregroundColor: Colors.white,
-                            minimumSize: const Size(
-                              double.infinity,
-                              48,
-                            ), // <-- Samain tingginya di sini juga
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            minimumSize: const Size(double.infinity, 48),
                             elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                          child: const Text("Simpan"),
+                          child: const Text(
+                            "Simpan",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ],
@@ -846,7 +1037,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   Text(
                                     nominalRiwayat >= 0
                                         ? "+${formatRupiah(nominalRiwayat)}"
-                                        : formatRupiah(nominalRiwayat),
+                                        : "-${formatRupiah(nominalRiwayat.abs())}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: nominalRiwayat >= 0
