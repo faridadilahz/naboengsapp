@@ -291,11 +291,28 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
       hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
-      fillColor: Color(0xFFFAFAFA),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      fillColor: const Color(0xFFFAFAFA), // Warna background inputan
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14), // Dikasih space dikit biar lega
+      
+      // 1. Border default (Bawaan pas lagi ga diklik)
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
+      ),
+      
+      // 2. Border pas form lagi ga diklik (enabled) biar makin rapi
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 1), 
+      ),
+      
+      // 3. INI YANG BIKIN JADI IJO PAS LAGI NGETIK / FOKUS
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Color(0xFF1B6B5A), // Warna ijo sesuai request kamu
+          width: 1.5, // Ditebelin dikit biar tegas kelihatannya
+        ),
       ),
     );
   }

@@ -416,7 +416,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                 ),
                                 title: const Text("Hapus Riwayat?"),
                                 content: Text(
-                                  "Apakah Anda yakin ingin menghapus riwayat nominal ${formatRupiah(data['nominal'])}?",
+                                  "Apakah Anda yakin ingin menghapus riwayat nominal ${(data['nominal'] as int) >= 0 ? "+${formatRupiah(data['nominal'])}" : "-${formatRupiah((data['nominal'] as int).abs())}"}?",
                                 ),
                                 actions: [
                                   TextButton(
