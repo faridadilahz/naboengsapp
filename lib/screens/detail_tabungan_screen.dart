@@ -376,7 +376,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: (data['nominal'] as int) < 0
-                          ? Colors.red
+                          ? const Color(0xFFD35D5D)
                           : const Color(0xFF1B6B5A),
                     ),
                   ),
@@ -1042,7 +1042,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                       fontWeight: FontWeight.bold,
                                       color: nominalRiwayat >= 0
                                           ? const Color(0xFF1B6B5A)
-                                          : Colors.red,
+                                          : const Color(0xFFD35D5D),
                                       fontSize: 16,
                                     ),
                                   ),
