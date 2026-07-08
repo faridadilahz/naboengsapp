@@ -51,7 +51,7 @@ flutter_native_splash:
   # if you specify this [required] background_image, then you should comment the 
   # [required] color in previous section. select one, they cant work together.
   background_image:      "assets/icon/background.png" #========[REQUIRED]============
-  background_image_dark: "assets/icon/background.png"
+  background_image_dark: "assets/icon/backgrounddark.png"
   # platform-specific background_image. will override general background_image if active:
   #background_image_android:      "assets/background-android.png"
   #background_image_dark_android: "assets/dark-background-android.png"
@@ -64,7 +64,7 @@ flutter_native_splash:
   # allows you to specify an image used in the splash screen. It must be a
   # png file and should be sized for 4x pixel density.
   image:                assets/icon/logosplash.png
-  image_dark:          assets/icon/logosplash.png
+  image_dark:          assets/icon/logosplashdark.png
   # platform-specific image. will override general image if active:
   #image_android:       assets/splash-android.png
   #image_dark_android:  assets/splash-invert-android.png
@@ -138,7 +138,7 @@ flutter_native_splash:
   android_12:
     # background color
     color: "#FFFFFF"
-    color_dark: "#FFFFFF"
+    color_dark: "#1B6B5A"
 
     # center-logo
     # If this parameter is not specified, the app's launcher icon will be used instead. 
@@ -147,11 +147,11 @@ flutter_native_splash:
     # without background: 1152×1152 px (fit within circle 768px in diameter)
     # ensure that the most important design elements of your image are placed within a circular area 
     image: assets/icon/logosplash.png  
-    image_dark: assets/icon/logosplash.png  
+    image_dark: assets/icon/logosplashdark.png  
 
     # center-logo background color
-    icon_background_color: "#FFFFFF"
-    icon_background_color_dark: "#FFFFFF"
+    # icon_background_color: "#FFFFFF"
+    # icon_background_color_dark: "#FFFFFF"
 
     # branding:
     # The branding image dimensions must be 800x320 px.
