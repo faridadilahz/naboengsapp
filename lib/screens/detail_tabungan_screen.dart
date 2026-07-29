@@ -59,7 +59,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         widget.item.terkumpul += nominalFinal;
         widget.item.riwayat.insert(0, {
           "nominal": nominalFinal,
-          "catatan": catatan.isEmpty ? (isTambah ? "-" : "-") : catatan,
+          "catatan": catatan.trim(),
           "tanggal": formattedDate,
         });
       });
@@ -588,7 +588,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       text: formatRupiah(nominalAsli), // Biar langsung terformat Rupiah pas dibuka
     );
     final TextEditingController catatanController = TextEditingController(
-      text: data['catatan'] == "-" ? "" : data['catatan'],
+      text: data['catatan'] ?? "",
     );
 
     // Kumpulkan nominal unik dari riwayat untuk chip pintar
@@ -916,9 +916,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                               setState(() {
                                 widget.item.terkumpul += selisih;
                                 data['nominal'] = nominalFinal;
-                                data['catatan'] = catatanController.text.isEmpty
-                                    ? "-"
-                                    : catatanController.text;
+                                data['catatan'] = catatanController.text.trim();
                               });
 
                               Navigator.pop(context);
