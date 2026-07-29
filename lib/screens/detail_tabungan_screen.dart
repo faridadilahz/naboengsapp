@@ -81,27 +81,20 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       int nominal = 0;
 
       if (r is Map) {
-        // Ambil data jika berbentuk Map
         isTambah = r['isTambah'] ?? true;
         nominal = (r['nominal'] is int)
             ? r['nominal']
             : int.tryParse(r['nominal'].toString()) ?? 0;
       } else {
-        // Ambil data jika berbentuk Objek (di-cast ke dynamic biar kompiler gak protes)
         final dynamic itemRiwayat = r;
         isTambah = itemRiwayat.isTambah ?? true;
         nominal = itemRiwayat.nominal ?? 0;
       }
 
-      // Kumpulkan semua transaksi penambahan (> 0) dan hindari angka duplikat
+      // Ambil HANYA transaksi penambahan (> 0) & hindari angka duplikat
       if (isTambah && nominal > 0 && !userNominals.contains(nominal)) {
         userNominals.add(nominal);
       }
-    }
-
-    // Fallback ke target perHari jika belum pernah ada transaksi tambah
-    if (userNominals.isEmpty && widget.item.perHari > 0) {
-      userNominals.add(widget.item.perHari);
     }
 
     int? selectedChipNominal;
@@ -314,7 +307,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   child: Text(
                                     "$formatted",
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontWeight: isSelected
                                           ? FontWeight.bold
                                           : FontWeight.normal,
@@ -600,6 +593,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
     // Kumpulkan nominal unik dari riwayat untuk chip pintar
     List<int> userNominals = [];
+
     for (dynamic r in widget.item.riwayat) {
       bool rIsTambah = false;
       int rNominal = 0;
@@ -618,10 +612,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       if (rIsTambah && rNominal > 0 && !userNominals.contains(rNominal)) {
         userNominals.add(rNominal);
       }
-    }
-
-    if (userNominals.isEmpty && widget.item.perHari > 0) {
-      userNominals.add(widget.item.perHari);
     }
 
     showDialog(
