@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:ionicons/ionicons.dart';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +91,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                   ),
                   child: imageFile == null
                       ? const Center(
-                          child: Icon(Ionicons.image_outline, size: 40),
+                          child: const Icon(Icons.image_outlined, size: 40),
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({super.key});
@@ -12,7 +11,12 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Ionicons.sad_outline, size: 86, color: Color(0xffaaaaaa)),
+            // Ganti Ionicons.sad_outline jadi Icons.sentiment_dissatisfied_outlined
+            Icon(
+              Icons.sentiment_dissatisfied_outlined,
+              size: 86,
+              color: Color(0xffaaaaaa),
+            ),
 
             SizedBox(height: 24),
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/empty_state.dart';
-import 'package:ionicons/ionicons.dart';
 import '../screens/add_tabungan_screen.dart';
 import '../models/tabungan_model.dart';
 import 'dart:io';
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedTab = 0;
 
   // --- TAMBAHAN BARU: Fungsi Load & Save Data ---
-  
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _saveDataTabungan() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Map<String, dynamic>> jsonList = tabunganList.map((item) => item.toJson()).toList();
+    List<Map<String, dynamic>> jsonList = tabunganList
+        .map((item) => item.toJson())
+        .toList();
     String jsonString = jsonEncode(jsonList);
     await prefs.setString('data_tabungan', jsonString);
   }
@@ -188,7 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailTabunganScreen(item: item),
+                                builder: (context) =>
+                                    DetailTabunganScreen(item: item),
                               ),
                             );
 
@@ -196,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               setState(() {
                                 tabunganList.remove(item);
                               });
-                              
+
                               _saveDataTabungan(); // <-- Simpan setelah dihapus
 
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -332,15 +334,11 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 tabunganList.insert(0, result);
               });
-              
+
               _saveDataTabungan(); // <-- Simpan setelah bikin tabungan baru
             }
           },
-          child: const Icon(
-            Ionicons.add_outline,
-            size: 36,
-            color: Colors.white,
-          ),
+          child: const Icon(Icons.add, size: 36, color: Colors.white),
         ),
       ),
     );

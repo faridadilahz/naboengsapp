@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:ionicons/ionicons.dart';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
@@ -86,8 +85,8 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(
-                              Ionicons.cloud_upload_outline,
+                            const Icon(
+                              Icons.cloud_upload_outlined,
                               color: Color(0xFF1B6B5A),
                               size: 32,
                             ),
@@ -182,6 +181,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
                         decoration: BoxDecoration(
                           color: isActive
                               ? const Color(0xFF1B6B5A)
@@ -292,20 +292,22 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
       fillColor: const Color(0xFFFAFAFA), // Warna background inputan
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14), // Dikasih space dikit biar lega
-      
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ), // Dikasih space dikit biar lega
       // 1. Border default (Bawaan pas lagi ga diklik)
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
       ),
-      
+
       // 2. Border pas form lagi ga diklik (enabled) biar makin rapi
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade200, width: 1), 
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
       ),
-      
+
       // 3. INI YANG BIKIN JADI IJO PAS LAGI NGETIK / FOKUS
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

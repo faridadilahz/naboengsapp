@@ -74,6 +74,38 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     final TextEditingController catatanController = TextEditingController();
     bool isTambah = true; // State awal: Tambah
 
+    List<int> userNominals = [];
+
+    for (dynamic r in widget.item.riwayat) {
+      bool isTambah = false;
+      int nominal = 0;
+
+      if (r is Map) {
+        // Ambil data jika berbentuk Map
+        isTambah = r['isTambah'] ?? true;
+        nominal = (r['nominal'] is int)
+            ? r['nominal']
+            : int.tryParse(r['nominal'].toString()) ?? 0;
+      } else {
+        // Ambil data jika berbentuk Objek (di-cast ke dynamic biar kompiler gak protes)
+        final dynamic itemRiwayat = r;
+        isTambah = itemRiwayat.isTambah ?? true;
+        nominal = itemRiwayat.nominal ?? 0;
+      }
+
+      // Kumpulkan semua transaksi penambahan (> 0) dan hindari angka duplikat
+      if (isTambah && nominal > 0 && !userNominals.contains(nominal)) {
+        userNominals.add(nominal);
+      }
+    }
+
+    // Fallback ke target perHari jika belum pernah ada transaksi tambah
+    if (userNominals.isEmpty && widget.item.perHari > 0) {
+      userNominals.add(widget.item.perHari);
+    }
+
+    int? selectedChipNominal;
+
     showDialog(
       context: context,
       builder: (context) {
@@ -189,6 +221,12 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         FilteringTextInputFormatter.digitsOnly,
                         RupiahFormatter(),
                       ],
+
+                      onChanged: (val) {
+                        setDialogState(() {
+                          selectedChipNominal = null;
+                        });
+                      },
                       style: const TextStyle(fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                         hintText: "Masukkan Nominal",
@@ -228,7 +266,72 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 8),
+
+                    if (userNominals.isNotEmpty) ...[
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: userNominals.map((amount) {
+                            String formatted = formatRupiah(amount);
+
+                            // 🔥 Cek langsung apakah isi TextField sama dengan angka Chip ini
+                            bool isSelected =
+                                nominalController.text == formatted;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: InkWell(
+                                onTap: () {
+                                  setDialogState(() {
+                                    if (isSelected) {
+                                      nominalController.clear();
+                                    } else {
+                                      nominalController.text = formatted;
+                                    }
+                                  });
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? const Color(
+                                            0xFF1B6B5A,
+                                          ).withOpacity(0.1)
+                                        : Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? const Color(0xFF1B6B5A)
+                                          : Colors.grey.shade100,
+                                      width: isSelected ? 1.5 : 1,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "$formatted",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      color: isSelected
+                                          ? const Color(0xFF1B6B5A)
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
                     const Text(
                       "Catatan (Opsional)",
                       style: TextStyle(
@@ -489,11 +592,37 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     bool isTambah = (data['nominal'] as int) >= 0;
 
     final TextEditingController nominalController = TextEditingController(
-      text: nominalAsli.toString(),
+      text: formatRupiah(nominalAsli), // Biar langsung terformat Rupiah pas dibuka
     );
     final TextEditingController catatanController = TextEditingController(
-      text: data['catatan'],
+      text: data['catatan'] == "-" ? "" : data['catatan'],
     );
+
+    // Kumpulkan nominal unik dari riwayat untuk chip pintar
+    List<int> userNominals = [];
+    for (dynamic r in widget.item.riwayat) {
+      bool rIsTambah = false;
+      int rNominal = 0;
+
+      if (r is Map) {
+        rIsTambah = (r['nominal'] is int) ? (r['nominal'] as int) >= 0 : true;
+        rNominal = (r['nominal'] is int)
+            ? (r['nominal'] as int).abs()
+            : int.tryParse(r['nominal'].toString())?.abs() ?? 0;
+      } else {
+        final dynamic itemRiwayat = r;
+        rIsTambah = itemRiwayat.isTambah ?? true;
+        rNominal = itemRiwayat.nominal ?? 0;
+      }
+
+      if (rIsTambah && rNominal > 0 && !userNominals.contains(rNominal)) {
+        userNominals.add(rNominal);
+      }
+    }
+
+    if (userNominals.isEmpty && widget.item.perHari > 0) {
+      userNominals.add(widget.item.perHari);
+    }
 
     showDialog(
       context: context,
@@ -528,7 +657,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // TOMBOL PILIHAN TAMBAH / KURANGI (Modern Soft Toggle)
+                  // TOGGLE TAMBAH / KURANGI
                   Row(
                     children: [
                       Expanded(
@@ -589,6 +718,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ],
                   ),
                   const SizedBox(height: 24),
+
                   const Text(
                     "Nominal Tabungan",
                     style: TextStyle(
@@ -598,6 +728,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+
                   TextField(
                     controller: nominalController,
                     keyboardType: TextInputType.number,
@@ -638,9 +769,71 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 18),
+
+                  const SizedBox(height: 8),
+
+                  // --- 🔥 CHIP QUICK ACTION DI EDIT RIWAYAT 🔥 ---
+                  if (userNominals.isNotEmpty) ...[
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: userNominals.map((amount) {
+                          String formatted = formatRupiah(amount);
+                          bool isSelected = nominalController.text == formatted;
+
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 6),
+                            child: InkWell(
+                              onTap: () {
+                                setDialogState(() {
+                                  if (isSelected) {
+                                    nominalController.clear();
+                                  } else {
+                                    nominalController.text = formatted;
+                                  }
+                                });
+                              },
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? const Color(0xFF1B6B5A).withOpacity(0.1)
+                                      : Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? const Color(0xFF1B6B5A)
+                                        : Colors.grey.shade100,
+                                    width: isSelected ? 1.5 : 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  "$formatted",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    color: isSelected
+                                        ? const Color(0xFF1B6B5A)
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
                   const Text(
-                    "Catatan",
+                    "Catatan (Opsional)",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.black87,
@@ -648,10 +841,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+
                   TextField(
                     controller: catatanController,
                     style: const TextStyle(fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
+                      hintText: "Contoh: Uang jajan, Sisa gajian",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 14,
+                      ),
                       filled: true,
                       fillColor: const Color(0xFFF8F9FA),
                       prefixIcon: const Icon(
@@ -683,15 +882,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 28),
+
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showPreviewRiwayat(context, index);
-                          },
+                          onPressed: () => Navigator.pop(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFFD35D5D),
@@ -715,29 +913,26 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (nominalController.text.isEmpty) return;
-                            int nominalLama = data['nominal'];
-                            int nominalInput = int.parse(
-                              nominalController.text.replaceAll(
-                                RegExp(r'[^0-9]'),
-                                '',
-                              ),
-                            );
-                            int nominalBaru = isTambah
-                                ? nominalInput
-                                : -nominalInput;
+                            if (nominalController.text.isNotEmpty) {
+                              String cleanNominal = nominalController.text
+                                  .replaceAll(RegExp(r'[^0-9]'), '');
+                              int nominalInput = int.parse(cleanNominal);
+                              int nominalFinal =
+                                  isTambah ? nominalInput : -nominalInput;
 
-                            setState(() {
-                              widget.item.terkumpul =
-                                  (widget.item.terkumpul - nominalLama) +
-                                  nominalBaru;
-                              widget.item.riwayat[index] = {
-                                "nominal": nominalBaru,
-                                "catatan": catatanController.text,
-                                "tanggal": data['tanggal'],
-                              };
-                            });
-                            Navigator.pop(context);
+                              int nominalLama = data['nominal'] as int;
+                              int selisih = nominalFinal - nominalLama;
+
+                              setState(() {
+                                widget.item.terkumpul += selisih;
+                                data['nominal'] = nominalFinal;
+                                data['catatan'] = catatanController.text.isEmpty
+                                    ? "-"
+                                    : catatanController.text;
+                              });
+
+                              Navigator.pop(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF1B6B5A),
