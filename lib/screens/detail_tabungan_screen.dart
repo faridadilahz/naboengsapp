@@ -585,7 +585,9 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     bool isTambah = (data['nominal'] as int) >= 0;
 
     final TextEditingController nominalController = TextEditingController(
-      text: formatRupiah(nominalAsli), // Biar langsung terformat Rupiah pas dibuka
+      text: formatRupiah(
+        nominalAsli,
+      ), // Biar langsung terformat Rupiah pas dibuka
     );
     final TextEditingController catatanController = TextEditingController(
       text: data['catatan'] ?? "",
@@ -907,8 +909,9 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                               String cleanNominal = nominalController.text
                                   .replaceAll(RegExp(r'[^0-9]'), '');
                               int nominalInput = int.parse(cleanNominal);
-                              int nominalFinal =
-                                  isTambah ? nominalInput : -nominalInput;
+                              int nominalFinal = isTambah
+                                  ? nominalInput
+                                  : -nominalInput;
 
                               int nominalLama = data['nominal'] as int;
                               int selisih = nominalFinal - nominalLama;
@@ -1194,86 +1197,94 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                   )
                 : ListView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemCount: widget.item.riwayat.length,
-  itemBuilder: (context, index) {
-    final data = widget.item.riwayat[index];
-    int nominalRiwayat = data['nominal'];
-    String catatan = (data['catatan'] ?? '').toString().trim();
-    bool hasCatatan = catatan.isNotEmpty;
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.item.riwayat.length,
+                    itemBuilder: (context, index) {
+                      final data = widget.item.riwayat[index];
+                      int nominalRiwayat = data['nominal'];
+                      String catatan = (data['catatan'] ?? '')
+                          .toString()
+                          .trim();
+                      bool hasCatatan = catatan.isNotEmpty;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => showPreviewRiwayat(context, index),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        // 🔥 Buat tinggi card tetep konsisten (misal: minimal 62px)
-        constraints: const BoxConstraints(minHeight: 62),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey.shade200),
-        ),
-        child: Row(
-          crossAxisAlignment: hasCatatan 
-              ? CrossAxisAlignment.start 
-              : CrossAxisAlignment.center, // Kunci alignment presisi
-          children: [
-            // Kiri: Nominal & Catatan
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    nominalRiwayat >= 0
-                        ? "+${formatRupiah(nominalRiwayat)}"
-                        : "-${formatRupiah(nominalRiwayat.abs())}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: nominalRiwayat >= 0
-                          ? const Color(0xFF1B6B5A)
-                          : const Color(0xFFD35D5D),
-                      fontSize: 16,
-                    ),
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => showPreviewRiwayat(context, index),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          // 🔥 Buat tinggi card tetep konsisten (misal: minimal 62px)
+                          constraints: const BoxConstraints(minHeight: 62),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: hasCatatan
+                                ? CrossAxisAlignment.start
+                                : CrossAxisAlignment
+                                      .center, // Kunci alignment presisi
+                            children: [
+                              // Kiri: Nominal & Catatan
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      nominalRiwayat >= 0
+                                          ? "+${formatRupiah(nominalRiwayat)}"
+                                          : "-${formatRupiah(nominalRiwayat.abs())}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: nominalRiwayat >= 0
+                                            ? const Color(0xFF1B6B5A)
+                                            : const Color(0xFFD35D5D),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    if (hasCatatan) ...[
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        catatan,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 13,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(width: 8),
+
+                              // Kanan: Tanggal (Sejajar horizontal dengan nominal)
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: hasCatatan ? 2.0 : 0.0,
+                                ),
+                                child: Text(
+                                  data['tanggal'],
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  if (hasCatatan) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      catatan,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 13,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            
-            const SizedBox(width: 8),
-
-            // Kanan: Tanggal (Sejajar horizontal dengan nominal)
-            Padding(
-              padding: EdgeInsets.only(top: hasCatatan ? 2.0 : 0.0),
-              child: Text(
-                data['tanggal'],
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  },
-),
             const SizedBox(height: 100),
           ],
         ),
