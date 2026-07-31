@@ -313,7 +313,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                           : FontWeight.normal,
                                       color: isSelected
                                           ? const Color(0xFF1B6B5A)
-                                          : Colors.black87,
+                                          : const Color(0xFF555555),
                                     ),
                                   ),
                                 ),
@@ -338,7 +338,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       controller: catatanController,
                       style: const TextStyle(fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
-                        hintText: "Contoh: Uang jajan, Sisa gajian",
+                        hintText: "Cth: Uang jajan",
                         hintStyle: TextStyle(
                           color: Colors.grey.shade400,
                           fontSize: 14,
@@ -812,7 +812,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                         : FontWeight.normal,
                                     color: isSelected
                                         ? const Color(0xFF1B6B5A)
-                                        : Colors.black87,
+                                        : Color(0xFF555555),
                                   ),
                                 ),
                               ),
@@ -838,7 +838,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     controller: catatanController,
                     style: const TextStyle(fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
-                      hintText: "Contoh: Uang jajan, Sisa gajian",
+                      hintText: "Cth: Uang Jajan",
                       hintStyle: TextStyle(
                         color: Colors.grey.shade400,
                         fontSize: 14,
