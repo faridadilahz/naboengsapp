@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import '../utils/format_rupiah.dart';
 import '../utils/rupiah_formatter.dart';
 import 'edit_tabungan_screen.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -16,6 +18,62 @@ class DetailTabunganScreen extends StatefulWidget {
 }
 
 class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
+  Future<void> _saveToPrefs({String? oldNama}) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString('data_tabungan');
+
+    if (jsonString != null) {
+      List<dynamic> jsonList = jsonDecode(jsonString);
+      List<Tabungan> list = jsonList
+          .map((item) => Tabungan.fromJson(item))
+          .toList();
+
+      // Pakai oldNama kalau ada (pas ganti nama tabungan), kalau tidak pakai widget.item.nama
+      String searchNama = oldNama ?? widget.item.nama;
+
+      int index = list.indexWhere((t) => t.nama == searchNama);
+
+      if (index != -1) {
+        list[index] = widget.item; // Timpa item dengan data terbaru
+        String updatedJson = jsonEncode(
+          list.map((item) => item.toJson()).toList(),
+        );
+        await prefs.setString(
+          'data_tabungan',
+          updatedJson,
+        ); // Simpan ke SharedPreferences!
+      }
+    }
+  }
+
+  void _openEditScreen() async {
+    // 1. Catat nama lama sebelum di-edit
+    String oldNama = widget.item.nama;
+
+    // 2. Buka layar EditTabunganScreen
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTabunganScreen(item: widget.item),
+      ),
+    );
+
+    // 3. Jika user menekan tombol "Simpan Perubahan" di EditTabunganScreen
+    if (result != null && result is Tabungan) {
+      setState(() {
+        // Update tampilan lokal dengan data baru dari EditTabunganScreen
+        widget.item.nama = result.nama;
+        widget.item.target = result.target;
+        widget.item.perHari = result.perHari;
+        widget.item.tipe = result.tipe;
+        widget.item.imagePath = result.imagePath;
+      });
+
+      // 4. 🔥 AUTOSAVE REALLTIME PAKAI OLD NAMA 🔥
+      await _saveToPrefs(oldNama: oldNama);
+    }
+  }
+
   String get estimasiSelesai {
     int sisaUang = widget.item.target - widget.item.terkumpul;
     if (sisaUang <= 0) return "Tercapai!";
@@ -63,6 +121,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           "tanggal": formattedDate,
         });
       });
+
+      _saveToPrefs();
     } catch (e) {
       debugPrint("Error saat proses transaksi: $e");
     }
@@ -535,7 +595,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                             (data['nominal'] as int);
                                         widget.item.riwayat.removeAt(index);
                                       });
-
+                                      _saveToPrefs();
                                       // 3. Tutup dialog preview riwayat
                                       Navigator.pop(context);
                                     },
@@ -922,6 +982,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                 data['catatan'] = catatanController.text.trim();
                               });
 
+                              _saveToPrefs();
+
                               Navigator.pop(context);
                             }
                           },
@@ -970,12 +1032,18 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             Icons.edit_note,
             const Color(0xFF1B6B5A),
             () async {
+              // 1. Catat nama lama sebelum di-edit
+              String oldNama = widget.item.nama;
+
+              // 2. Buka layar EditTabunganScreen
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditTabunganScreen(item: widget.item),
                 ),
               );
+
+              // 3. Pas balik membawa data baru
               if (result != null && result is Tabungan) {
                 setState(() {
                   widget.item.nama = result.nama;
@@ -984,6 +1052,9 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   widget.item.tipe = result.tipe;
                   widget.item.imagePath = result.imagePath;
                 });
+
+                // 4. 🔥 Simpan langsung pakai oldNama 🔥
+                await _saveToPrefs(oldNama: oldNama);
               }
             },
           ),
