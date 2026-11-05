@@ -14,7 +14,7 @@ class EmptyState extends StatelessWidget {
           children: const [
             // Ganti Ionicons.sad_outline jadi Icons.sentiment_dissatisfied_outlined
             Icon(
-              Ionicons.sad,
+              Ionicons.file_tray,
               size: 86,
               color: Color(0xffaaaaaa),
             ),

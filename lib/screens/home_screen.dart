@@ -7,6 +7,7 @@ import '../utils/format_rupiah.dart';
 import '../screens/detail_tabungan_screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ionicons/ionicons.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -342,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _saveDataTabungan(); // <-- Simpan setelah bikin tabungan baru
             }
           },
-          child: const Icon(Icons.add, size: 36, color: Colors.white),
+          child: const Icon(Ionicons.add, size: 36, color: Colors.white),
         ),
       ),
     );
