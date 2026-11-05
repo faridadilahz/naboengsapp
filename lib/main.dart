@@ -13,7 +13,7 @@ class NaboengsApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Naboengs',
-      theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'Inter'),
+      theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'Quicksand'),
       home: const HomeScreen(),
     );
   }

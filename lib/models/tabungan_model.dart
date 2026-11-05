@@ -23,9 +23,6 @@ class Tabungan {
     List<Map<String, dynamic>>? riwayat,
   }) : riwayat = riwayat ?? [];
 
-  // --- TAMBAH DARI SINI: Fungsi dari/ke JSON ---
-
-  // 1. Fungsi buat ngubah JSON ke Objek Tabungan (Buat nge-Load Data)
   factory Tabungan.fromJson(Map<String, dynamic> json) {
     return Tabungan(
       nama: json['nama'],
