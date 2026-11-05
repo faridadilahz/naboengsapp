@@ -7,7 +7,7 @@ import '../utils/format_rupiah.dart';
 import '../screens/detail_tabungan_screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ionicons/ionicons.dart'; 
+import 'package:ionicons/ionicons.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
               "Halo, Farid!",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
             ),
@@ -98,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
                 ),
             ),
           ],
@@ -129,8 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
                             fontWeight: selectedTab == 0
-                                ? FontWeight.w800
-                                : FontWeight.w500,
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                           ),
                         ),
                       ),
@@ -161,8 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
                             fontWeight: selectedTab == 1
-                                ? FontWeight.w800
-                                : FontWeight.w500,
+                                ? FontWeight.w600
+                                : FontWeight.w400,
                           ),
                         ),
                       ),
@@ -176,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
               "Tabunganmu",
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w400,
                 color: Color(0xff777777),
               ),
             ),
@@ -248,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   item.nama,
                                   style: const TextStyle(
                                     fontSize: 19,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     color: Color(0xff222222),
                                   ),
                                 ),
@@ -259,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(
                                       formatRupiah(item.target),
                                       style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 17,
                                         color: Color(0xFF555555),
                                       ),
@@ -270,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "Tercapai!",
                                         style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                           color: Color(0xFF1B6B5A),
                                           fontStyle: FontStyle.italic,
                                         ),
@@ -286,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         formatRupiah(item.perHari),
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 16,
                                           color: Color(0xff555555),
                                         ),

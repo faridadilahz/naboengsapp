@@ -28,7 +28,7 @@ class EmptyState extends StatelessWidget {
                 color: Color(0xffaaaaaa),
                 fontSize: 16,
                 height: 1.2,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

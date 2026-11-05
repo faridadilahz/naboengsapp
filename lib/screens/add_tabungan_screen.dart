@@ -4,7 +4,7 @@ import 'dart:io';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
-import 'package:ionicons/ionicons.dart'; 
+import 'package:ionicons/ionicons.dart';
 
 class AddTabunganScreen extends StatefulWidget {
   const AddTabunganScreen({super.key});
@@ -47,7 +47,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
           "Tambah Tabungan",
           style: TextStyle(
             color: Color(0xff222222),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: Colors.white,
@@ -64,7 +64,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
             children: [
               /// FOTO
               const Text(
-                "Foto Tabungan",
+                "Foto tabungan",
                 style: TextStyle(
                   color: Color(0xff777777),
                   fontSize: 16,
@@ -148,6 +148,11 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: targetController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  RupiahFormatter(),
+                ],
                 decoration: inputDecoration("Masukkan target tabungan disini"),
                 // ⚡ POPUP ADAPTIF ⚡
                 contextMenuBuilder: (context, editableTextState) {
@@ -216,6 +221,11 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
               TextFormField(
                 controller: nominalController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  RupiahFormatter(),
+                ],
                 decoration: inputDecoration("Masukkan nominal tabungan disini"),
                 // ⚡ POPUP ADAPTIF ⚡
                 contextMenuBuilder: (context, editableTextState) {
@@ -281,7 +291,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     "Simpan",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),

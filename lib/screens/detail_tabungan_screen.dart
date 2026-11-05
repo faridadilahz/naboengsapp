@@ -7,6 +7,7 @@ import '../utils/rupiah_formatter.dart';
 import 'edit_tabungan_screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ionicons/ionicons.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -183,7 +184,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       child: Text(
                         "Tambah Nominal Tabungan",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           fontSize: 18,
                           color: Color(0xFF1B6B5A),
                           letterSpacing: 0.3,
@@ -216,7 +217,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                     color: isTambah
                                         ? Colors.white
                                         : const Color(0xFF1B6B5A),
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -246,7 +247,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                     color: !isTambah
                                         ? Colors.white
                                         : const Color(0xFFD35D5D),
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -280,7 +281,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           selectedChipNominal = null;
                         });
                       },
-                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                       decoration: InputDecoration(
                         hintText: "Masukkan Nominal",
                         hintStyle: TextStyle(
@@ -290,8 +291,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         filled: true,
                         fillColor: const Color(0xFFF8F9FA),
                         prefixIcon: const Icon(
-                          Icons.payments_outlined,
-                          color: Color(0xFF1B6B5A),
+                          Ionicons.cash,
+                          color: Colors.grey,
                           size: 22,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
@@ -369,8 +370,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
+                                          ? FontWeight.w600
+                                          : FontWeight.w400,
                                       color: isSelected
                                           ? const Color(0xFF1B6B5A)
                                           : const Color(0xFF555555),
@@ -396,7 +397,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     const SizedBox(height: 8),
                     TextField(
                       controller: catatanController,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                       decoration: InputDecoration(
                         hintText: "Cth: Uang jajan",
                         hintStyle: TextStyle(
@@ -406,7 +407,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         filled: true,
                         fillColor: const Color(0xFFF8F9FA),
                         prefixIcon: const Icon(
-                          Icons.sticky_note_2_outlined,
+                          Ionicons.attach,
                           color: Colors.grey,
                           size: 22,
                         ),
@@ -456,7 +457,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             ),
                             child: const Text(
                               "Batal",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -484,7 +485,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             ),
                             child: const Text(
                               "Tambah",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -521,7 +522,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     "Detail Tabungan",
                     style: TextStyle(
                       color: Color(0xFF1B6B5A),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
                   ),
@@ -530,7 +531,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     "Nominal: ${formatRupiah(data['nominal'])}",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: (data['nominal'] as int) < 0
                           ? const Color(0xFFD35D5D)
                           : const Color(0xFF1B6B5A),
@@ -603,7 +604,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                       "Hapus",
                                       style: TextStyle(
                                         color: Color(0xFFD35D5D),
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
@@ -628,7 +629,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               right: 0,
               top: 0,
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.grey),
+                icon: const Icon(Ionicons.close, color: Colors.grey),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
@@ -700,7 +701,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     child: Text(
                       "Edit Riwayat Tabungan",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: 18,
                         color: Color(0xFF1B6B5A),
                         letterSpacing: 0.3,
@@ -731,7 +732,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   color: isTambah
                                       ? Colors.white
                                       : const Color(0xFF1B6B5A),
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
                               ),
@@ -759,7 +760,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   color: !isTambah
                                       ? Colors.white
                                       : const Color(0xFFD35D5D),
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
                               ),
@@ -788,12 +789,12 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                       RupiahFormatter(),
                     ],
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFFF8F9FA),
                       prefixIcon: const Icon(
-                        Icons.payments_outlined,
+                        Ionicons.cash,
                         color: Color(0xFF1B6B5A),
                         size: 22,
                       ),
@@ -868,8 +869,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
                                     color: isSelected
                                         ? const Color(0xFF1B6B5A)
                                         : Color(0xFF555555),
@@ -896,7 +897,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
                   TextField(
                     controller: catatanController,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
                       hintText: "Cth: Uang Jajan",
                       hintStyle: TextStyle(
@@ -906,7 +907,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       filled: true,
                       fillColor: const Color(0xFFF8F9FA),
                       prefixIcon: const Icon(
-                        Icons.sticky_note_2_outlined,
+                        Ionicons.attach,
                         color: Colors.grey,
                         size: 22,
                       ),
@@ -957,7 +958,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           ),
                           child: const Text(
                             "Batal",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -998,7 +999,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           ),
                           child: const Text(
                             "Simpan",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ),
@@ -1029,7 +1030,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         actions: [
           _buildAppBarButton(
             "Edit",
-            Icons.edit_note,
+            Ionicons.pencil,
             const Color(0xFF1B6B5A),
             () async {
               // 1. Catat nama lama sebelum di-edit
@@ -1061,7 +1062,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           const SizedBox(width: 8),
           _buildAppBarButton(
             "Hapus",
-            Icons.delete_outline,
+            Ionicons.trash,
             const Color(0xFFD35D5D),
             () {
               // Tampilkan dialog konfirmasi sebelum hapus
@@ -1097,7 +1098,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           "Hapus",
                           style: TextStyle(
                             color: Color(0xFFD35D5D),
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -1119,7 +1120,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               widget.item.nama,
               style: const TextStyle(
                 fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Color(0xFF1B6B5A),
               ),
             ),
@@ -1135,7 +1136,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: 160,
                     color: Colors.grey.shade200,
-                    child: const Icon(Icons.broken_image),
+                    child: const Icon(Ionicons.help),
                   ),
                 ),
               ),
@@ -1150,7 +1151,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       formatRupiah(widget.item.target),
                       style: const TextStyle(
                         fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Color(0xFF1B6B5A),
                       ),
                     ),
@@ -1177,7 +1178,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       "$persenDisplay%",
                       style: const TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.grey,
                       ),
                     ),
@@ -1200,7 +1201,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       "${widget.item.tanggalDibuat.day} ${["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"][widget.item.tanggalDibuat.month - 1]} ${widget.item.tanggalDibuat.year}",
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         color: Color(0xFF444444),
                       ),
                     ),
@@ -1218,7 +1219,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       estimasiSelesai,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
                         color: Color(0xFF444444),
                       ),
                     ),
@@ -1252,7 +1253,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               child: Text(
                 "Riwayat Tabungan",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 16,
                   color: Color(0xFF1B6B5A),
                 ),
@@ -1312,7 +1313,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                           ? "+${formatRupiah(nominalRiwayat)}"
                                           : "-${formatRupiah(nominalRiwayat.abs())}",
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
                                         color: nominalRiwayat >= 0
                                             ? const Color(0xFF1B6B5A)
                                             : const Color(0xFFD35D5D),
@@ -1364,10 +1365,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         onPressed: () => showTambahNominal(context),
         backgroundColor: const Color(0xFF1B6B5A),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        icon: const Icon(Icons.edit_note, color: Colors.white),
+        icon: const Icon(Ionicons.add, color: Colors.white),
         label: const Text(
           "Tambah nominal",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -1405,7 +1406,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           value,
           style: TextStyle(
             color: valueColor,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
             fontSize: 15,
           ),
         ),

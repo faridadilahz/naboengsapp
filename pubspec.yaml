@@ -55,9 +55,9 @@ flutter:
   uses-material-design: true
   
   fonts:
-    - family: Quicksand
+    - family: Fredoka
       fonts:
-        - asset: font/quicksand/Quicksand.ttf
+        - asset: font/fredoka/Fredoka.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
