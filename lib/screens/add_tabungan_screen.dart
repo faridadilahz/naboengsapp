@@ -4,6 +4,7 @@ import 'dart:io';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
+import 'package:ionicons/ionicons.dart'; 
 
 class AddTabunganScreen extends StatefulWidget {
   const AddTabunganScreen({super.key});
@@ -86,7 +87,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             const Icon(
-                              Icons.cloud_upload_outlined,
+                              Ionicons.cloud_upload,
                               color: Color(0xFF1B6B5A),
                               size: 32,
                             ),
