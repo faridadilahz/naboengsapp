@@ -119,6 +119,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               TextFormField(
                 controller: namaController,
                 decoration: inputDecoration("Masukkan nama tabungan disini"),
+                // ⚡ POPUP ADAPTIF ⚡
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return "Nama tabungan wajib diisi!";
@@ -141,12 +147,13 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: targetController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  RupiahFormatter(),
-                ],
                 decoration: inputDecoration("Masukkan target tabungan disini"),
+                // ⚡ POPUP ADAPTIF ⚡
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return "Target wajib diisi!";
@@ -208,12 +215,13 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
               TextFormField(
                 controller: nominalController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  RupiahFormatter(),
-                ],
-                decoration: inputDecoration("Rencana nominal tabungan"),
+                decoration: inputDecoration("Masukkan nominal tabungan disini"),
+                // ⚡ POPUP ADAPTIF ⚡
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return "Nominal wajib diisi!";
