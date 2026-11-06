@@ -330,7 +330,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     ),
                   ),
                   child: const Text(
-                    "Simpan",
+                    "SIMPAN",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

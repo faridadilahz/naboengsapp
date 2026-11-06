@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:ui';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
+import 'package:ionicons/ionicons.dart';
 
 class EditTabunganScreen extends StatefulWidget {
   final Tabungan item; // Wajib ada karena mau edit data yang sudah ada
@@ -12,6 +14,45 @@ class EditTabunganScreen extends StatefulWidget {
 
   @override
   State<EditTabunganScreen> createState() => _EditTabunganScreenState();
+}
+
+class DashedBorderPainter extends CustomPainter {
+  final Color color;
+  DashedBorderPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+
+    final RRect rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(16),
+    );
+
+    final Path path = Path()..addRRect(rrect);
+    final Path dashPath = Path();
+
+    double dashWidth = 6.0;
+    double dashSpace = 4.0;
+    double distance = 0.0;
+
+    for (PathMetric pathMetric in path.computeMetrics()) {
+      while (distance < pathMetric.length) {
+        dashPath.addPath(
+          pathMetric.extractPath(distance, distance + dashWidth),
+          Offset.zero,
+        );
+        distance += dashWidth + dashSpace;
+      }
+    }
+    canvas.drawPath(dashPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _EditTabunganScreenState extends State<EditTabunganScreen> {
@@ -31,15 +72,23 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
     // Inisialisasi controller dengan data lama
     namaController = TextEditingController(text: widget.item.nama);
     targetController = TextEditingController(
-      text: widget.item.target.toString(),
+      text: formatRupiahInitial(widget.item.target),
     );
     nominalController = TextEditingController(
-      text: widget.item.perHari.toString(),
+      text: formatRupiahInitial(widget.item.perHari),
     );
     selectedType = widget.item.tipe;
     if (widget.item.imagePath != null) {
       imageFile = File(widget.item.imagePath!);
     }
+  }
+
+  // Helper opsional buat format titik angka awal pas load data
+  String formatRupiahInitial(int number) {
+    return number.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        );
   }
 
   Future<void> pickImage() async {
@@ -55,19 +104,24 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Ionicons.arrow_back, color: Color(0xff333333)),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           "Edit Tabungan",
           style: TextStyle(
-            color: Color(0xff222222),
-            fontWeight: FontWeight.bold,
+            color: Color(0xff333333),
+            fontWeight: FontWeight.w600,
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        leading: const BackButton(color: Color(0xff222222)),
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -75,48 +129,92 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// FOTO
               const Text(
-                "Foto Tabungan",
-                style: TextStyle(color: Color(0xff777777), fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: pickImage,
-                child: Container(
-                  height: 120,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF1B6B5A)),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: imageFile == null
-                      ? const Center(
-                          child: const Icon(Icons.image_outlined, size: 40),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(imageFile!, fit: BoxFit.cover),
-                        ),
+                "Foto tabungan",
+                style: TextStyle(
+                  color: Color(0xff777777),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
+              const SizedBox(height: 8),
+
+              GestureDetector(
+                onTap: pickImage,
+                child: CustomPaint(
+                  painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
+                  child: Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: imageFile == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Ionicons.cloud_upload,
+                                color: Color(0xFF777777),
+                                size: 32,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Klik untuk unggah foto",
+                                style: TextStyle(
+                                  color: Color(0xFF777777),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.file(imageFile!, fit: BoxFit.cover),
+                          ),
+                  ),
+                ),
+              ),
+
               const SizedBox(height: 20),
 
+              /// NAMA
               const Text(
                 "Nama tabungan",
-                style: TextStyle(color: Color(0xff777777), fontSize: 16),
+                style: TextStyle(
+                  color: Color(0xff777777),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: namaController,
-                decoration: inputDecoration("Nama tabungan"),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? "Nama wajib diisi!" : null,
+                decoration: inputDecoration("Masukkan nama tabungan disini"),
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Nama tabungan wajib diisi!";
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 16),
+
+              /// TARGET
               const Text(
                 "Target tabungan",
-                style: TextStyle(color: Color(0xff777777), fontSize: 16),
+                style: TextStyle(
+                  color: Color(0xff777777),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -126,23 +224,44 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                   FilteringTextInputFormatter.digitsOnly,
                   RupiahFormatter(),
                 ],
-                decoration: inputDecoration("Target"),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? "Target wajib diisi!" : null,
+                decoration: inputDecoration("Masukkan target tabungan disini"),
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Target wajib diisi!";
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 16),
+
+              /// NOMINAL PERHARI
               const Text(
-                "Tipe Tabungan",
-                style: TextStyle(color: Color(0xff777777), fontSize: 16),
+                "Nominal tabungan",
+                style: TextStyle(
+                  color: Color(0xff777777),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               const SizedBox(height: 8),
+
               Row(
                 children: ["Harian", "Mingguan", "Bulanan"].map((e) {
                   bool isActive = selectedType == e;
+
                   return Expanded(
                     child: GestureDetector(
-                      onTap: () => setState(() => selectedType = e),
+                      onTap: () {
+                        setState(() {
+                          selectedType = e;
+                        });
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -150,7 +269,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                           color: isActive
                               ? const Color(0xFF1B6B5A)
                               : const Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
                           child: Text(
@@ -158,7 +277,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                             style: TextStyle(
                               color: isActive
                                   ? Colors.white
-                                  : const Color(0xff222222),
+                                  : const Color(0xFF777777),
                             ),
                           ),
                         ),
@@ -169,11 +288,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               ),
 
               const SizedBox(height: 16),
-              const Text(
-                "Nominal Tabungan",
-                style: TextStyle(color: Color(0xff777777), fontSize: 16),
-              ),
-              const SizedBox(height: 8),
+
               TextFormField(
                 controller: nominalController,
                 keyboardType: TextInputType.number,
@@ -181,19 +296,30 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                   FilteringTextInputFormatter.digitsOnly,
                   RupiahFormatter(),
                 ],
-                decoration: inputDecoration("Nominal"),
-                validator: (v) =>
-                    (v == null || v.isEmpty) ? "Nominal wajib diisi!" : null,
+                decoration: inputDecoration("Masukkan nominal tabungan disini"),
+                contextMenuBuilder: (context, editableTextState) {
+                  return SystemContextMenu.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Nominal wajib diisi!";
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 24),
+
+              /// BUTTON SIMPAN PERUBAHAN
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Kuncinya di sini: Kita bikin objek baru tapi bawa saldo lama
+                      // Tetap pakai logika PUT/EDIT kamu (saldo & riwayat lama aman)
                       final data = Tabungan(
                         nama: namaController.text,
                         target: int.parse(
@@ -206,8 +332,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                         tanggalDibuat: widget.item.tanggalDibuat,
                         estimasiSelesai: widget.item.estimasiSelesai,
                         imagePath: imageFile?.path,
-                        terkumpul:
-                            widget.item.terkumpul, // Tetap pake saldo lama
+                        terkumpul: widget.item.terkumpul, // Tetap pake saldo lama
                         riwayat: widget.item.riwayat, // Tetap pake riwayat lama
                         isDone: widget.item.isDone,
                       );
@@ -217,14 +342,14 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1B6B5A),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: const Text(
-                    "Simpan Perubahan",
+                    "SIMPAN PERUBAHAN",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16,
                     ),
                   ),
@@ -240,12 +365,28 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
+      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
       fillColor: const Color(0xFFFAFAFA),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(
+          color: Color(0xFF1B6B5A),
+          width: 1.5,
+        ),
       ),
     );
   }
