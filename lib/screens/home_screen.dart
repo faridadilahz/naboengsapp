@@ -339,6 +339,10 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 72,
               height: 72,
               child: FloatingActionButton(
+                elevation: 0,
+                focusElevation: 0,
+                hoverElevation: 0,
+                highlightElevation: 0,
                 backgroundColor: const Color(0xFF1B6B5A),
                 onPressed: _bukaFormTambahTabungan,
                 child: const Icon(Ionicons.add, size: 36, color: Colors.white),
