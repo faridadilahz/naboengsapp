@@ -41,6 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _bukaFormTambahTabungan() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTabunganScreen()),
+    );
+
+    if (result != null && result is Tabungan) {
+      setState(() {
+        tabunganList.insert(0, result);
+      });
+
+      _saveDataTabungan();
+    }
+  }
+
   Future<void> _saveDataTabungan() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<Map<String, dynamic>> jsonList = tabunganList
@@ -95,10 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 4),
             Text(
               "Nabung berapa hari ini?",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                ),
+              style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ],
         ),
@@ -182,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             Expanded(
               child: tabunganList.isEmpty
-                  ? const EmptyState()
+                  ? EmptyState(onAddPressed: _bukaFormTambahTabungan)
                   : ListView.builder(
                       itemCount: filteredList.length,
                       itemBuilder: (context, index) {
@@ -321,30 +333,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
-        width: 72,
-        height: 72,
-        child: FloatingActionButton(
-          backgroundColor: const Color(0xFF1B6B5A),
-          onPressed: () async {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AddTabunganScreen(),
+      floatingActionButton: tabunganList.isEmpty
+          ? null
+          : SizedBox(
+              width: 72,
+              height: 72,
+              child: FloatingActionButton(
+                backgroundColor: const Color(0xFF1B6B5A),
+                onPressed: _bukaFormTambahTabungan,
+                child: const Icon(Ionicons.add, size: 36, color: Colors.white),
               ),
-            );
-
-            if (result != null && result is Tabungan) {
-              setState(() {
-                tabunganList.insert(0, result);
-              });
-
-              _saveDataTabungan(); // <-- Simpan setelah bikin tabungan baru
-            }
-          },
-          child: const Icon(Ionicons.add, size: 36, color: Colors.white),
-        ),
-      ),
+            ),
     );
   }
 }
