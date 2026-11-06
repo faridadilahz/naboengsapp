@@ -1,13 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../models/tabungan_model.dart';
-import 'package:flutter/services.dart';
-import '../utils/format_rupiah.dart';
-import '../utils/rupiah_formatter.dart';
-import 'edit_tabungan_screen.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/tabungan_model.dart';
+import '../utils/format_rupiah.dart';
+import '../widgets/edit_riwayat_dialog.dart';
+import '../widgets/tambah_nominal_dialog.dart';
+import 'edit_tabungan_screen.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -29,49 +30,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           .map((item) => Tabungan.fromJson(item))
           .toList();
 
-      // Pakai oldNama kalau ada (pas ganti nama tabungan), kalau tidak pakai widget.item.nama
       String searchNama = oldNama ?? widget.item.nama;
-
       int index = list.indexWhere((t) => t.nama == searchNama);
 
       if (index != -1) {
-        list[index] = widget.item; // Timpa item dengan data terbaru
+        list[index] = widget.item;
         String updatedJson = jsonEncode(
           list.map((item) => item.toJson()).toList(),
         );
-        await prefs.setString(
-          'data_tabungan',
-          updatedJson,
-        ); // Simpan ke SharedPreferences!
+        await prefs.setString('data_tabungan', updatedJson);
       }
-    }
-  }
-
-  void _openEditScreen() async {
-    // 1. Catat nama lama sebelum di-edit
-    String oldNama = widget.item.nama;
-
-    // 2. Buka layar EditTabunganScreen
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditTabunganScreen(item: widget.item),
-      ),
-    );
-
-    // 3. Jika user menekan tombol "Simpan Perubahan" di EditTabunganScreen
-    if (result != null && result is Tabungan) {
-      setState(() {
-        // Update tampilan lokal dengan data baru dari EditTabunganScreen
-        widget.item.nama = result.nama;
-        widget.item.target = result.target;
-        widget.item.perHari = result.perHari;
-        widget.item.tipe = result.tipe;
-        widget.item.imagePath = result.imagePath;
-      });
-
-      // 4. 🔥 AUTOSAVE REALLTIME PAKAI OLD NAMA 🔥
-      await _saveToPrefs(oldNama: oldNama);
     }
   }
 
@@ -100,15 +68,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     return "${tglSelesai.day} ${bulan[tglSelesai.month - 1]} ${tglSelesai.year}";
   }
 
-  // LOGIKA PROSES (Bisa nambah / ngurang)
-  void _prosesTransaksi(String nominalRaw, String catatan, bool isTambah) {
-    try {
-      String cleanNominal = nominalRaw.replaceAll(RegExp(r'[^0-9]'), '');
-      if (cleanNominal.isEmpty) return;
+  // ⚡ 1. DIALOG TAMBAH NOMINAL (Memanggil Widget Terpisah) ⚡
+  void showTambahNominal(BuildContext context) async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) => TambahNominalDialog(item: widget.item),
+    );
 
-      int nominal = int.parse(cleanNominal);
-      // Kalau pilih kurangi, nominal dipaksa jadi negatif
-      int nominalFinal = isTambah ? nominal : -nominal;
+    if (result != null) {
+      int nominalFinal = result['nominal'];
+      String catatan = result['catatan'];
 
       DateTime now = DateTime.now();
       String formattedDate =
@@ -118,390 +87,45 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         widget.item.terkumpul += nominalFinal;
         widget.item.riwayat.insert(0, {
           "nominal": nominalFinal,
-          "catatan": catatan.trim(),
+          "catatan": catatan,
           "tanggal": formattedDate,
         });
       });
 
       _saveToPrefs();
-    } catch (e) {
-      debugPrint("Error saat proses transaksi: $e");
     }
   }
 
-  // 1. DIALOG TAMBAH NOMINAL (UI POLISHED)
-  void showTambahNominal(BuildContext context) {
-    final TextEditingController nominalController = TextEditingController();
-    final TextEditingController catatanController = TextEditingController();
-    bool isTambah = true; // State awal: Tambah
+  // ⚡ 2. DIALOG EDIT RIWAYAT (Memanggil Widget Terpisah) ⚡
+  void showEditRiwayat(BuildContext context, int index) async {
+    final data = widget.item.riwayat[index];
 
-    List<int> userNominals = [];
-
-    for (dynamic r in widget.item.riwayat) {
-      bool isTambah = false;
-      int nominal = 0;
-
-      if (r is Map) {
-        isTambah = r['isTambah'] ?? true;
-        nominal = (r['nominal'] is int)
-            ? r['nominal']
-            : int.tryParse(r['nominal'].toString()) ?? 0;
-      } else {
-        final dynamic itemRiwayat = r;
-        isTambah = itemRiwayat.isTambah ?? true;
-        nominal = itemRiwayat.nominal ?? 0;
-      }
-
-      // Ambil HANYA transaksi penambahan (> 0) & hindari angka duplikat
-      if (isTambah && nominal > 0 && !userNominals.contains(nominal)) {
-        userNominals.add(nominal);
-      }
-    }
-
-    int? selectedChipNominal;
-
-    showDialog(
+    final result = await showDialog(
       context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return Dialog(
-              backgroundColor: Colors.white,
-              insetPadding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 24,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16), // Radius lebih smooth
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(24), // Spacing lebih lega
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Center(
-                      child: Text(
-                        "Tambah Nominal Tabungan",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Color(0xFF1B6B5A),
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // TOMBOL PILIHAN TAMBAH / KURANGI (Modern Soft Toggle)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setDialogState(() => isTambah = true),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: isTambah
-                                    ? const Color(0xFF1B6B5A)
-                                    : const Color(
-                                        0xFFE8F1EF,
-                                      ), // Soft green tint pas unselected
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "+ Tambah",
-                                  style: TextStyle(
-                                    color: isTambah
-                                        ? Colors.white
-                                        : const Color(0xFF1B6B5A),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setDialogState(() => isTambah = false),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: !isTambah
-                                    ? const Color(0xFFD35D5D)
-                                    : const Color(
-                                        0xFFFAEBEB,
-                                      ), // Soft red tint pas unselected
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "- Kurangi",
-                                  style: TextStyle(
-                                    color: !isTambah
-                                        ? Colors.white
-                                        : const Color(0xFFD35D5D),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-                    const Text(
-                      "Nominal Tabungan",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: nominalController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        RupiahFormatter(),
-                      ],
-
-                      onChanged: (val) {
-                        setDialogState(() {
-                          selectedChipNominal = null;
-                        });
-                      },
-                      style: const TextStyle(fontWeight: FontWeight.w400),
-                      decoration: InputDecoration(
-                        hintText: "Masukkan Nominal",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 14,
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFFF8F9FA),
-                        prefixIcon: const Icon(
-                          Ionicons.cash,
-                          color: Colors.grey,
-                          size: 22,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF1B6B5A),
-                            width: 1.5,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    if (userNominals.isNotEmpty) ...[
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: userNominals.map((amount) {
-                            String formatted = formatRupiah(amount);
-
-                            // 🔥 Cek langsung apakah isi TextField sama dengan angka Chip ini
-                            bool isSelected =
-                                nominalController.text == formatted;
-
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 6),
-                              child: InkWell(
-                                onTap: () {
-                                  setDialogState(() {
-                                    if (isSelected) {
-                                      nominalController.clear();
-                                    } else {
-                                      nominalController.text = formatted;
-                                    }
-                                  });
-                                },
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? const Color(
-                                            0xFF1B6B5A,
-                                          ).withOpacity(0.1)
-                                        : Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? const Color(0xFF1B6B5A)
-                                          : Colors.grey.shade100,
-                                      width: isSelected ? 1.5 : 1,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "$formatted",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.w400,
-                                      color: isSelected
-                                          ? const Color(0xFF1B6B5A)
-                                          : const Color(0xFF555555),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    const Text(
-                      "Catatan (Opsional)",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: catatanController,
-                      style: const TextStyle(fontWeight: FontWeight.w400),
-                      decoration: InputDecoration(
-                        hintText: "Cth: Uang jajan",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 14,
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFFF8F9FA),
-                        prefixIcon: const Icon(
-                          Ionicons.attach,
-                          color: Colors.grey,
-                          size: 22,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF1B6B5A),
-                            width: 1.5,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 28),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: const Color(0xFFD35D5D),
-                              minimumSize: const Size(double.infinity, 48),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: const BorderSide(
-                                  color: Color(0xFFD35D5D),
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              "Batal",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (nominalController.text.isNotEmpty) {
-                                _prosesTransaksi(
-                                  nominalController.text,
-                                  catatanController.text,
-                                  isTambah,
-                                );
-                                Navigator.pop(context);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1B6B5A),
-                              foregroundColor: Colors.white,
-                              minimumSize: const Size(double.infinity, 48),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: const Text(
-                              "Tambah",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+      barrierDismissible: false,
+      builder: (context) => EditRiwayatDialog(
+        data: data,
+        riwayatFull: widget.item.riwayat,
+      ),
     );
+
+    if (result != null) {
+      int nominalFinal = result['nominal'];
+      String catatan = result['catatan'];
+      int nominalLama = data['nominal'] as int;
+      int selisih = nominalFinal - nominalLama;
+
+      setState(() {
+        widget.item.terkumpul += selisih;
+        data['nominal'] = nominalFinal;
+        data['catatan'] = catatan;
+      });
+
+      _saveToPrefs();
+    }
   }
 
-  // 2. DIALOG PREVIEW RIWAYAT
+  // ⚡ 3. DIALOG PREVIEW RIWAYAT ⚡
   void showPreviewRiwayat(BuildContext context, int index) {
     final data = widget.item.riwayat[index];
 
@@ -563,7 +187,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Tampilkan dialog konfirmasi sebelum hapus riwayat
                           showDialog(
                             context: context,
                             builder: (BuildContext dialogContext) {
@@ -571,15 +194,13 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                title: const Text("Hapus Riwayat?"),
+                                title: const Text("Hapus Riwayat Nominal?"),
                                 content: Text(
                                   "Apakah Anda yakin ingin menghapus riwayat nominal ${(data['nominal'] as int) >= 0 ? "+${formatRupiah(data['nominal'])}" : "-${formatRupiah((data['nominal'] as int).abs())}"}?",
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(
-                                      dialogContext,
-                                    ), // Tutup dialog konfirmasi aja
+                                    onPressed: () => Navigator.pop(dialogContext),
                                     child: const Text(
                                       "Batal",
                                       style: TextStyle(color: Colors.grey),
@@ -587,17 +208,13 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      // 1. Tutup dialog konfirmasi
                                       Navigator.pop(dialogContext);
-
-                                      // 2. Jalankan logika penghapusan
                                       setState(() {
                                         widget.item.terkumpul -=
                                             (data['nominal'] as int);
                                         widget.item.riwayat.removeAt(index);
                                       });
                                       _saveToPrefs();
-                                      // 3. Tutup dialog preview riwayat
                                       Navigator.pop(context);
                                     },
                                     child: const Text(
@@ -615,9 +232,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         },
                         child: const Text(
                           "Hapus",
-                          style: TextStyle(
-                            color: Color(0xFFD35D5D),
-                          ), // Warna disamain biar konsisten
+                          style: TextStyle(color: Color(0xFFD35D5D)),
                         ),
                       ),
                     ],
@@ -639,381 +254,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     );
   }
 
-  // 3. DIALOG EDIT RIWAYAT (UI POLISHED)
-  void showEditRiwayat(BuildContext context, int index) {
-    final data = widget.item.riwayat[index];
-    int nominalAsli = (data['nominal'] as int).abs();
-    bool isTambah = (data['nominal'] as int) >= 0;
-
-    final TextEditingController nominalController = TextEditingController(
-      text: formatRupiah(
-        nominalAsli,
-      ), // Biar langsung terformat Rupiah pas dibuka
-    );
-    final TextEditingController catatanController = TextEditingController(
-      text: data['catatan'] ?? "",
-    );
-
-    // Kumpulkan nominal unik dari riwayat untuk chip pintar
-    List<int> userNominals = [];
-
-    for (dynamic r in widget.item.riwayat) {
-      bool rIsTambah = false;
-      int rNominal = 0;
-
-      if (r is Map) {
-        rIsTambah = (r['nominal'] is int) ? (r['nominal'] as int) >= 0 : true;
-        rNominal = (r['nominal'] is int)
-            ? (r['nominal'] as int).abs()
-            : int.tryParse(r['nominal'].toString())?.abs() ?? 0;
-      } else {
-        final dynamic itemRiwayat = r;
-        rIsTambah = itemRiwayat.isTambah ?? true;
-        rNominal = itemRiwayat.nominal ?? 0;
-      }
-
-      if (rIsTambah && rNominal > 0 && !userNominals.contains(rNominal)) {
-        userNominals.add(rNominal);
-      }
-    }
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            insetPadding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 24,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
-                    child: Text(
-                      "Edit Riwayat Tabungan",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Color(0xFF1B6B5A),
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // TOGGLE TAMBAH / KURANGI
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setDialogState(() => isTambah = true),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: isTambah
-                                  ? const Color(0xFF1B6B5A)
-                                  : const Color(0xFFE8F1EF),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "+ Tambah",
-                                style: TextStyle(
-                                  color: isTambah
-                                      ? Colors.white
-                                      : const Color(0xFF1B6B5A),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => setDialogState(() => isTambah = false),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: !isTambah
-                                  ? const Color(0xFFD35D5D)
-                                  : const Color(0xFFFAEBEB),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "- Kurangi",
-                                style: TextStyle(
-                                  color: !isTambah
-                                      ? Colors.white
-                                      : const Color(0xFFD35D5D),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  const Text(
-                    "Nominal Tabungan",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  TextField(
-                    controller: nominalController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      RupiahFormatter(),
-                    ],
-                    style: const TextStyle(fontWeight: FontWeight.w400),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFF8F9FA),
-                      prefixIcon: const Icon(
-                        Ionicons.cash,
-                        color: Color(0xFF1B6B5A),
-                        size: 22,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade200,
-                          width: 1,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF1B6B5A),
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // --- 🔥 CHIP QUICK ACTION DI EDIT RIWAYAT 🔥 ---
-                  if (userNominals.isNotEmpty) ...[
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: userNominals.map((amount) {
-                          String formatted = formatRupiah(amount);
-                          bool isSelected = nominalController.text == formatted;
-
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 6),
-                            child: InkWell(
-                              onTap: () {
-                                setDialogState(() {
-                                  if (isSelected) {
-                                    nominalController.clear();
-                                  } else {
-                                    nominalController.text = formatted;
-                                  }
-                                });
-                              },
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? const Color(0xFF1B6B5A).withOpacity(0.1)
-                                      : Colors.grey.shade100,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? const Color(0xFF1B6B5A)
-                                        : Colors.grey.shade100,
-                                    width: isSelected ? 1.5 : 1,
-                                  ),
-                                ),
-                                child: Text(
-                                  "$formatted",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                                    color: isSelected
-                                        ? const Color(0xFF1B6B5A)
-                                        : Color(0xFF555555),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-
-                  const Text(
-                    "Catatan (Opsional)",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  TextField(
-                    controller: catatanController,
-                    style: const TextStyle(fontWeight: FontWeight.w400),
-                    decoration: InputDecoration(
-                      hintText: "Cth: Uang Jajan",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 14,
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFFF8F9FA),
-                      prefixIcon: const Icon(
-                        Ionicons.attach,
-                        color: Colors.grey,
-                        size: 22,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade200,
-                          width: 1,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFF1B6B5A),
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFFD35D5D),
-                            minimumSize: const Size(double.infinity, 48),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(
-                                color: Color(0xFFD35D5D),
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: const Text(
-                            "Batal",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (nominalController.text.isNotEmpty) {
-                              String cleanNominal = nominalController.text
-                                  .replaceAll(RegExp(r'[^0-9]'), '');
-                              int nominalInput = int.parse(cleanNominal);
-                              int nominalFinal = isTambah
-                                  ? nominalInput
-                                  : -nominalInput;
-
-                              int nominalLama = data['nominal'] as int;
-                              int selisih = nominalFinal - nominalLama;
-
-                              setState(() {
-                                widget.item.terkumpul += selisih;
-                                data['nominal'] = nominalFinal;
-                                data['catatan'] = catatanController.text.trim();
-                              });
-
-                              _saveToPrefs();
-
-                              Navigator.pop(context);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1B6B5A),
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 48),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            "Simpan",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     int uangTerkumpul = widget.item.terkumpul;
@@ -1026,17 +266,17 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Ionicons.arrow_back, color: Color(0xff333333)),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           _buildAppBarButton(
             "Edit",
             Ionicons.pencil,
             const Color(0xFF1B6B5A),
             () async {
-              // 1. Catat nama lama sebelum di-edit
               String oldNama = widget.item.nama;
-
-              // 2. Buka layar EditTabunganScreen
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1044,7 +284,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
               );
 
-              // 3. Pas balik membawa data baru
               if (result != null && result is Tabungan) {
                 setState(() {
                   widget.item.nama = result.nama;
@@ -1054,7 +293,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   widget.item.imagePath = result.imagePath;
                 });
 
-                // 4. 🔥 Simpan langsung pakai oldNama 🔥
                 await _saveToPrefs(oldNama: oldNama);
               }
             },
@@ -1065,7 +303,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             Ionicons.trash,
             const Color(0xFFD35D5D),
             () {
-              // Tampilkan dialog konfirmasi sebelum hapus
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -1079,8 +316,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () =>
-                            Navigator.pop(context), // Tutup dialog doang
+                        onPressed: () => Navigator.pop(context),
                         child: const Text(
                           "Batal",
                           style: TextStyle(color: Colors.grey),
@@ -1088,11 +324,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // Tutup dialog
-                          Navigator.pop(
-                            context,
-                            "delete",
-                          ); // Balik ke Home sambil kirim perintah delete
+                          Navigator.pop(context);
+                          Navigator.pop(context, "delete");
                         },
                         child: const Text(
                           "Hapus",
@@ -1189,7 +422,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             const SizedBox(height: 24),
             Column(
               children: [
-                // Baris Tanggal Dibuat
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1207,7 +439,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                   ],
                 ),
-                // Baris Perkiraan Selesai
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1227,7 +458,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1245,9 +475,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               ],
             ),
             const SizedBox(height: 8),
-
             const Divider(color: Color(0xffeeeeee), thickness: 0.7, height: 32),
-
             const SizedBox(height: 8),
             const Center(
               child: Text(
@@ -1260,7 +488,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               ),
             ),
             const SizedBox(height: 16),
-
             widget.item.riwayat.isEmpty
                 ? const Center(
                     child: Text(
@@ -1289,7 +516,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             horizontal: 12,
                             vertical: 10,
                           ),
-                          // 🔥 Buat tinggi card tetep konsisten (misal: minimal 62px)
                           constraints: const BoxConstraints(minHeight: 62),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -1299,10 +525,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                           child: Row(
                             crossAxisAlignment: hasCatatan
                                 ? CrossAxisAlignment.start
-                                : CrossAxisAlignment
-                                      .center, // Kunci alignment presisi
+                                : CrossAxisAlignment.center,
                             children: [
-                              // Kiri: Nominal & Catatan
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1335,10 +559,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(width: 8),
-
-                              // Kanan: Tanggal (Sejajar horizontal dengan nominal)
                               Padding(
                                 padding: EdgeInsets.only(
                                   top: hasCatatan ? 2.0 : 0.0,
@@ -1364,7 +585,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showTambahNominal(context),
         backgroundColor: const Color(0xFF1B6B5A),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         icon: const Icon(Ionicons.add, color: Colors.white),
         label: const Text(
           "Tambah nominal",
