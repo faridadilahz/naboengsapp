@@ -20,6 +20,7 @@ class DetailTabunganScreen extends StatefulWidget {
 }
 
 class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
+  // Save Data
   Future<void> _saveToPrefs({String? oldNama}) async {
     final prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString('data_tabungan');
@@ -43,6 +44,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     }
   }
 
+  // Hitung Estimasi Selesai
   String get estimasiSelesai {
     int sisaUang = widget.item.target - widget.item.terkumpul;
     if (sisaUang <= 0) return "Tercapai!";
@@ -68,7 +70,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     return "${tglSelesai.day} ${bulan[tglSelesai.month - 1]} ${tglSelesai.year}";
   }
 
-  // ⚡ 1. DIALOG TAMBAH NOMINAL (Memanggil Widget Terpisah) ⚡
+  // Dialog Tambah Nominal
   void showTambahNominal(BuildContext context) async {
     final result = await showDialog(
       context: context,
@@ -96,7 +98,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     }
   }
 
-  // ⚡ 2. DIALOG EDIT RIWAYAT (Memanggil Widget Terpisah) ⚡
+  // Dialog Edit Riwayat
   void showEditRiwayat(BuildContext context, int index) async {
     final data = widget.item.riwayat[index];
 
@@ -125,7 +127,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     }
   }
 
-  // ⚡ 3. DIALOG PREVIEW RIWAYAT ⚡
+  // Dialog Preview Riwayat
   void showPreviewRiwayat(BuildContext context, int index) {
     final data = widget.item.riwayat[index];
 
@@ -263,6 +265,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+
+      // App Bar (Tombol Back, Edit & Hapus)
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -310,7 +314,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    title: const Text("Hapus Tabungan?"),
+                    title: const Text(
+                      "Hapus Tabungan Ini?",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
                     content: Text(
                       "Apakah Anda yakin ingin menghapus tabungan '${widget.item.nama}'?",
                     ),
@@ -319,7 +326,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                         onPressed: () => Navigator.pop(context),
                         child: const Text(
                           "Batal",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                       TextButton(
@@ -344,20 +354,24 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           const SizedBox(width: 16),
         ],
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Nama Tabungan
             Text(
               widget.item.nama,
               style: const TextStyle(
-                fontSize: 22,
+                fontSize: 24,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1B6B5A),
+                color: Color(0xFF333333),
               ),
             ),
             const SizedBox(height: 12),
+
+            // Foto Tabungan
             if (widget.item.imagePath != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -374,6 +388,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
               ),
             const SizedBox(height: 16),
+
+            // Target & Progress Persentase
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -420,6 +436,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               ],
             ),
             const SizedBox(height: 24),
+
+            // Tanggal Dibuat & Perkiraan Selesai
             Column(
               children: [
                 Row(
@@ -433,8 +451,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       "${widget.item.tanggalDibuat.day} ${["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"][widget.item.tanggalDibuat.month - 1]} ${widget.item.tanggalDibuat.year}",
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF444444),
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF777777),
                       ),
                     ),
                   ],
@@ -450,15 +468,17 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       estimasiSelesai,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF444444),
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF777777),
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
+
+            // Card Ringkasan (Terkumpul vs Tersisa)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -474,20 +494,26 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
               ],
             ),
+            
             const SizedBox(height: 8),
+
             const Divider(color: Color(0xffeeeeee), thickness: 0.7, height: 32),
             const SizedBox(height: 8),
+
+            // Section Riwayat Tabungan
             const Center(
               child: Text(
-                "Riwayat Tabungan",
+                "Riwayat Nominal Tabungan",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                  fontSize: 18,
                   color: Color(0xFF1B6B5A),
                 ),
               ),
             ),
             const SizedBox(height: 16),
+
+            // List Riwayat
             widget.item.riwayat.isEmpty
                 ? const Center(
                     child: Text(
@@ -582,19 +608,22 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           ],
         ),
       ),
+
+      // Tombol Floating Tambah Nominal
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showTambahNominal(context),
         backgroundColor: const Color(0xFF1B6B5A),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         icon: const Icon(Ionicons.add, color: Colors.white),
         label: const Text(
-          "Tambah nominal",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          "TAMBAH NOMINAL",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
       ),
     );
   }
 
+  // Helper Widget Appbar Button
   Widget _buildAppBarButton(
     String label,
     IconData icon,
@@ -618,17 +647,17 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     );
   }
 
+  // Helper Widget Card Ringkasan
   Widget _buildSummaryItem(String label, String value, Color valueColor) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 15)),
         Text(
           value,
           style: TextStyle(
             color: valueColor,
             fontWeight: FontWeight.w600,
-            fontSize: 15,
+            fontSize: 18,
           ),
         ),
       ],
