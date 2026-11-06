@@ -105,10 +105,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     final result = await showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => EditRiwayatDialog(
-        data: data,
-        riwayatFull: widget.item.riwayat,
-      ),
+      builder: (context) =>
+          EditRiwayatDialog(data: data, riwayatFull: widget.item.riwayat),
     );
 
     if (result != null) {
@@ -202,7 +200,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext),
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext),
                                     child: const Text(
                                       "Batal",
                                       style: TextStyle(color: Colors.grey),
@@ -494,7 +493,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 8),
 
             const Divider(color: Color(0xffeeeeee), thickness: 0.7, height: 32),
@@ -611,6 +610,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
       // Tombol Floating Tambah Nominal
       floatingActionButton: FloatingActionButton.extended(
+        elevation: 0,
+        focusElevation: 0,
+        hoverElevation: 0,
+        highlightElevation: 0,
         onPressed: () => showTambahNominal(context),
         backgroundColor: const Color(0xFF1B6B5A),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
