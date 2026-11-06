@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'dart:ui';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,45 @@ class AddTabunganScreen extends StatefulWidget {
 
   @override
   State<AddTabunganScreen> createState() => _AddTabunganScreenState();
+}
+
+class DashedBorderPainter extends CustomPainter {
+  final Color color;
+  DashedBorderPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+
+    final RRect rrect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(16),
+    );
+
+    final Path path = Path()..addRRect(rrect);
+    final Path dashPath = Path();
+
+    double dashWidth = 6.0;
+    double dashSpace = 4.0;
+    double distance = 0.0;
+
+    for (PathMetric pathMetric in path.computeMetrics()) {
+      while (distance < pathMetric.length) {
+        dashPath.addPath(
+          pathMetric.extractPath(distance, distance + dashWidth),
+          Offset.zero,
+        );
+        distance += dashWidth + dashSpace;
+      }
+    }
+    canvas.drawPath(dashPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _AddTabunganScreenState extends State<AddTabunganScreen> {
@@ -39,14 +79,14 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 8),
-          child: BackButton(color: Color(0xff222222)),
+        leading: IconButton(
+          icon: const Icon(Ionicons.arrow_back, color: Color(0xff333333)),
+          onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "Tambah Tabungan",
           style: TextStyle(
-            color: Color(0xff222222),
+            color: Color(0xff333333),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -75,33 +115,35 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
               GestureDetector(
                 onTap: pickImage,
-                child: Container(
-                  height: 120,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF1B6B5A)),
-                    borderRadius: BorderRadius.circular(12),
+                child: CustomPaint(
+                  painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
+                  child: Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: imageFile == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Ionicons.cloud_upload,
+                                color: Color(0xFF777777),
+                                size: 32,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Klik untuk unggah foto",
+                                style: TextStyle(color: Color(0xFF777777), fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.file(imageFile!, fit: BoxFit.cover),
+                          ),
                   ),
-                  child: imageFile == null
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            const Icon(
-                              Ionicons.cloud_upload,
-                              color: Color(0xFF1B6B5A),
-                              size: 32,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              "Ambil foto dari galeri",
-                              style: TextStyle(color: Color(0xFF1B6B5A)),
-                            ),
-                          ],
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(imageFile!, fit: BoxFit.cover),
-                        ),
                 ),
               ),
 
@@ -199,7 +241,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                           color: isActive
                               ? const Color(0xFF1B6B5A)
                               : Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
                           child: Text(
@@ -207,7 +249,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                             style: TextStyle(
                               color: isActive
                                   ? Colors.white
-                                  : Color(0xff222222),
+                                  : Color(0xFF777777),
                             ),
                           ),
                         ),
@@ -284,7 +326,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1B6B5A),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: const Text(
@@ -317,19 +359,19 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
       ), // Dikasih space dikit biar lega
       // 1. Border default (Bawaan pas lagi ga diklik)
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
       ),
 
       // 2. Border pas form lagi ga diklik (enabled) biar makin rapi
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
       ),
 
       // 3. INI YANG BIKIN JADI IJO PAS LAGI NGETIK / FOKUS
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(
           color: Color(0xFF1B6B5A), // Warna ijo sesuai request kamu
           width: 1.5, // Ditebelin dikit biar tegas kelihatannya
