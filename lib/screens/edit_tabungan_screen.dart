@@ -86,9 +86,9 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   // Helper opsional buat format titik angka awal pas load data
   String formatRupiahInitial(int number) {
     return number.toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]}.',
-        );
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]}.',
+    );
   }
 
   Future<void> pickImage() async {
@@ -278,6 +278,9 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                               color: isActive
                                   ? Colors.white
                                   : const Color(0xFF777777),
+                              fontWeight: isActive
+                                  ? FontWeight.w800
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -332,7 +335,8 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                         tanggalDibuat: widget.item.tanggalDibuat,
                         estimasiSelesai: widget.item.estimasiSelesai,
                         imagePath: imageFile?.path,
-                        terkumpul: widget.item.terkumpul, // Tetap pake saldo lama
+                        terkumpul:
+                            widget.item.terkumpul, // Tetap pake saldo lama
                         riwayat: widget.item.riwayat, // Tetap pake riwayat lama
                         isDone: widget.item.isDone,
                       );
@@ -369,10 +373,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
       errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
       filled: true,
       fillColor: const Color(0xFFFAFAFA),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
@@ -383,10 +384,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(
-          color: Color(0xFF1B6B5A),
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: Color(0xFF1B6B5A), width: 1.5),
       ),
     );
   }

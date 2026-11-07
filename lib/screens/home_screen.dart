@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import '../widgets/empty_state.dart';
 import '../screens/add_tabungan_screen.dart';
 import '../models/tabungan_model.dart';
-import 'dart:io';
-import '../utils/format_rupiah.dart';
-import '../screens/detail_tabungan_screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
-import '../widgets/tabungan_card.dart';
-import '../widgets/tab_bar.dart';
 import '../widgets/tabungan_list_view.dart';
+import '../widgets/tab_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // 1. Deklarasi variabel
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
   late PageController _pageController;
@@ -81,52 +75,38 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedTab = 0;
       });
 
-      _pageController.animateToPage(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      if (_pageController.hasClients) {
+        _pageController.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
 
-      _saveDataTabungan();
+      await _saveDataTabungan();
     }
   }
 
   Future<void> _saveDataTabungan() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Map<String, dynamic>> jsonList = tabunganList
-        .map((item) => item.toJson())
-        .toList();
+    List jsonList = tabunganList.map((item) => item.toJson()).toList();
     String jsonString = jsonEncode(jsonList);
     await prefs.setString('data_tabungan', jsonString);
-  }
-  // ---------------------------------------------
-
-  String _hitungSisaHari(Tabungan item) {
-    int sisaUang = item.target - item.terkumpul;
-    if (sisaUang <= 0) return "Selesai hari ini";
-    int sisaHari = (sisaUang / item.perHari).ceil();
-    return "$sisaHari hari lagi";
   }
 
   @override
   Widget build(BuildContext context) {
-
     List<Tabungan> dalamProsesList = [];
     List<Tabungan> tercapaiList = [];
-    // 2. Logika filter
-    List<Tabungan> filteredList = tabunganList.where((item) {
-      if (item.terkumpul >= item.target) {
-        item.isDone = true;
-      } else {
-        item.isDone = false;
-      }
 
-      if (selectedTab == 0) {
-        return item.isDone == false;
+    for (var item in tabunganList) {
+      item.isDone = item.terkumpul >= item.target;
+      if (item.isDone) {
+        tercapaiList.add(item);
       } else {
-        return item.isDone == true;
+        dalamProsesList.add(item);
       }
-    }).toList();
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xffFDFFFF),
@@ -153,65 +133,69 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SegmentedTabBar(
-              selectedIndex: selectedTab,
-              onTabChanged: (index) {
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ⚡ 2. BUNGKUS HEADER & TAB BAR DENGAN PADDING SENDIRI ⚡
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SegmentedTabBar(
+                  selectedIndex: selectedTab,
+                  onTabChanged: (index) {
+                    setState(() {
+                      selectedTab = index;
+                    });
+                    _pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  "Tabunganmu",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff777777),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ⚡ 3. PAGEVIEW SEKARANG MEMENUHI SELEBAR LAYAR (FULL BLEED) ⚡
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
                 setState(() {
                   selectedTab = index;
                 });
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
               },
+              children: [
+                TabunganListView(
+                  items: dalamProsesList,
+                  selectedTab: 0,
+                  onAddPressed: _bukaFormTambahTabungan,
+                  onItemUpdated: (item, action) =>
+                      _handleItemUpdate(item, action),
+                ),
+                TabunganListView(
+                  items: tercapaiList,
+                  selectedTab: 1,
+                  onAddPressed: _bukaFormTambahTabungan,
+                  onItemUpdated: (item, action) =>
+                      _handleItemUpdate(item, action),
+                ),
+              ],
             ),
-            const SizedBox(height: 24),
-            const Text(
-              "Tabunganmu",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Color(0xff777777),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    selectedTab = index;
-                  });
-                },
-                children: [
-                  // Page 0: Dalam Proses
-                  TabunganListView(
-                    items: dalamProsesList,
-                    selectedTab: 0,
-                    onAddPressed: _bukaFormTambahTabungan,
-                    onItemUpdated: (item, action) =>
-                        _handleItemUpdate(item, action),
-                  ),
-
-                  // Page 1: Tercapai
-                  TabunganListView(
-                    items: tercapaiList,
-                    selectedTab: 1,
-                    onAddPressed: _bukaFormTambahTabungan,
-                    onItemUpdated: (item, action) =>
-                        _handleItemUpdate(item, action),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
 
       floatingActionButton: AnimatedSwitcher(
@@ -219,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(opacity: animation, child: child);
         },
-        child: (tabunganList.isEmpty || selectedTab != 0)
+        child: (dalamProsesList.isEmpty || selectedTab != 0)
             ? const SizedBox.shrink()
             : SizedBox(
                 key: const ValueKey('fab_tambah_tabungan'),

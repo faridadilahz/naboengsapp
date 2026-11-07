@@ -90,7 +90,6 @@ class TabunganCard extends StatelessWidget {
                       fontSize: 19,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF1B6B5A),
-                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ] else ...[

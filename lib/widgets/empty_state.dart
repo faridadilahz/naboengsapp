@@ -3,8 +3,13 @@ import 'package:ionicons/ionicons.dart';
 
 class EmptyState extends StatelessWidget {
   final VoidCallback onAddPressed;
+  final bool isTercapaiTab; // ⚡ Tambahkan flag tab
 
-  const EmptyState({super.key, required this.onAddPressed});
+  const EmptyState({
+    super.key,
+    required this.onAddPressed,
+    this.isTercapaiTab = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +19,18 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Ionicons.file_tray, size: 86, color: Color(0xffaaaaaa)),
+            Icon(
+              isTercapaiTab ? Ionicons.trophy : Ionicons.file_tray,
+              size: 86,
+              color: const Color(0xffaaaaaa),
+            ),
             const SizedBox(height: 24),
-            const Text(
-              "Belum ada sesuatu yang mau ditabung nih, yuk tambah tabungan!",
+            Text(
+              isTercapaiTab
+                  ? "Belum ada tabungan yang berhasil tercapai. Tetap semangat nabungnya!"
+                  : "Belum ada sesuatu yang mau ditabung nih, yuk tambah tabungan!",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xffaaaaaa),
                 fontSize: 16,
                 height: 1.2,

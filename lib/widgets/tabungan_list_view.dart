@@ -21,10 +21,14 @@ class TabunganListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) {
-      return EmptyState(onAddPressed: onAddPressed);
+      return EmptyState(
+        onAddPressed: onAddPressed,
+        isTercapaiTab: selectedTab == 1,
+      );
     }
 
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
