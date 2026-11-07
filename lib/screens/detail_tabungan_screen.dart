@@ -85,8 +85,19 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     if (sisaUang <= 0) return "Tercapai!";
     if (widget.item.perHari <= 0) return "-";
 
-    int sisaHari = (sisaUang / widget.item.perHari).ceil();
-    DateTime tglSelesai = DateTime.now().add(Duration(days: sisaHari));
+    int sisaPeriode = (sisaUang / widget.item.perHari).ceil();
+    DateTime now = DateTime.now();
+    DateTime tglSelesai;
+
+    String tipeLower = widget.item.tipe.toLowerCase();
+
+    if (tipeLower.contains('minggu')) {
+      tglSelesai = now.add(Duration(days: sisaPeriode * 7));
+    } else if (tipeLower.contains('bulan')) {
+      tglSelesai = DateTime(now.year, now.month + sisaPeriode, now.day);
+    } else {
+      tglSelesai = now.add(Duration(days: sisaPeriode));
+    }
 
     List<String> bulan = [
       "Jan",

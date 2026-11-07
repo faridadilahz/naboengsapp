@@ -15,11 +15,25 @@ class TabunganCard extends StatelessWidget {
     required this.onTap,
   });
 
+  // HITUNG SISA HARI
   String _hitungSisaHari(Tabungan item) {
     int sisaUang = item.target - item.terkumpul;
     if (sisaUang <= 0) return "Selesai hari ini";
-    int sisaHari = (sisaUang / item.perHari).ceil();
-    return "$sisaHari hari lagi";
+    if (item.perHari <= 0) return "-";
+
+    int sisaPeriode = (sisaUang / item.perHari).ceil();
+    String tipeLower = item.tipe.toLowerCase();
+    int totalHari;
+
+    if (tipeLower.contains('minggu')) {
+      totalHari = sisaPeriode * 7;
+    } else if (tipeLower.contains('bulan')) {
+      totalHari = sisaPeriode * 30;
+    } else {
+      totalHari = sisaPeriode;
+    }
+
+    return "$totalHari hari lagi";
   }
 
   @override
