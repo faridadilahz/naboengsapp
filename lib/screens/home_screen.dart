@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
 import '../widgets/tabungan_card.dart';
+import '../widgets/tab_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (result != null && result is Tabungan) {
       setState(() {
         tabunganList.insert(0, result);
+        selectedTab = 0;
       });
 
       _saveDataTabungan();
@@ -121,67 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = 0;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      child: Center(
-                        child: Text(
-                          "Dalam Proses",
-                          style: TextStyle(
-                            color: selectedTab == 0
-                                ? const Color(0xFF1B6B5A)
-                                : const Color(0xffaaaaaa),
-                            fontSize: 16,
-                            fontWeight: selectedTab == 0
-                                ? FontWeight.w800
-                                : FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 16,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  color: Colors.grey.shade300,
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = 1;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      child: Center(
-                        child: Text(
-                          "Tercapai",
-                          style: TextStyle(
-                            color: selectedTab == 1
-                                ? const Color(0xFF1B6B5A)
-                                : const Color(0xffaaaaaa),
-                            fontSize: 16,
-                            fontWeight: selectedTab == 1
-                                ? FontWeight.w800
-                                : FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SegmentedTabBar(
+              selectedIndex: selectedTab,
+              onTabChanged: (index) {
+                setState(() {
+                  selectedTab = index;
+                });
+              },
             ),
             const SizedBox(height: 24),
             const Text(
