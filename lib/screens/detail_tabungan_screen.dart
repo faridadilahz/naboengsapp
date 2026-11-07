@@ -240,7 +240,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                title: const Text("Hapus Riwayat Nominal?"),
+                                title: const Text("Hapus Nominal Ini?"),
                                 content: Text(
                                   "Apakah Anda yakin ingin menghapus riwayat nominal ${(data['nominal'] as int) >= 0 ? "+${formatRupiah(data['nominal'])}" : "-${formatRupiah((data['nominal'] as int).abs())}"}?",
                                 ),

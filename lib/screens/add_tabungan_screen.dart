@@ -241,7 +241,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                           color: isActive
                               ? const Color(0xFF1B6B5A)
                               : Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(48),
                         ),
                         child: Center(
                           child: Text(
