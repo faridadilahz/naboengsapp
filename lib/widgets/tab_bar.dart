@@ -23,33 +23,32 @@ class SegmentedTabBar extends StatelessWidget {
         children: [
           // SLIDE ANIMATION
           // SLIDE ANIMATION
-AnimatedAlign(
-  duration: const Duration(milliseconds: 250),
-  curve: Curves.easeInOut,
-  alignment: selectedIndex == 0
-      ? Alignment.centerLeft
-      : Alignment.centerRight,
-  child: FractionallySizedBox(
-    widthFactor: 0.5,
-    child: Padding(
-      // ⚡ ATUR JARAK PILL DI SINI (Contoh: 2px di sekeliling pill) ⚡
-      padding: const EdgeInsets.all(2), 
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+          AnimatedAlign(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            alignment: selectedIndex == 0
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
+            child: FractionallySizedBox(
+              widthFactor: 0.5,
+              child: Padding(
+                padding: const EdgeInsets.all(2),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
+          ),
 
           Row(
             children: [
