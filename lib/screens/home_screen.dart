@@ -240,21 +240,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: tabunganList.isEmpty
-          ? null
-          : SizedBox(
-              width: 72,
-              height: 72,
-              child: FloatingActionButton(
-                elevation: 0,
-                focusElevation: 0,
-                hoverElevation: 0,
-                highlightElevation: 0,
-                backgroundColor: const Color(0xFF1B6B5A),
-                onPressed: _bukaFormTambahTabungan,
-                child: const Icon(Ionicons.add, size: 36, color: Colors.white),
+
+      floatingActionButton: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 100),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: (tabunganList.isEmpty || selectedTab != 0)
+            ? const SizedBox.shrink()
+            : SizedBox(
+                key: const ValueKey('fab_tambah_tabungan'),
+                width: 72,
+                height: 72,
+                child: FloatingActionButton(
+                  elevation: 0,
+                  focusElevation: 0,
+                  hoverElevation: 0,
+                  highlightElevation: 0,
+                  backgroundColor: const Color(0xFF1B6B5A),
+                  onPressed: _bukaFormTambahTabungan,
+                  child: const Icon(
+                    Ionicons.add,
+                    size: 36,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
+      ),
     );
   }
 }
