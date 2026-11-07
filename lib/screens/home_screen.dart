@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   content: Text(
                                     "Tabungan '${item.nama}' berhasil dihapus!",
                                   ),
-                                  backgroundColor: Colors.redAccent,
+                                  backgroundColor: Color(0xFFD35D5D),
                                 ),
                               );
                             } else {
@@ -258,12 +258,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   item.nama,
                                   style: const TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 21,
                                     fontWeight: FontWeight.w800,
-                                    color: Color(0xff222222),
+                                    color: Color(0xff333333),
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 12),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -271,16 +271,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       formatRupiah(item.target),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w800,
-                                        fontSize: 17,
+                                        fontSize: 19,
                                         color: Color(0xFF555555),
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 4),
                                     if (selectedTab == 1) ...[
                                       const Text(
                                         "Tercapai!",
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 19,
                                           fontWeight: FontWeight.w800,
                                           color: Color(0xFF1B6B5A),
                                           fontStyle: FontStyle.italic,
@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         formatRupiah(item.perHari),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 16,
+                                          fontSize: 19,
                                           color: Color(0xff555555),
                                         ),
                                       ),
