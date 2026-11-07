@@ -39,32 +39,32 @@ class EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            ElevatedButton.icon(
-              onPressed: onAddPressed,
-              icon: const Icon(
-                Ionicons.add,
-                color: Colors.white,
-              ),
-              label: const Text(
-                "TAMBAH TABUNGAN",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 15,
+            if (!isTercapaiTab) ...[
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: onAddPressed,
+                icon: const Icon(Ionicons.add, color: Colors.white),
+                label: const Text(
+                  "TAMBAH TABUNGAN",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  shadowColor: Colors.transparent,
+                  backgroundColor: const Color(0xFF1B6B5A),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                shadowColor: Colors.transparent,
-                backgroundColor: const Color(0xFF1B6B5A),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-            ),
+            ],
           ],
         ),
       ),
