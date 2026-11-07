@@ -249,7 +249,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                             builder: (BuildContext dialogContext) {
                               return AlertDialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
                                 title: const Text("Hapus Nominal Ini?"),
                                 content: Text(
@@ -317,13 +317,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ⚡ LOGIKA PERHITUNGAN AKURAT & BEBAS BUG ⚡
     int totalSaldoMurni = _totalSaldoRiwayat;
 
-    // Uang terkumpul minimal 0
     int uangTerkumpul = totalSaldoMurni < 0 ? 0 : totalSaldoMurni;
 
-    // Uang tersisa dihitung presisi dari target dikurangi saldo riwayat asli
     int sisa = widget.item.target - totalSaldoMurni;
 
     double persen = (uangTerkumpul / widget.item.target).clamp(0.0, 1.0);
@@ -378,7 +375,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     title: const Text(
                       "Hapus Tabungan Ini?",
@@ -440,7 +437,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             // Foto Tabungan
             if (widget.item.imagePath != null)
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 child: Image.file(
                   File(widget.item.imagePath!),
                   height: 160,
@@ -707,11 +704,12 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         icon: Icon(icon, size: 12),
         label: Text(label),
         style: ElevatedButton.styleFrom(
+          shadowColor: Colors.transparent,
           backgroundColor: color,
           foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
