@@ -20,6 +20,31 @@ class DetailTabunganScreen extends StatefulWidget {
 }
 
 class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
+  // Format Tanggal di Detail Nominal
+  String _formatTanggalDibuat(String tanggalRaw) {
+    try {
+      List<String> parts = tanggalRaw.split('/');
+      if (parts.length != 3) return tanggalRaw;
+
+      int day = int.parse(parts[0]);
+      int month = int.parse(parts[1]);
+      int year = int.parse(parts[2]);
+
+      if (year < 100) {
+        year += 2000;
+      }
+
+      List<String> bulan = [
+        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+        "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
+      ];
+
+      return "$day ${bulan[month - 1]} $year";
+    } catch (e) {
+      return tanggalRaw;
+    }
+  }
+
   // Save Data
   Future<void> _saveToPrefs({String? oldNama}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -54,20 +79,19 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     DateTime tglSelesai = DateTime.now().add(Duration(days: sisaHari));
 
     List<String> bulan = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
+      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+      "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
     ];
     return "${tglSelesai.day} ${bulan[tglSelesai.month - 1]} ${tglSelesai.year}";
+  }
+
+  // Helper Murni Hitung Saldo dari Seluruh Riwayat
+  int get _totalSaldoRiwayat {
+    int total = 0;
+    for (var r in widget.item.riwayat) {
+      total += (r['nominal'] as int);
+    }
+    return total;
   }
 
   // Dialog Tambah Nominal
@@ -86,12 +110,15 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year.toString().substring(2)}";
 
       setState(() {
-        widget.item.terkumpul += nominalFinal;
         widget.item.riwayat.insert(0, {
           "nominal": nominalFinal,
           "catatan": catatan,
           "tanggal": formattedDate,
         });
+
+        // Update item.terkumpul berdasar total riwayat murni
+        int totalMurni = _totalSaldoRiwayat;
+        widget.item.terkumpul = totalMurni < 0 ? 0 : totalMurni;
       });
 
       _saveToPrefs();
@@ -112,13 +139,13 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     if (result != null) {
       int nominalFinal = result['nominal'];
       String catatan = result['catatan'];
-      int nominalLama = data['nominal'] as int;
-      int selisih = nominalFinal - nominalLama;
 
       setState(() {
-        widget.item.terkumpul += selisih;
         data['nominal'] = nominalFinal;
         data['catatan'] = catatan;
+
+        int totalMurni = _totalSaldoRiwayat;
+        widget.item.terkumpul = totalMurni < 0 ? 0 : totalMurni;
       });
 
       _saveToPrefs();
@@ -133,7 +160,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       context: context,
       builder: (context) => Dialog(
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Stack(
           children: [
             Padding(
@@ -143,18 +170,18 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Detail Tabungan",
+                    "Detail Nominal",
                     style: TextStyle(
-                      color: Color(0xFF1B6B5A),
-                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF555555),
+                      fontWeight: FontWeight.w500,
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Text(
                     "Nominal: ${formatRupiah(data['nominal'])}",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: (data['nominal'] as int) < 0
                           ? const Color(0xFFD35D5D)
@@ -164,12 +191,11 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   const SizedBox(height: 8),
                   Text(
                     "Catatan: ${data['catatan']}",
-                    style: const TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  const SizedBox(height: 4),
                   Text(
-                    "Tanggal: ${data['tanggal']}",
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    "Tanggal: ${_formatTanggalDibuat(data['tanggal'])}",
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -211,9 +237,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                     onPressed: () {
                                       Navigator.pop(dialogContext);
                                       setState(() {
-                                        widget.item.terkumpul -=
-                                            (data['nominal'] as int);
                                         widget.item.riwayat.removeAt(index);
+                                        
+                                        int totalMurni = _totalSaldoRiwayat;
+                                        widget.item.terkumpul = totalMurni < 0 ? 0 : totalMurni;
                                       });
                                       _saveToPrefs();
                                       Navigator.pop(context);
@@ -242,8 +269,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               ),
             ),
             Positioned(
-              right: 0,
-              top: 0,
+              right: 8,
+              top: 8,
               child: IconButton(
                 icon: const Icon(Ionicons.close, color: Colors.grey),
                 onPressed: () => Navigator.pop(context),
@@ -257,8 +284,15 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int uangTerkumpul = widget.item.terkumpul;
-    int sisa = widget.item.target - uangTerkumpul;
+    // ⚡ LOGIKA PERHITUNGAN AKURAT & BEBAS BUG ⚡
+    int totalSaldoMurni = _totalSaldoRiwayat;
+    
+    // Uang terkumpul minimal 0
+    int uangTerkumpul = totalSaldoMurni < 0 ? 0 : totalSaldoMurni;
+    
+    // Uang tersisa dihitung presisi dari target dikurangi saldo riwayat asli
+    int sisa = widget.item.target - totalSaldoMurni;
+    
     double persen = (uangTerkumpul / widget.item.target).clamp(0.0, 1.0);
     int persenDisplay = (persen * 100).toInt();
 
@@ -488,7 +522,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                 ),
                 _buildSummaryItem(
                   "Uang Tersisa",
-                  formatRupiah(sisa < 0 ? 0 : sisa),
+                  formatRupiah(sisa),
                   const Color(0xFFD35D5D),
                 ),
               ],
@@ -590,7 +624,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                                   top: hasCatatan ? 2.0 : 0.0,
                                 ),
                                 child: Text(
-                                  data['tanggal'],
+                                  _formatTanggalDibuat(data['tanggal']),
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -637,7 +671,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
         onPressed: onTap,
-        icon: Icon(icon, size: 18),
+        icon: Icon(icon, size: 12),
         label: Text(label),
         style: ElevatedButton.styleFrom(
           backgroundColor: color,

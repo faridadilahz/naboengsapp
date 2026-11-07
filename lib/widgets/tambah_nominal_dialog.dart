@@ -47,12 +47,42 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
     }
   }
 
+  InputDecoration inputDecoration(String hint, {Widget? prefixIcon}) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
+      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
+      filled: true,
+      fillColor: const Color(0xFFFAFAFA),
+      prefixIcon: prefixIcon,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Color(0xFF1B6B5A),
+          width: 1.5,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -64,8 +94,8 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                 "Tambah Nominal Tabungan",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Color(0xFF1B6B5A),
+                  fontSize: 20,
+                  color: Color(0xFF333333),
                 ),
               ),
             ),
@@ -88,6 +118,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                         child: Text(
                           "+ Tambah",
                           style: TextStyle(
+                            fontSize: 16,
                             color: isTambah
                                 ? Colors.white
                                 : const Color(0xFF1B6B5A),
@@ -115,6 +146,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                         child: Text(
                           "- Kurangi",
                           style: TextStyle(
+                            fontSize: 16,
                             color: !isTambah
                                 ? Colors.white
                                 : const Color(0xFFD35D5D),
@@ -130,9 +162,11 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
             const SizedBox(height: 24),
             const Text(
               "Nominal Tabungan",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF333333),),
             ),
             const SizedBox(height: 8),
+
+            // ⚡ TextField Nominal dengan inputDecoration ⚡
             TextField(
               controller: nominalController,
               keyboardType: TextInputType.number,
@@ -140,19 +174,17 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                 FilteringTextInputFormatter.digitsOnly,
                 RupiahFormatter(),
               ],
-              decoration: InputDecoration(
-                hintText: "Masukkan Nominal",
-                filled: true,
-                fillColor: const Color(0xFFF8F9FA),
-                prefixIcon: const Icon(Ionicons.cash, color: Colors.grey, size: 22),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+              decoration: inputDecoration(
+                "Masukkan Nominal",
+                prefixIcon: const Icon(
+                  Ionicons.cash,
+                  color: Color(0xFF777777),
+                  size: 20,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+
+            const SizedBox(height: 12),
             if (userNominals.isNotEmpty) ...[
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -173,7 +205,10 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? const Color(0xFF1B6B5A).withOpacity(0.1)
@@ -189,8 +224,12 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                             formatted,
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                              color: isSelected ? const Color(0xFF1B6B5A) : const Color(0xFF555555),
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                              color: isSelected
+                                  ? const Color(0xFF1B6B5A)
+                                  : const Color(0xFF555555),
                             ),
                           ),
                         ),
@@ -203,23 +242,23 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
             ],
             const Text(
               "Catatan (Opsional)",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF333333),),
             ),
             const SizedBox(height: 8),
+
+            // ⚡ TextField Catatan dengan inputDecoration ⚡
             TextField(
               controller: catatanController,
-              decoration: InputDecoration(
-                hintText: "Cth: Uang jajan",
-                filled: true,
-                fillColor: const Color(0xFFF8F9FA),
-                prefixIcon: const Icon(Ionicons.reader, color: Colors.grey, size: 22),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+              decoration: inputDecoration(
+                "Contoh: Uang jajan",
+                prefixIcon: const Icon(
+                  Ionicons.reader,
+                  color: Color(0xFF777777),
+                  size: 20,
                 ),
               ),
             ),
+
             const SizedBox(height: 28),
             Row(
               children: [
@@ -229,14 +268,17 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFD35D5D),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: const Size(double.infinity, 56),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Color(0xFFD35D5D)),
                       ),
                     ),
-                    child: const Text("Batal", style: TextStyle(fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      "BATAL",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -244,11 +286,11 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (nominalController.text.isNotEmpty) {
-                        String cleanNominal = nominalController.text.replaceAll(RegExp(r'[^0-9]'), '');
+                        String cleanNominal = nominalController.text
+                            .replaceAll(RegExp(r'[^0-9]'), '');
                         int nominal = int.parse(cleanNominal);
                         int nominalFinal = isTambah ? nominal : -nominal;
 
-                        // Pop sambil kirim data hasil transaksi
                         Navigator.pop(context, {
                           "nominal": nominalFinal,
                           "catatan": catatanController.text.trim(),
@@ -258,11 +300,16 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1B6B5A),
                       foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: const Size(double.infinity, 56),
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text("Tambah", style: TextStyle(fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      "TAMBAH",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ],

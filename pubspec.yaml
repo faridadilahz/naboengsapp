@@ -33,6 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.5
   ionicons: 0.2.2
+  flutter_svg: ^2.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,9 +56,9 @@ flutter:
   uses-material-design: true
   
   fonts:
-    - family: Fredoka
+    - family: Nunito
       fonts:
-        - asset: font/fredoka/Fredoka.ttf
+        - asset: font/nunito/Nunito.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
