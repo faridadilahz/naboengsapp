@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
 import '../widgets/tabungan_card.dart';
 import '../widgets/tab_bar.dart';
+import '../widgets/tabungan_list_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -142,48 +143,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: tabunganList.isEmpty
-                  ? EmptyState(onAddPressed: _bukaFormTambahTabungan)
-                  : ListView.builder(
-                      itemCount: filteredList.length,
-                      itemBuilder: (context, index) {
-                        final item = filteredList[index];
+              child: TabunganListView(
+                items: filteredList,
+                selectedTab: selectedTab,
+                onAddPressed: _bukaFormTambahTabungan,
+                onItemUpdated: (item, action) {
+                  if (action == "delete") {
+                    setState(() {
+                      tabunganList.remove(item);
+                    });
+                    _saveDataTabungan();
 
-                        return TabunganCard(
-                          item: item,
-                          selectedTab: selectedTab,
-                          onTap: () async {
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailTabunganScreen(item: item),
-                              ),
-                            );
-
-                            if (result == "delete") {
-                              setState(() {
-                                tabunganList.remove(item);
-                              });
-
-                              _saveDataTabungan();
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Tabungan '${item.nama}' berhasil dihapus!",
-                                  ),
-                                  backgroundColor: const Color(0xFFD35D5D),
-                                ),
-                              );
-                            } else {
-                              setState(() {});
-                              _saveDataTabungan();
-                            }
-                          },
-                        );
-                      },
-                    ),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Tabungan '${item.nama}' berhasil dihapus!",
+                        ),
+                        backgroundColor: const Color(0xFFD35D5D),
+                      ),
+                    );
+                  } else {
+                    setState(() {});
+                    _saveDataTabungan();
+                  }
+                },
+              ),
             ),
           ],
         ),
