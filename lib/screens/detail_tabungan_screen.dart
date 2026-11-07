@@ -500,14 +500,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                   children: [
                     const Text(
                       "Tanggal dibuat",
-                      style: TextStyle(color: Color(0xffaaaaaa), fontSize: 15),
+                      style: TextStyle(color: Color(0xffaaaaaa), fontSize: 16),
                     ),
                     Text(
                       "${widget.item.tanggalDibuat.day} ${["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"][widget.item.tanggalDibuat.month - 1]} ${widget.item.tanggalDibuat.year}",
                       style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF777777),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF999999),
                       ),
                     ),
                   ],
@@ -523,8 +523,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       estimasiSelesai,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF777777),
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF999999),
                       ),
                     ),
                   ],

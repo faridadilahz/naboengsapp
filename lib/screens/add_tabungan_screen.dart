@@ -288,7 +288,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
               const SizedBox(height: 24),
 
-              /// BUTTON SIMPAN
+              /// BUTTON TAMBAH TABUNGAN
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -333,7 +333,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     ),
                   ),
                   child: const Text(
-                    "SIMPAN",
+                    "TAMBAH TABUNGAN",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w800,
