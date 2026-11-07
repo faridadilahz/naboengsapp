@@ -80,10 +80,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
   }
 
   // Dialog Konfirmasi Hapus Riwayat
-  void _konfirmasiHapusRiwayat(BuildContext context, int index, Map<String, dynamic> data) {
+  void _konfirmasiHapusRiwayat(
+    BuildContext context,
+    int index,
+    Map<String, dynamic> data,
+  ) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -97,7 +101,9 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
               child: const Text(
                 "Batal",
                 style: TextStyle(
@@ -108,10 +114,13 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             ),
             TextButton(
               onPressed: () {
+                Navigator.pop(dialogContext);
                 Navigator.pop(context);
+
                 setState(() {
                   widget.item.riwayat.removeAt(index);
 
+                  // Recalculate saldo terkumpul
                   int totalMurni = _totalSaldoRiwayat;
                   widget.item.terkumpul = totalMurni < 0 ? 0 : totalMurni;
                 });

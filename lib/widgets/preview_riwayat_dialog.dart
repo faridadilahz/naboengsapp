@@ -53,12 +53,18 @@ class PreviewRiwayatDialog extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   "Catatan: ${data['catatan'] != null && data['catatan'].toString().isNotEmpty ? data['catatan'] : '-'}",
-                  style: const TextStyle(color: Color(0xFF777777), fontSize: 14),
+                  style: const TextStyle(
+                    color: Color(0xFF777777),
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "Tanggal: ${formatTanggal(data['tanggal'])}",
-                  style: const TextStyle(color: Color(0xFF777777), fontSize: 14),
+                  style: const TextStyle(
+                    color: Color(0xFF777777),
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -78,8 +84,12 @@ class PreviewRiwayatDialog extends StatelessWidget {
                       ),
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       onPressed: () {
-                        Navigator.pop(context);
                         onDelete();
                       },
                       child: const Text(
