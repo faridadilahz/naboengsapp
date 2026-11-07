@@ -8,6 +8,7 @@ import '../screens/detail_tabungan_screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
+import '../widgets/tabungan_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -200,7 +201,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         final item = filteredList[index];
 
-                        return GestureDetector(
+                        return TabunganCard(
+                          item: item,
+                          selectedTab: selectedTab,
                           onTap: () async {
                             final result = await Navigator.push(
                               context,
@@ -215,117 +218,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 tabunganList.remove(item);
                               });
 
-                              _saveDataTabungan(); // <-- Simpan setelah dihapus
+                              _saveDataTabungan();
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
                                     "Tabungan '${item.nama}' berhasil dihapus!",
                                   ),
-                                  backgroundColor: Color(0xFFD35D5D),
+                                  backgroundColor: const Color(0xFFD35D5D),
                                 ),
                               );
                             } else {
                               setState(() {});
-                              _saveDataTabungan(); // <-- Simpan perubahan apapun (nambah nominal/edit tabungan)
+                              _saveDataTabungan();
                             }
                           },
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xffffffff),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: const Color(0xffeeeeee),
-                                width: 0.7,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (item.imagePath != null)
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(
-                                      File(item.imagePath!),
-                                      height: 144,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  item.nama,
-                                  style: const TextStyle(
-                                    fontSize: 21,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0xff333333),
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      formatRupiah(item.target),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 19,
-                                        color: Color(0xFF555555),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    if (selectedTab == 1) ...[
-                                      const Text(
-                                        "Tercapai!",
-                                        style: TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.w800,
-                                          color: Color(0xFF1B6B5A),
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                      ),
-                                    ] else ...[
-                                      Text(
-                                        "Tabungan per ${item.tipe}",
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Color(0xffaaaaaa),
-                                        ),
-                                      ),
-                                      Text(
-                                        formatRupiah(item.perHari),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 19,
-                                          color: Color(0xff555555),
-                                        ),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 8,
-                                        ),
-                                        child: Divider(
-                                          color: Color(0xffeeeeee),
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          _hitungSisaHari(item),
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Color(0xffaaaaaa),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
                         );
                       },
                     ),

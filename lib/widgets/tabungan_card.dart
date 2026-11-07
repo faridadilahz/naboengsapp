@@ -1,0 +1,119 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import '../models/tabungan_model.dart';
+import '../utils/format_rupiah.dart';
+
+class TabunganCard extends StatelessWidget {
+  final Tabungan item;
+  final int selectedTab;
+  final VoidCallback onTap;
+
+  const TabunganCard({
+    super.key,
+    required this.item,
+    required this.selectedTab,
+    required this.onTap,
+  });
+
+  String _hitungSisaHari(Tabungan item) {
+    int sisaUang = item.target - item.terkumpul;
+    if (sisaUang <= 0) return "Selesai hari ini";
+    int sisaHari = (sisaUang / item.perHari).ceil();
+    return "$sisaHari hari lagi";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xffeeeeee), width: 0.7),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (item.imagePath != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  File(item.imagePath!),
+                  height: 144,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            const SizedBox(height: 8),
+            Text(
+              item.nama,
+              style: const TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.w800,
+                color: Color(0xff333333),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  formatRupiah(item.target),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 19,
+                    color: Color(0xFF555555),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                if (selectedTab == 1) ...[
+                  const Text(
+                    "Tercapai!",
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF1B6B5A),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ] else ...[
+                  Text(
+                    "Tabungan per ${item.tipe}",
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xffaaaaaa),
+                    ),
+                  ),
+                  Text(
+                    formatRupiah(item.perHari),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 19,
+                      color: Color(0xff555555),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Divider(color: Color(0xffeeeeee), thickness: 1),
+                  ),
+                  Center(
+                    child: Text(
+                      _hitungSisaHari(item),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xffaaaaaa),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
