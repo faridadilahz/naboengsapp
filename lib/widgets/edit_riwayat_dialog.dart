@@ -65,7 +65,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               child: Text(
                 "Edit Riwayat Tabungan",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w800,
                   fontSize: 18,
                   color: Color(0xFF1B6B5A),
                 ),
@@ -91,7 +91,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           "+ Tambah",
                           style: TextStyle(
                             color: isTambah ? Colors.white : const Color(0xFF1B6B5A),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
@@ -116,7 +116,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           "- Kurangi",
                           style: TextStyle(
                             color: !isTambah ? Colors.white : const Color(0xFFD35D5D),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
@@ -126,7 +126,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               ],
             ),
             const SizedBox(height: 24),
-            const Text("Nominal Tabungan", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            const Text("Nominal Tabungan", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
             const SizedBox(height: 8),
             TextField(
               controller: nominalController,
@@ -183,7 +183,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                             formatted,
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w400,
                               color: isSelected ? const Color(0xFF1B6B5A) : const Color(0xFF555555),
                             ),
                           ),
@@ -195,7 +195,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               ),
               const SizedBox(height: 16),
             ],
-            const Text("Catatan (Opsional)", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            const Text("Catatan (Opsional)", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
             const SizedBox(height: 8),
             TextField(
               controller: catatanController,
@@ -227,7 +227,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                         side: const BorderSide(color: Color(0xFFD35D5D)),
                       ),
                     ),
-                    child: const Text("Batal", style: TextStyle(fontWeight: FontWeight.w600)),
+                    child: const Text("Batal", style: TextStyle(fontWeight: FontWeight.w800)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -252,7 +252,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text("Simpan", style: TextStyle(fontWeight: FontWeight.w600)),
+                    child: const Text("Simpan", style: TextStyle(fontWeight: FontWeight.w800)),
                   ),
                 ),
               ],

@@ -87,7 +87,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
           "Tambah Tabungan",
           style: TextStyle(
             color: Color(0xff333333),
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w800,
           ),
         ),
         backgroundColor: Colors.white,
@@ -250,6 +250,9 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                               color: isActive
                                   ? Colors.white
                                   : Color(0xFF777777),
+                                  fontWeight: isActive
+                                  ? FontWeight.w800
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -333,7 +336,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     "SIMPAN",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w800,
                       fontSize: 16,
                     ),
                   ),

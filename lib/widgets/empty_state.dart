@@ -35,14 +35,15 @@ class EmptyState extends StatelessWidget {
                 color: Colors.white,
               ),
               label: const Text(
-                "Tambah Tabungan",
+                "TAMBAH TABUNGAN",
                 style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w800,
                   fontSize: 15,
                 ),
               ),
               style: ElevatedButton.styleFrom(
+                shadowColor: Colors.transparent,
                 backgroundColor: const Color(0xFF1B6B5A),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,

@@ -114,7 +114,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
           "Edit Tabungan",
           style: TextStyle(
             color: Color(0xff333333),
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w800,
           ),
         ),
         backgroundColor: Colors.white,
@@ -349,7 +349,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                     "SIMPAN PERUBAHAN",
                     style: TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w800,
                       fontSize: 16,
                     ),
                   ),

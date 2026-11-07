@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
               "Halo, Farid!",
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w800,
                 color: Colors.white,
               ),
             ),
@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
                             fontWeight: selectedTab == 0
-                                ? FontWeight.w600
+                                ? FontWeight.w800
                                 : FontWeight.w400,
                           ),
                         ),
@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : const Color(0xffaaaaaa),
                             fontSize: 16,
                             fontWeight: selectedTab == 1
-                                ? FontWeight.w600
+                                ? FontWeight.w800
                                 : FontWeight.w400,
                           ),
                         ),
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   item.nama,
                                   style: const TextStyle(
                                     fontSize: 19,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w800,
                                     color: Color(0xff222222),
                                   ),
                                 ),
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(
                                       formatRupiah(item.target),
                                       style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w800,
                                         fontSize: 17,
                                         color: Color(0xFF555555),
                                       ),
@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "Tercapai!",
                                         style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w800,
                                           color: Color(0xFF1B6B5A),
                                           fontStyle: FontStyle.italic,
                                         ),
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         formatRupiah(item.perHari),
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w800,
                                           fontSize: 16,
                                           color: Color(0xff555555),
                                         ),

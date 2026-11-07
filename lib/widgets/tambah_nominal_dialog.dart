@@ -55,10 +55,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
       filled: true,
       fillColor: const Color(0xFFFAFAFA),
       prefixIcon: prefixIcon,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -69,10 +66,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-          color: Color(0xFF1B6B5A),
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: Color(0xFF1B6B5A), width: 1.5),
       ),
     );
   }
@@ -93,13 +87,13 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
               child: Text(
                 "Tambah Nominal Tabungan",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w800,
                   fontSize: 20,
                   color: Color(0xFF333333),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -122,7 +116,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                             color: isTambah
                                 ? Colors.white
                                 : const Color(0xFF1B6B5A),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
@@ -150,7 +144,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                             color: !isTambah
                                 ? Colors.white
                                 : const Color(0xFFD35D5D),
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
@@ -159,10 +153,14 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const Text(
               "Nominal Tabungan",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF333333),),
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+                color: Color(0xFF333333),
+              ),
             ),
             const SizedBox(height: 8),
 
@@ -225,7 +223,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: isSelected
-                                  ? FontWeight.w600
+                                  ? FontWeight.w800
                                   : FontWeight.w400,
                               color: isSelected
                                   ? const Color(0xFF1B6B5A)
@@ -238,11 +236,15 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
             ],
             const Text(
               "Catatan (Opsional)",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF333333),),
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+                color: Color(0xFF333333),
+              ),
             ),
             const SizedBox(height: 8),
 
@@ -268,8 +270,9 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFD35D5D),
-                      minimumSize: const Size(double.infinity, 56),
+                      minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Color(0xFFD35D5D)),
@@ -277,7 +280,10 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     ),
                     child: const Text(
                       "BATAL",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ),
@@ -286,8 +292,10 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (nominalController.text.isNotEmpty) {
-                        String cleanNominal = nominalController.text
-                            .replaceAll(RegExp(r'[^0-9]'), '');
+                        String cleanNominal = nominalController.text.replaceAll(
+                          RegExp(r'[^0-9]'),
+                          '',
+                        );
                         int nominal = int.parse(cleanNominal);
                         int nominalFinal = isTambah ? nominal : -nominal;
 
@@ -300,15 +308,19 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1B6B5A),
                       foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 56),
+                      minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: const Text(
                       "TAMBAH",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ),
