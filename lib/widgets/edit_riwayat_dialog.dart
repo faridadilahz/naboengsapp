@@ -31,14 +31,18 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
     isTambah = (widget.data['nominal'] as int) >= 0;
 
     nominalController = TextEditingController(text: formatRupiah(nominalAsli));
-    catatanController = TextEditingController(text: widget.data['catatan'] ?? "");
+    catatanController = TextEditingController(
+      text: widget.data['catatan'] ?? "",
+    );
 
     _initUserNominals();
   }
 
   void _initUserNominals() {
     for (dynamic r in widget.riwayatFull) {
-      bool rIsTambah = (r['nominal'] is int) ? (r['nominal'] as int) >= 0 : true;
+      bool rIsTambah = (r['nominal'] is int)
+          ? (r['nominal'] as int) >= 0
+          : true;
       int rNominal = (r['nominal'] is int)
           ? (r['nominal'] as int).abs()
           : int.tryParse(r['nominal'].toString())?.abs() ?? 0;
@@ -49,12 +53,36 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
     }
   }
 
+  InputDecoration inputDecoration(String hint, {Widget? prefixIcon}) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
+      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
+      filled: true,
+      fillColor: const Color(0xFFFAFAFA),
+      prefixIcon: prefixIcon,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Color(0xFF1B6B5A), width: 1.5),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -66,12 +94,12 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                 "Edit Riwayat Tabungan",
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
-                  fontSize: 18,
-                  color: Color(0xFF1B6B5A),
+                  fontSize: 20,
+                  color: Color(0xFF333333),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -90,7 +118,10 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                         child: Text(
                           "+ Tambah",
                           style: TextStyle(
-                            color: isTambah ? Colors.white : const Color(0xFF1B6B5A),
+                            fontSize: 16,
+                            color: isTambah
+                                ? Colors.white
+                                : const Color(0xFF1B6B5A),
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -115,7 +146,10 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                         child: Text(
                           "- Kurangi",
                           style: TextStyle(
-                            color: !isTambah ? Colors.white : const Color(0xFFD35D5D),
+                            fontSize: 16,
+                            color: !isTambah
+                                ? Colors.white
+                                : const Color(0xFFD35D5D),
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -125,9 +159,18 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            const Text("Nominal Tabungan", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+            const SizedBox(height: 20),
+            const Text(
+              "Nominal Tabungan",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+                color: Color(0xFF333333),
+              ),
+            ),
             const SizedBox(height: 8),
+
+            // TextField Nominal dengan inputDecoration
             TextField(
               controller: nominalController,
               keyboardType: TextInputType.number,
@@ -135,18 +178,17 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                 FilteringTextInputFormatter.digitsOnly,
                 RupiahFormatter(),
               ],
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFFF8F9FA),
-                prefixIcon: const Icon(Ionicons.cash, color: Color(0xFF1B6B5A), size: 22),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+              decoration: inputDecoration(
+                "Masukkan Nominal",
+                prefixIcon: const Icon(
+                  Ionicons.cash,
+                  color: Color(0xFF777777),
+                  size: 20,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+
+            const SizedBox(height: 12),
             if (userNominals.isNotEmpty) ...[
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -167,7 +209,10 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? const Color(0xFF1B6B5A).withOpacity(0.1)
@@ -182,9 +227,13 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           child: Text(
                             formatted,
                             style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w400,
-                              color: isSelected ? const Color(0xFF1B6B5A) : const Color(0xFF555555),
+                              fontSize: 14,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w400,
+                              color: isSelected
+                                  ? const Color(0xFF1B6B5A)
+                                  : const Color(0xFF555555),
                             ),
                           ),
                         ),
@@ -193,24 +242,31 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
             ],
-            const Text("Catatan (Opsional)", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+            const Text(
+              "Catatan (Opsional)",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+                color: Color(0xFF333333),
+              ),
+            ),
             const SizedBox(height: 8),
+
+            // TextField Catatan dengan inputDecoration
             TextField(
               controller: catatanController,
-              decoration: InputDecoration(
-                hintText: "Cth: Uang Jajan",
-                filled: true,
-                fillColor: const Color(0xFFF8F9FA),
-                prefixIcon: const Icon(Ionicons.attach, color: Colors.grey, size: 22),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+              decoration: inputDecoration(
+                "Contoh: Uang jajan",
+                prefixIcon: const Icon(
+                  Ionicons.reader,
+                  color: Color(0xFF777777),
+                  size: 20,
                 ),
               ),
             ),
+
             const SizedBox(height: 28),
             Row(
               children: [
@@ -220,14 +276,21 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFFD35D5D),
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Color(0xFFD35D5D)),
                       ),
                     ),
-                    child: const Text("Batal", style: TextStyle(fontWeight: FontWeight.w800)),
+                    child: const Text(
+                      "BATAL",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -235,9 +298,14 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (nominalController.text.isNotEmpty) {
-                        String cleanNominal = nominalController.text.replaceAll(RegExp(r'[^0-9]'), '');
+                        String cleanNominal = nominalController.text.replaceAll(
+                          RegExp(r'[^0-9]'),
+                          '',
+                        );
                         int nominalInput = int.parse(cleanNominal);
-                        int nominalFinal = isTambah ? nominalInput : -nominalInput;
+                        int nominalFinal = isTambah
+                            ? nominalInput
+                            : -nominalInput;
 
                         Navigator.pop(context, {
                           "nominal": nominalFinal,
@@ -248,11 +316,20 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1B6B5A),
                       foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 48),
+                      minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: const Text("Simpan", style: TextStyle(fontWeight: FontWeight.w800)),
+                    child: const Text(
+                      "SIMPAN",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
                 ),
               ],
