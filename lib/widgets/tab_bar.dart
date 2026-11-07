@@ -22,7 +22,6 @@ class SegmentedTabBar extends StatelessWidget {
       child: Stack(
         children: [
           // SLIDE ANIMATION
-          // SLIDE ANIMATION
           AnimatedAlign(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeInOut,

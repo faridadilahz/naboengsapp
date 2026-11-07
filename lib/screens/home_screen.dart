@@ -23,13 +23,38 @@ class _HomeScreenState extends State<HomeScreen> {
   // 1. Deklarasi variabel
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
-
-  // --- TAMBAHAN BARU: Fungsi Load & Save Data ---
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _loadDataTabungan(); // Panggil data pas aplikasi dibuka
+    _pageController = PageController(initialPage: selectedTab);
+    _loadDataTabungan();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _handleItemUpdate(Tabungan item, String action) {
+    if (action == "delete") {
+      setState(() {
+        tabunganList.remove(item);
+      });
+      _saveDataTabungan();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Tabungan '${item.nama}' berhasil dihapus!"),
+          backgroundColor: const Color(0xFFD35D5D),
+        ),
+      );
+    } else {
+      setState(() {});
+      _saveDataTabungan();
+    }
   }
 
   Future<void> _loadDataTabungan() async {
@@ -56,6 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedTab = 0;
       });
 
+      _pageController.animateToPage(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+
       _saveDataTabungan();
     }
   }
@@ -79,6 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Tabungan> dalamProsesList = [];
+    List<Tabungan> tercapaiList = [];
     // 2. Logika filter
     List<Tabungan> filteredList = tabunganList.where((item) {
       if (item.terkumpul >= item.target) {
@@ -130,6 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   selectedTab = index;
                 });
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               },
             ),
             const SizedBox(height: 24),
@@ -143,30 +182,32 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: TabunganListView(
-                items: filteredList,
-                selectedTab: selectedTab,
-                onAddPressed: _bukaFormTambahTabungan,
-                onItemUpdated: (item, action) {
-                  if (action == "delete") {
-                    setState(() {
-                      tabunganList.remove(item);
-                    });
-                    _saveDataTabungan();
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          "Tabungan '${item.nama}' berhasil dihapus!",
-                        ),
-                        backgroundColor: const Color(0xFFD35D5D),
-                      ),
-                    );
-                  } else {
-                    setState(() {});
-                    _saveDataTabungan();
-                  }
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    selectedTab = index;
+                  });
                 },
+                children: [
+                  // Page 0: Dalam Proses
+                  TabunganListView(
+                    items: dalamProsesList,
+                    selectedTab: 0,
+                    onAddPressed: _bukaFormTambahTabungan,
+                    onItemUpdated: (item, action) =>
+                        _handleItemUpdate(item, action),
+                  ),
+
+                  // Page 1: Tercapai
+                  TabunganListView(
+                    items: tercapaiList,
+                    selectedTab: 1,
+                    onAddPressed: _bukaFormTambahTabungan,
+                    onItemUpdated: (item, action) =>
+                        _handleItemUpdate(item, action),
+                  ),
+                ],
               ),
             ),
           ],
