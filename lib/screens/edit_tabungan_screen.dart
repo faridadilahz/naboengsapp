@@ -269,7 +269,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                           color: isActive
                               ? const Color(0xFF1B6B5A)
                               : const Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(48),
+                          borderRadius: BorderRadius.circular(41),
                         ),
                         child: Center(
                           child: Text(
