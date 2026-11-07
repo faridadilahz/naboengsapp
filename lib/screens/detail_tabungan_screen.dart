@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/tabungan_model.dart';
 import '../utils/format_rupiah.dart';
 import '../widgets/edit_riwayat_dialog.dart';
 import '../widgets/tambah_nominal_dialog.dart';
 import 'edit_tabungan_screen.dart';
+import '../widgets/preview_riwayat_dialog.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -77,6 +77,59 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         await prefs.setString('data_tabungan', updatedJson);
       }
     }
+  }
+
+  // Dialog Konfirmasi Hapus Riwayat
+  void _konfirmasiHapusRiwayat(BuildContext context, int index, Map<String, dynamic> data) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            "Hapus Riwayat Ini?",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          content: Text(
+            "Apakah Anda yakin ingin menghapus nominal ${formatRupiah(data['nominal'])}?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                "Batal",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  widget.item.riwayat.removeAt(index);
+
+                  int totalMurni = _totalSaldoRiwayat;
+                  widget.item.terkumpul = totalMurni < 0 ? 0 : totalMurni;
+                });
+
+                _saveToPrefs();
+              },
+              child: const Text(
+                "Hapus",
+                style: TextStyle(
+                  color: Color(0xFFD35D5D),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Hitung Estimasi Selesai
@@ -189,128 +242,11 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Detail Nominal",
-                    style: TextStyle(
-                      color: Color(0xFF555555),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Nominal: ${formatRupiah(data['nominal'])}",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: (data['nominal'] as int) < 0
-                          ? const Color(0xFFD35D5D)
-                          : const Color(0xFF1B6B5A),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Catatan: ${data['catatan']}",
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
-                  Text(
-                    "Tanggal: ${_formatTanggalDibuat(data['tanggal'])}",
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          showEditRiwayat(context, index);
-                        },
-                        child: const Text(
-                          "Edit",
-                          style: TextStyle(color: Color(0xFF1B6B5A)),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext dialogContext) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                title: const Text("Hapus Nominal Ini?"),
-                                content: Text(
-                                  "Apakah Anda yakin ingin menghapus riwayat nominal ${(data['nominal'] as int) >= 0 ? "+${formatRupiah(data['nominal'])}" : "-${formatRupiah((data['nominal'] as int).abs())}"}?",
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(dialogContext),
-                                    child: const Text(
-                                      "Batal",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(dialogContext);
-                                      setState(() {
-                                        widget.item.riwayat.removeAt(index);
-
-                                        int totalMurni = _totalSaldoRiwayat;
-                                        widget.item.terkumpul = totalMurni < 0
-                                            ? 0
-                                            : totalMurni;
-                                      });
-                                      _saveToPrefs();
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      "Hapus",
-                                      style: TextStyle(
-                                        color: Color(0xFFD35D5D),
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: const Text(
-                          "Hapus",
-                          style: TextStyle(color: Color(0xFFD35D5D)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              right: 8,
-              top: 8,
-              child: IconButton(
-                icon: const Icon(Ionicons.close, color: Colors.grey),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-          ],
-        ),
+      builder: (context) => PreviewRiwayatDialog(
+        data: data,
+        formatTanggal: _formatTanggalDibuat,
+        onEdit: () => showEditRiwayat(context, index),
+        onDelete: () => _konfirmasiHapusRiwayat(context, index, data),
       ),
     );
   }
@@ -709,7 +645,9 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
     );
