@@ -70,7 +70,7 @@ class TabunganCard extends StatelessWidget {
                 color: Color(0xff333333),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 4),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -78,8 +78,8 @@ class TabunganCard extends StatelessWidget {
                   formatRupiah(item.target),
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
-                    fontSize: 19,
-                    color: Color(0xFF555555),
+                    fontSize: 21,
+                    color: Color(0xFF1B6B5A),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -103,7 +103,7 @@ class TabunganCard extends StatelessWidget {
                   Text(
                     formatRupiah(item.perHari),
                     style: const TextStyle(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       fontSize: 19,
                       color: Color(0xff555555),
                     ),

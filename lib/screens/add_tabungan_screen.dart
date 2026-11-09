@@ -6,6 +6,7 @@ import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
+import '../widgets/selector.dart';
 
 class AddTabunganScreen extends StatefulWidget {
   const AddTabunganScreen({super.key});
@@ -135,7 +136,10 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                               SizedBox(height: 8),
                               Text(
                                 "Klik untuk unggah foto",
-                                style: TextStyle(color: Color(0xFF777777), fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  color: Color(0xFF777777),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
                           )
@@ -223,43 +227,13 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               ),
               const SizedBox(height: 8),
 
-              Row(
-                children: ["Harian", "Mingguan", "Bulanan"].map((e) {
-                  bool isActive = selectedType == e;
-
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedType = e;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: isActive
-                              ? const Color(0xFF1B6B5A)
-                              : Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(48),
-                        ),
-                        child: Center(
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                              color: isActive
-                                  ? Colors.white
-                                  : Color(0xFF777777),
-                                  fontWeight: isActive
-                                  ? FontWeight.w800
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+              SegmentedSelector(
+                selectedType: selectedType,
+                onTypeChanged: (type) {
+                  setState(() {
+                    selectedType = type;
+                  });
+                },
               ),
 
               const SizedBox(height: 16),

@@ -6,6 +6,7 @@ import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
+import '../widgets/selector.dart';
 
 class EditTabunganScreen extends StatefulWidget {
   final Tabungan item; // Wajib ada karena mau edit data yang sudah ada
@@ -251,43 +252,13 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               ),
               const SizedBox(height: 8),
 
-              Row(
-                children: ["Harian", "Mingguan", "Bulanan"].map((e) {
-                  bool isActive = selectedType == e;
-
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedType = e;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: isActive
-                              ? const Color(0xFF1B6B5A)
-                              : const Color(0xfff2f2f2),
-                          borderRadius: BorderRadius.circular(48),
-                        ),
-                        child: Center(
-                          child: Text(
-                            e,
-                            style: TextStyle(
-                              color: isActive
-                                  ? Colors.white
-                                  : const Color(0xFF777777),
-                              fontWeight: isActive
-                                  ? FontWeight.w800
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+              SegmentedSelector(
+                selectedType: selectedType,
+                onTypeChanged: (type) {
+                  setState(() {
+                    selectedType = type;
+                  });
+                },
               ),
 
               const SizedBox(height: 16),
