@@ -9,6 +9,7 @@ import '../widgets/edit_riwayat_dialog.dart';
 import '../widgets/tambah_nominal_dialog.dart';
 import 'edit_tabungan_screen.dart';
 import '../widgets/preview_riwayat_dialog.dart';
+import '../widgets/celebration_dialog.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -209,6 +210,8 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       String formattedDate =
           "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year.toString().substring(2)}";
 
+      bool statusSebelumnya = widget.item.terkumpul >= widget.item.target;
+
       setState(() {
         widget.item.riwayat.insert(0, {
           "nominal": nominalFinal,
@@ -222,6 +225,16 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       });
 
       _saveToPrefs();
+
+      bool statusSekarang = widget.item.terkumpul >= widget.item.target;
+      if (!statusSebelumnya && statusSekarang) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => SelebrasiTercapaiDialog(item: widget.item),
+          );
+        }
+      }
     }
   }
 

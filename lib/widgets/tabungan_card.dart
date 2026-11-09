@@ -70,7 +70,7 @@ class TabunganCard extends StatelessWidget {
                 color: Color(0xff333333),
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
