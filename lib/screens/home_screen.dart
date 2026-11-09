@@ -128,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 4),
             Text(
               "Nabung berapa hari ini?",
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 16, color: Color(0xFFDDDDDD)),
             ),
           ],
         ),
