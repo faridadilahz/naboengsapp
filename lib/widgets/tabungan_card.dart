@@ -53,7 +53,7 @@ class TabunganCard extends StatelessWidget {
           children: [
             if (item.imagePath != null)
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
                 child: Image.file(
                   File(item.imagePath!),
                   height: 144,

@@ -84,11 +84,6 @@ class PreviewRiwayatDialog extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
                       onPressed: () {
                         onDelete();
                       },

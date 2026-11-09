@@ -115,18 +115,18 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         toolbarHeight: 96,
         flexibleSpace: Stack(
-    children: [
-      Positioned.fill(
-        child: Opacity(
-          opacity: 0.12,
-          child: Image.asset(
-            'assets/images/headerpattern.png',
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-          ),
-        ),
-      ),
-    ],
+          children: [
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.36,
+                child: Image.asset(
+                  'assets/images/headerpattern.png',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ],
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               "Halo, Farid!",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 26,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
               ),
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 4),
             Text(
               "Nabung berapa hari ini?",
-              style: TextStyle(fontSize: 16, color: Color(0xFFDDDDDD)),
+              style: TextStyle(fontSize: 16, color: Color(0xFFEEEEEE), fontWeight: FontWeight.w500),
             ),
           ],
         ),

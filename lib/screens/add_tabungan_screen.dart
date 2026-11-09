@@ -166,10 +166,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               TextFormField(
                 controller: namaController,
                 decoration: inputDecoration("Masukkan nama tabungan disini"),
-                // ⚡ POPUP ADAPTIF ⚡
+
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -201,9 +203,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 ],
                 decoration: inputDecoration("Masukkan target tabungan disini"),
                 // ⚡ POPUP ADAPTIF ⚡
+                // Ganti blok contextMenuBuilder dengan ini:
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
                   );
                 },
                 validator: (value) {
@@ -248,9 +253,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 ],
                 decoration: inputDecoration("Masukkan nominal tabungan disini"),
                 // ⚡ POPUP ADAPTIF ⚡
+                // Ganti blok contextMenuBuilder dengan ini:
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
                   );
                 },
                 validator: (value) {

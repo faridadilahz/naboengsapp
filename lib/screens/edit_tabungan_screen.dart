@@ -194,8 +194,10 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 controller: namaController,
                 decoration: inputDecoration("Masukkan nama tabungan disini"),
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
                   );
                 },
                 validator: (value) {
@@ -227,8 +229,10 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 ],
                 decoration: inputDecoration("Masukkan target tabungan disini"),
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
                   );
                 },
                 validator: (value) {
@@ -272,8 +276,10 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 ],
                 decoration: inputDecoration("Masukkan nominal tabungan disini"),
                 contextMenuBuilder: (context, editableTextState) {
-                  return SystemContextMenu.editableText(
-                    editableTextState: editableTextState,
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: editableTextState.contextMenuAnchors,
+                    buttonItems: editableTextState
+                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
                   );
                 },
                 validator: (value) {
