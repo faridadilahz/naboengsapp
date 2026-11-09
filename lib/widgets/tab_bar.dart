@@ -34,7 +34,7 @@ class SegmentedTabBar extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFF1B6B5A),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -71,7 +71,7 @@ class SegmentedTabBar extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             style: TextStyle(
               color: isSelected
-                  ? const Color(0xFF1B6B5A)
+                  ? const Color(0xFFFFFFFF)
                   : const Color(0xFFAAAAAA),
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
