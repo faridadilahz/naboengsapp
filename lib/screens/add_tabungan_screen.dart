@@ -243,6 +243,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(12),
                   RupiahFormatter(),
                 ],
                 decoration: inputDecoration("Masukkan nominal tabungan disini"),
@@ -280,11 +281,27 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                       // Target dibagi nominal harian = jumlah hari (dibulatkan ke atas pakai .ceil)
                       int jumlahHari = (targetAngka / nominalAngka).ceil();
 
+                      if (jumlahHari > 36500) {
+                        jumlahHari =
+                            36500; // Cap di 100 tahun biar gak overflow DateTime
+                      }
+
                       // 2. Tentukan tanggal dibuat dan hitung estimasi selesainya
                       DateTime sekarang = DateTime.now();
                       DateTime tanggalEstimasi = sekarang.add(
                         Duration(days: jumlahHari),
                       );
+
+                      try {
+                        tanggalEstimasi = sekarang.add(
+                          Duration(days: jumlahHari),
+                        );
+                      } catch (e) {
+                        tanggalEstimasi = sekarang.add(
+                          const Duration(days: 36500),
+                        );
+                      }
+
                       final data = Tabungan(
                         nama: namaController.text,
                         target: targetAngka,

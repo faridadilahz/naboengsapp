@@ -148,17 +148,24 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
     if (widget.item.perHari <= 0) return "-";
 
     int sisaPeriode = (sisaUang / widget.item.perHari).ceil();
+
+    // ⚡ CAP SISA PERIODE BIAR GAK OVERFLOW ⚡
+    if (sisaPeriode > 36500) return "Lebih dari 100 tahun";
+
     DateTime now = DateTime.now();
     DateTime tglSelesai;
 
-    String tipeLower = widget.item.tipe.toLowerCase();
-
-    if (tipeLower.contains('minggu')) {
-      tglSelesai = now.add(Duration(days: sisaPeriode * 7));
-    } else if (tipeLower.contains('bulan')) {
-      tglSelesai = DateTime(now.year, now.month + sisaPeriode, now.day);
-    } else {
-      tglSelesai = now.add(Duration(days: sisaPeriode));
+    try {
+      String tipeLower = widget.item.tipe.toLowerCase();
+      if (tipeLower.contains('minggu')) {
+        tglSelesai = now.add(Duration(days: sisaPeriode * 7));
+      } else if (tipeLower.contains('bulan')) {
+        tglSelesai = DateTime(now.year, now.month + sisaPeriode, now.day);
+      } else {
+        tglSelesai = now.add(Duration(days: sisaPeriode));
+      }
+    } catch (e) {
+      return "Lebih dari 100 tahun";
     }
 
     List<String> bulan = [
