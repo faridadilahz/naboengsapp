@@ -114,6 +114,20 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF1B6B5A),
         elevation: 0,
         toolbarHeight: 96,
+        flexibleSpace: Stack(
+    children: [
+      Positioned.fill(
+        child: Opacity(
+          opacity: 0.12,
+          child: Image.asset(
+            'assets/images/headerpattern.png',
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+        ),
+      ),
+    ],
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
