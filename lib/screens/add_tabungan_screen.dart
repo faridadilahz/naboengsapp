@@ -170,8 +170,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems,
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -327,6 +326,9 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1B6B5A),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
