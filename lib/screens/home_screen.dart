@@ -7,9 +7,7 @@ import 'package:ionicons/ionicons.dart';
 import '../widgets/tabungan_list_view.dart';
 import '../widgets/tab_bar.dart';
 import '../widgets/input_nama.dart';
-
-// Nama Pengguna
-String namaPengguna = "";
+import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,11 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Tabungan> tabunganList = [];
   int selectedTab = 0;
   late PageController _pageController;
+  String namaPengguna = "";
+  String sapaanHarian = "Nabung berapa hari ini?";
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: selectedTab);
+    _generateSapaan();
     _loadDataTabungan();
     _loadNamaPengguna();
   }
@@ -35,6 +36,45 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _generateSapaan() {
+    final jam = DateTime.now().hour;
+    final random = Random();
+
+    List<String> daftarSapaan;
+
+    if (jam >= 4 && jam < 11) {
+      daftarSapaan = [
+        "Selamat pagi! Awali hari dengan nabung yuk.",
+        "Pagi yang cerah buat selangkah lebih dekat ke target!",
+        "Semangat pagi! Mau sisihin berapa hari ini?",
+        "Ngopi dulu, habis itu jangan lupa nabung ya!",
+      ];
+    } else if (jam >= 11 && jam < 15) {
+      daftarSapaan = [
+        "Selamat siang! Tetap konsisten kejar impianmu.",
+        "Siang-siang gini paling pas cek progres tabungan.",
+        "Jangan lupa sisihin receh siang ini ya!",
+        "Semangat terus, dikit-dikit lama-lama jadi bukit!",
+      ];
+    } else if (jam >= 15 && jam < 18) {
+      daftarSapaan = [
+        "Selamat sore! Gimana progres nabungmu hari ini?",
+        "Sore santai, waktunya cek target tabungan!",
+        "Ada sisa uang jajan hari ini? Yuk masukin tabungan!",
+        "Sore-sore gini enak nih liat saldo makin nambah.",
+      ];
+    } else {
+      daftarSapaan = [
+        "Selamat malam! Sudah nabung hari ini?",
+        "Sebelum istirahat, yuk isi tabunganmu dulu.",
+        "Malam! Satu langkah lagi menuju barang impianmu.",
+        "Tutup harimu dengan nabung hari ini, yuk!",
+      ];
+    }
+
+    sapaanHarian = daftarSapaan[random.nextInt(daftarSapaan.length)];
   }
 
   void _handleItemUpdate(Tabungan item, String action) {
@@ -207,9 +247,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
-              "Nabung berapa hari ini?",
-              style: TextStyle(fontSize: 16, color: Color(0xFFDDDDDD)),
+            Text(
+              sapaanHarian,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 15, color: Color(0xFFDDDDDD)),
             ),
           ],
         ),
