@@ -47,7 +47,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
             // ✨ Padding bawah disesuaikan sedikit saat ada tombol Lewati agar proporsional
             padding: EdgeInsets.fromLTRB(
               24,
-              48,
+              64,
               24,
               widget.isFirstTime ? 16 : 24,
             ),
@@ -132,7 +132,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                 // Primary Action Button
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: _submitNama,
                     style: ElevatedButton.styleFrom(
