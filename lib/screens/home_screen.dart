@@ -46,31 +46,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (jam >= 4 && jam < 11) {
       daftarSapaan = [
-        "Selamat pagi! Awali hari dengan nabung yuk.",
-        "Pagi yang cerah buat selangkah lebih dekat ke target!",
-        "Semangat pagi! Mau sisihin berapa hari ini?",
-        "Ngopi dulu, habis itu jangan lupa nabung ya!",
+        "Selamat pagi! Yuk mulai nabung.",
+        "Pagi! Nabung berapa hari ini?",
+        "Semangat pagi, kejar targetmu!",
+        "Awali pagi dengan nabung yuk!",
       ];
     } else if (jam >= 11 && jam < 15) {
       daftarSapaan = [
-        "Selamat siang! Tetap konsisten kejar impianmu.",
-        "Siang-siang gini paling pas cek progres tabungan.",
-        "Jangan lupa sisihin receh siang ini ya!",
-        "Semangat terus, dikit-dikit lama-lama jadi bukit!",
+        "Selamat siang! Sudah nabung?",
+        "Siang! Cek progres tabungan yuk.",
+        "Sisihin receh siang ini yuk!",
+        "Tetap konsisten kejar targetmu!",
       ];
     } else if (jam >= 15 && jam < 18) {
       daftarSapaan = [
-        "Selamat sore! Gimana progres nabungmu hari ini?",
-        "Sore santai, waktunya cek target tabungan!",
-        "Ada sisa uang jajan hari ini? Yuk masukin tabungan!",
-        "Sore-sore gini enak nih liat saldo makin nambah.",
+        "Selamat sore! Gimana progresmu?",
+        "Sore santai, waktunya nabung!",
+        "Ada sisa jajan? Tabung yuk!",
+        "Sore! Cek saldo tabunganmu yuk.",
       ];
     } else {
       daftarSapaan = [
-        "Selamat malam! Sudah nabung hari ini?",
-        "Sebelum istirahat, yuk isi tabunganmu dulu.",
-        "Malam! Satu langkah lagi menuju barang impianmu.",
-        "Tutup harimu dengan nabung hari ini, yuk!",
+        "Selamat malam! Sudah nabung?",
+        "Yuk nabung sebelum istirahat!",
+        "Malam! Dikit lagi target tercapai.",
+        "Tutup harimu dengan nabung yuk!",
       ];
     }
 
