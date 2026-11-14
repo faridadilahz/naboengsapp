@@ -6,6 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ionicons/ionicons.dart';
 import '../widgets/tabungan_list_view.dart';
 import '../widgets/tab_bar.dart';
+import '../widgets/input_nama.dart';
+
+// Nama Pengguna
+String namaPengguna = "";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _pageController = PageController(initialPage: selectedTab);
     _loadDataTabungan();
+    _loadNamaPengguna();
   }
 
   @override
@@ -48,6 +53,44 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       setState(() {});
       _saveDataTabungan();
+    }
+  }
+
+  Future<void> _loadNamaPengguna() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedName = prefs.getString('nama_pengguna');
+    bool sudahDitanya = prefs.getBool('sudah_ditanya_nama') ?? false;
+
+    if (savedName != null && savedName.trim().isNotEmpty) {
+      setState(() {
+        namaPengguna = savedName;
+      });
+    } else if (!sudahDitanya) {
+      // Tandai sudah pernah ditanya agar tidak muncul berulang kali jika di-skip
+      await prefs.setBool('sudah_ditanya_nama', true);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _bukaDialogEditNama(isFirstTime: true);
+      });
+    }
+  }
+
+  Future<void> _bukaDialogEditNama({bool isFirstTime = false}) async {
+    final result = await showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) =>
+          InputNamaDialog(currentName: namaPengguna, isFirstTime: isFirstTime),
+    );
+
+    // Jika user menekan tombol Simpan (result tidak null, meskipun kosong)
+    if (result != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('nama_pengguna', result);
+
+      setState(() {
+        namaPengguna = result;
+      });
     }
   }
 
@@ -130,19 +173,43 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "Halo, Farid!",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
+          children: [
+            GestureDetector(
+              onTap: () => _bukaDialogEditNama(isFirstTime: false),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Halo, ${namaPengguna.isEmpty ? 'Sobat' : namaPengguna}!",
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Ionicons.pencil,
+                      size: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 4),
-            Text(
+            const SizedBox(height: 4),
+            const Text(
               "Nabung berapa hari ini?",
-              style: TextStyle(fontSize: 16, color: Color(0xFFEEEEEE), fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 16, color: Color(0xFFDDDDDD)),
             ),
           ],
         ),
