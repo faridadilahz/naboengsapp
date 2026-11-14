@@ -44,10 +44,9 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
       child: Stack(
         children: [
           Padding(
-            // ✨ Padding bawah disesuaikan sedikit saat ada tombol Lewati agar proporsional
             padding: EdgeInsets.fromLTRB(
               24,
-              64,
+              widget.isFirstTime ? 28 : 48,
               24,
               widget.isFirstTime ? 16 : 24,
             ),
@@ -172,10 +171,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                       ),
                       child: const Text(
                         "Lewati",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -185,14 +181,15 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
           ),
 
           // Tombol Close
-          Positioned(
-            right: 8,
-            top: 8,
-            child: IconButton(
-              icon: const Icon(Ionicons.close, color: Colors.grey, size: 20),
-              onPressed: () => Navigator.pop(context),
+          if (!widget.isFirstTime)
+            Positioned(
+              right: 8,
+              top: 8,
+              child: IconButton(
+                icon: const Icon(Ionicons.close, color: Colors.grey, size: 20),
+                onPressed: () => Navigator.pop(context),
+              ),
             ),
-          ),
         ],
       ),
     );
