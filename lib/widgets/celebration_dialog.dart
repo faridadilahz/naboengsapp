@@ -57,7 +57,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
             borderRadius: BorderRadius.circular(24),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
