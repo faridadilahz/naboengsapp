@@ -114,39 +114,44 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               ),
               const SizedBox(height: 8),
 
-              GestureDetector(
-                onTap: pickImage,
-                child: CustomPaint(
-                  painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
-                  child: Container(
-                    height: 120,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: imageFile == null
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Ionicons.cloud_upload,
-                                color: Color(0xFF777777),
-                                size: 32,
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "Klik untuk unggah foto",
-                                style: TextStyle(
+              CustomPaint(
+                painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
+                child: Material(
+                  color: const Color(0xFFFAFAFA),
+                  borderRadius: BorderRadius.circular(16),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: pickImage,
+                    borderRadius: BorderRadius.circular(16),
+                    splashColor: const Color(0xFF1B6B5A).withValues(alpha: 0.12),
+                    highlightColor: const Color(0xFF1B6B5A).withValues(alpha: 0.08),
+                    child: SizedBox(
+                      height: 120,
+                      width: double.infinity,
+                      child: imageFile == null
+                          ? const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Ionicons.cloud_upload,
                                   color: Color(0xFF777777),
-                                  fontWeight: FontWeight.w500,
+                                  size: 32,
                                 ),
-                              ),
-                            ],
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.file(imageFile!, fit: BoxFit.cover),
-                          ),
+                                SizedBox(height: 8),
+                                Text(
+                                  "Klik untuk unggah foto",
+                                  style: TextStyle(
+                                    color: Color(0xFF777777),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Ink.image(
+                              image: FileImage(imageFile!),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                   ),
                 ),
               ),
