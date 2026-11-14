@@ -289,6 +289,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
@@ -328,6 +329,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
