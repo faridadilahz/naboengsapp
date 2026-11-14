@@ -44,7 +44,13 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
+            // ✨ Padding bawah disesuaikan sedikit saat ada tombol Lewati agar proporsional
+            padding: EdgeInsets.fromLTRB(
+              24,
+              48,
+              24,
+              widget.isFirstTime ? 16 : 24,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,6 +65,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                     fontSize: 21,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF333333),
+                    height: 1.2,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -77,7 +84,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                 ),
                 const SizedBox(height: 24),
 
-                // Input Field (Tanpa validator wajib)
+                // Input Field
                 TextFormField(
                   controller: _namaController,
                   autofocus: true,
@@ -85,9 +92,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _submitNama(),
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(20),
-                  ],
+                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -124,10 +129,10 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                 ),
                 const SizedBox(height: 24),
 
-                // Action Button
+                // Primary Action Button
                 SizedBox(
                   width: double.infinity,
-                  height: 52,
+                  height: 48,
                   child: ElevatedButton(
                     onPressed: _submitNama,
                     style: ElevatedButton.styleFrom(
@@ -149,6 +154,32 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                     ),
                   ),
                 ),
+
+                // ✨ Secondary CTA: Hanya muncul saat pertama kali buka aplikasi[cite: 13]
+                if (widget.isFirstTime) ...[
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 36,
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        overlayColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: const Text(
+                        "Lewati",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
