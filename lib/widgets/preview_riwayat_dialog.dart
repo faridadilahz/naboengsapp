@@ -80,6 +80,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                         style: TextStyle(
                           color: Color(0xFF1B6B5A),
                           fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
@@ -92,6 +93,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                         style: TextStyle(
                           color: Color(0xFFD35D5D),
                           fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
