@@ -60,9 +60,9 @@ flutter:
     - assets/icon/
   
   fonts:
-    - family: Nunito
+    - family: Quicksand
       fonts:
-        - asset: font/nunito/Nunito.ttf
+        - asset: font/quicksand/Quicksand.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
