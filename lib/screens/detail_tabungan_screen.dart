@@ -650,7 +650,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         icon: const Icon(Ionicons.add, color: Colors.white),
         label: const Text(
           "TAMBAH NOMINAL",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, letterSpacing: 0.5,),
         ),
       ),
     );
