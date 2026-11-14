@@ -639,6 +639,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
       // Tombol Floating Tambah Nominal
       floatingActionButton: FloatingActionButton.extended(
+        foregroundColor: Colors.white,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
