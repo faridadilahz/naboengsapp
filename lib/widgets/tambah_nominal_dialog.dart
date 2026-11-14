@@ -283,6 +283,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
@@ -320,6 +321,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
