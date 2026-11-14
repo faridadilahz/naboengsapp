@@ -21,7 +21,7 @@ class EmptyState extends StatelessWidget {
           children: [
             Icon(
               isTercapaiTab ? Ionicons.trophy : Ionicons.file_tray,
-              size: 86,
+              size: 72,
               color: const Color(0xffaaaaaa),
             ),
             const SizedBox(height: 24),
@@ -60,7 +60,7 @@ class EmptyState extends StatelessWidget {
                   backgroundColor: const Color(0xFF1B6B5A),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
-                    vertical: 24,
+                    vertical: 20,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
