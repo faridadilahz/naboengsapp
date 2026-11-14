@@ -54,10 +54,12 @@ class EmptyState extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,
+                  elevation: 0,
+                  foregroundColor: Colors.white,
                   backgroundColor: const Color(0xFF1B6B5A),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
-                    vertical: 20,
+                    vertical: 24,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
