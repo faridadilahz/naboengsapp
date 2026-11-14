@@ -88,7 +88,7 @@ class TabunganCard extends StatelessWidget {
                     "Tercapai!",
                     style: TextStyle(
                       fontSize: 19,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: Color(0xFF1B6B5A),
                     ),
                   ),
