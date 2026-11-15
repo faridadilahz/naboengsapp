@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:naboengs/utils/app_colors.dart';
 import '../models/tabungan_model.dart';
 import '../utils/format_rupiah.dart';
 
@@ -11,7 +12,8 @@ class SelebrasiTercapaiDialog extends StatefulWidget {
   const SelebrasiTercapaiDialog({super.key, required this.item});
 
   @override
-  State<SelebrasiTercapaiDialog> createState() => _SelebrasiTercapaiDialogState();
+  State<SelebrasiTercapaiDialog> createState() =>
+      _SelebrasiTercapaiDialogState();
 }
 
 class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
@@ -20,7 +22,9 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 5));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 5),
+    );
     _confettiController.play();
   }
 
@@ -43,7 +47,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
           numberOfParticles: 25,
           gravity: 0.2,
           colors: const [
-            Color(0xFF1B6B5A),
+            AppColors.primary,
             Colors.amber,
             Colors.orange,
             Colors.pink,
@@ -64,13 +68,13 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F4F1),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Ionicons.trophy,
                     size: 56,
-                    color: Color(0xFF1B6B5A),
+                    color: AppColors.primary,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -81,7 +85,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF333333),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -91,7 +95,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF777777),
+                    color: AppColors.textSecondary,
                     height: 1.4,
                   ),
                 ),
@@ -103,8 +107,10 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1B6B5A),
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
                       elevation: 0,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -112,7 +118,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                     child: const Text(
                       "LANJUTKAN",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.onPrimary,
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                         letterSpacing: 0.5,
