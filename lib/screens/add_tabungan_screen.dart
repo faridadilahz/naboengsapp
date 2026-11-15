@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
+import '../utils/app_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
 import '../widgets/selector.dart';
@@ -81,13 +82,13 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Ionicons.arrow_back, color: Color(0xff333333)),
+          icon: const Icon(Ionicons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "Tambah Tabungan",
           style: TextStyle(
-            color: Color(0xff333333),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -107,7 +108,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const Text(
                 "Foto tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -115,16 +116,16 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const SizedBox(height: 8),
 
               CustomPaint(
-                painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
+                painter: DashedBorderPainter(color: AppColors.textMuted),
                 child: Material(
-                  color: const Color(0xFFFAFAFA),
+                  color: AppColors.surfaceInput,
                   borderRadius: BorderRadius.circular(16),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: pickImage,
                     borderRadius: BorderRadius.circular(16),
-                    splashColor: const Color(0xFF1B6B5A).withValues(alpha: 0.12),
-                    highlightColor: const Color(0xFF1B6B5A).withValues(alpha: 0.08),
+                    splashColor: AppColors.primary.withValues(alpha: 0.12),
+                    highlightColor: AppColors.primary.withValues(alpha: 0.08),
                     child: SizedBox(
                       height: 120,
                       width: double.infinity,
@@ -134,14 +135,14 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                               children: [
                                 Icon(
                                   Ionicons.cloud_upload,
-                                  color: Color(0xFF777777),
+                                  color: AppColors.textSecondary,
                                   size: 32,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   "Klik untuk unggah foto",
                                   style: TextStyle(
-                                    color: Color(0xFF777777),
+                                    color: AppColors.textSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -162,7 +163,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const Text(
                 "Nama tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -192,7 +193,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const Text(
                 "Target tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -206,13 +207,10 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   RupiahFormatter(),
                 ],
                 decoration: inputDecoration("Masukkan target tabungan disini"),
-                // ⚡ POPUP ADAPTIF ⚡
-                // Ganti blok contextMenuBuilder dengan ini:
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -229,7 +227,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const Text(
                 "Nominal tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -256,13 +254,10 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   RupiahFormatter(),
                 ],
                 decoration: inputDecoration("Masukkan nominal tabungan disini"),
-                // ⚡ POPUP ADAPTIF ⚡
-                // Ganti blok contextMenuBuilder dengan ini:
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -282,7 +277,6 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // 1. Hitung dulu berapa hari yang dibutuhkan buat mencapai target
                       int targetAngka = int.parse(
                         targetController.text.replaceAll('.', ''),
                       );
@@ -290,15 +284,12 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                         nominalController.text.replaceAll('.', ''),
                       );
 
-                      // Target dibagi nominal harian = jumlah hari (dibulatkan ke atas pakai .ceil)
                       int jumlahHari = (targetAngka / nominalAngka).ceil();
 
                       if (jumlahHari > 36500) {
-                        jumlahHari =
-                            36500; // Cap di 100 tahun biar gak overflow DateTime
+                        jumlahHari = 36500;
                       }
 
-                      // 2. Tentukan tanggal dibuat dan hitung estimasi selesainya
                       DateTime sekarang = DateTime.now();
                       DateTime tanggalEstimasi = sekarang.add(
                         Duration(days: jumlahHari),
@@ -319,10 +310,9 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                         target: targetAngka,
                         perHari: nominalAngka,
                         tipe: selectedType,
-                        terkumpul: 0, // Inisialisasi awal 0
+                        terkumpul: 0,
                         tanggalDibuat: sekarang,
-                        estimasiSelesai:
-                            tanggalEstimasi, // MASUKIN VARIABEL INI
+                        estimasiSelesai: tanggalEstimasi,
                         imagePath: imageFile?.path,
                       );
 
@@ -330,8 +320,8 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1B6B5A),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.onPrimary,
                     elevation: 0,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
@@ -341,7 +331,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                   child: const Text(
                     "TAMBAH TABUNGAN",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.onPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
                       letterSpacing: 0.5,
@@ -359,33 +349,22 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
   InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
+      hintStyle: const TextStyle(color: AppColors.textMuted),
+      errorStyle: const TextStyle(fontSize: 12, color: AppColors.danger),
       filled: true,
-      fillColor: const Color(0xFFFAFAFA), // Warna background inputan
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ), // Dikasih space dikit biar lega
-      // 1. Border default (Bawaan pas lagi ga diklik)
+      fillColor: AppColors.surfaceInput,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
       ),
-
-      // 2. Border pas form lagi ga diklik (enabled) biar makin rapi
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
       ),
-
-      // 3. INI YANG BIKIN JADI IJO PAS LAGI NGETIK / FOKUS
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(
-          color: Color(0xFF1B6B5A), // Warna ijo sesuai request kamu
-          width: 1.5, // Ditebelin dikit biar tegas kelihatannya
-        ),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
     );
   }

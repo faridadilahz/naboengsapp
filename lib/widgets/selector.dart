@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:naboengs/utils/app_colors.dart';
 
 class SegmentedSelector extends StatelessWidget {
   final String selectedType;
@@ -45,7 +46,7 @@ class SegmentedSelector extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFF1B6B5A),
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -77,7 +78,7 @@ class SegmentedSelector extends StatelessWidget {
                             : const Color(0xFFAAAAAA),
                         fontSize: 14,
                         fontWeight:
-                            isSelected ? FontWeight.w800 : FontWeight.w400,
+                            isSelected ? FontWeight.w800 : FontWeight.w500,
                         fontFamily: 'Quicksand',
                       ),
                       child: Text(type),
