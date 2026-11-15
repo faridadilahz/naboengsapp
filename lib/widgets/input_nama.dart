@@ -19,11 +19,13 @@ class InputNamaDialog extends StatefulWidget {
 
 class _InputNamaDialogState extends State<InputNamaDialog> {
   late TextEditingController _namaController;
+  late bool _hasText;
 
   @override
   void initState() {
     super.initState();
     _namaController = TextEditingController(text: widget.currentName);
+    _hasText = widget.currentName.trim().isNotEmpty;
   }
 
   @override
@@ -33,11 +35,14 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
   }
 
   void _submitNama() {
+    if (widget.isFirstTime && !_hasText) return;
     Navigator.pop(context, _namaController.text.trim());
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isButtonEnabled = !widget.isFirstTime || _hasText;
+
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -88,6 +93,11 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                   textAlign: TextAlign.center,
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.done,
+                  onChanged: (value) {
+                    setState(() {
+                      _hasText = value.trim().isNotEmpty;
+                    });
+                  },
                   onFieldSubmitted: (_) => _submitNama(),
                   inputFormatters: [LengthLimitingTextInputFormatter(20)],
                   style: const TextStyle(
@@ -130,10 +140,12 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: _submitNama,
+                    onPressed: isButtonEnabled ? _submitNama : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onPrimary,
+                      disabledBackgroundColor: AppColors.primaryDisabled,
+                      disabledForegroundColor: AppColors.onPrimary,
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
