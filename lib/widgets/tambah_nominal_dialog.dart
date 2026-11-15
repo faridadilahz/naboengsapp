@@ -192,42 +192,53 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     bool isSelected = nominalController.text == formatted;
                     return Padding(
                       padding: const EdgeInsets.only(right: 6),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (isSelected) {
-                              nominalController.clear();
-                            } else {
-                              nominalController.text = formatted;
-                            }
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
+                      child: Material(
+                        color: isSelected
+                            ? AppColors.primary.withValues(alpha: 0.1)
+                            : AppColors.surfaceInput,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          splashColor: AppColors.primary.withValues(
+                            alpha: 0.15,
                           ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.primary.withValues(alpha: 0.1)
-                                : AppColors.grey,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.grey,
+                          highlightColor: AppColors.primary.withValues(
+                            alpha: 0.08,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              if (isSelected) {
+                                nominalController.clear();
+                              } else {
+                                nominalController.text = formatted;
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 8,
                             ),
-                          ),
-                          child: Text(
-                            formatted,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: isSelected
-                                  ? FontWeight.w800
-                                  : FontWeight.w400,
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.textSecondary,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.grey,
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              formatted,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: isSelected
+                                    ? FontWeight.w800
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
+                              ),
                             ),
                           ),
                         ),

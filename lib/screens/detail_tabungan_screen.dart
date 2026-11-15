@@ -245,7 +245,6 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
     final result = await showDialog(
       context: context,
-      barrierDismissible: false,
       builder: (context) =>
           EditRiwayatDialog(data: data, riwayatFull: widget.item.riwayat),
     );
