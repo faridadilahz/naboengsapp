@@ -284,8 +284,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Tabunganmu",
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xff777777),
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
