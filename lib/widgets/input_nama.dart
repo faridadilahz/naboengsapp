@@ -20,12 +20,19 @@ class InputNamaDialog extends StatefulWidget {
 class _InputNamaDialogState extends State<InputNamaDialog> {
   late TextEditingController _namaController;
   late bool _hasText;
+  late bool _isDefaultName;
 
   @override
   void initState() {
     super.initState();
-    _namaController = TextEditingController(text: widget.currentName);
-    _hasText = widget.currentName.trim().isNotEmpty;
+    final trimmedName = widget.currentName.trim();
+    _isDefaultName =
+        trimmedName.isEmpty || trimmedName.toLowerCase() == 'sobat';
+
+    // Jika nama masih default, kosongkan text field saat dibuka
+    final initialText = _isDefaultName ? '' : widget.currentName;
+    _namaController = TextEditingController(text: initialText);
+    _hasText = initialText.trim().isNotEmpty;
   }
 
   @override
@@ -35,13 +42,16 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
   }
 
   void _submitNama() {
-    if (widget.isFirstTime && !_hasText) return;
+    final bool requireText = widget.isFirstTime || _isDefaultName;
+    if (requireText && !_hasText) return;
     Navigator.pop(context, _namaController.text.trim());
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isButtonEnabled = !widget.isFirstTime || _hasText;
+    // Wajib ada teks jika pertama kali buka atau nama sebelumnya masih default
+    final bool isButtonEnabled =
+        !(widget.isFirstTime || _isDefaultName) || _hasText;
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -75,7 +85,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                 const SizedBox(height: 8),
 
                 Text(
-                  widget.isFirstTime
+                  (widget.isFirstTime || _isDefaultName)
                       ? "Nama ini akan muncul saat kamu membuka aplikasi."
                       : "Kosongkan jika ingin memakai nama yang sebelumnya.",
                   textAlign: TextAlign.center,
