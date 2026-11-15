@@ -48,10 +48,10 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
           gravity: 0.2,
           colors: const [
             AppColors.primary,
-            Colors.amber,
-            Colors.orange,
-            Colors.pink,
-            Colors.blue,
+            AppColors.danger,
+            Color(0xFF8CE4C5),
+            Color(0xFFFFC847),
+            Color(0xFF4CC9F0),
           ],
         ),
 
