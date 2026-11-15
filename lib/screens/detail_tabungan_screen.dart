@@ -423,14 +423,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     Text(
                       formatRupiah(widget.item.target),
                       style: const TextStyle(
-                        fontSize: 22,
+                        fontSize: 24,
                         fontWeight: FontWeight.w800,
                         color: AppColors.primary,
                       ),
                     ),
                     Text(
                       "${formatRupiah(widget.item.perHari)}/${widget.item.tipe}",
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: AppColors.textMuted),
                     ),
                   ],
                 ),
@@ -450,7 +450,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     Text(
                       "$persenDisplay%",
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textMuted,
                       ),
@@ -673,7 +673,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
         onPressed: onTap,
-        icon: Icon(icon, size: 12),
+        icon: Icon(icon, size: 13),
         label: Text(label),
         style: ElevatedButton.styleFrom(
           shadowColor: Colors.transparent,
