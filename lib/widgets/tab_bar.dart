@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:naboengs/utils/app_colors.dart';
 
 class SegmentedTabBar extends StatelessWidget {
   final int selectedIndex;
@@ -16,7 +17,7 @@ class SegmentedTabBar extends StatelessWidget {
       height: 50,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F4F5),
+        color: AppColors.surfaceInput,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Stack(
@@ -34,7 +35,7 @@ class SegmentedTabBar extends StatelessWidget {
                 padding: const EdgeInsets.all(2),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFF1B6B5A),
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -70,11 +71,9 @@ class SegmentedTabBar extends StatelessWidget {
           child: AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 200),
             style: TextStyle(
-              color: isSelected
-                  ? const Color(0xFFFFFFFF)
-                  : const Color(0xFFAAAAAA),
+              color: isSelected ? AppColors.onPrimary : AppColors.textMuted,
               fontSize: 14,
-              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
               fontFamily: 'Quicksand',
             ),
             child: Text(title),
