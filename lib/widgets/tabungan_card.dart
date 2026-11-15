@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:naboengs/utils/app_colors.dart';
 import '../models/tabungan_model.dart';
 import '../utils/format_rupiah.dart';
 
@@ -46,7 +47,7 @@ class TabunganCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xffeeeeee), width: 0.7),
+          border: Border.all(color: AppColors.grey, width: 0.7),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +68,7 @@ class TabunganCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w800,
-                color: Color(0xff333333),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -79,7 +80,7 @@ class TabunganCard extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 21,
-                    color: Color(0xFF1B6B5A),
+                    color: AppColors.primary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -89,7 +90,7 @@ class TabunganCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1B6B5A),
+                      color: AppColors.primary,
                     ),
                   ),
                 ] else ...[
@@ -97,7 +98,7 @@ class TabunganCard extends StatelessWidget {
                     "Tabungan per ${item.tipe}",
                     style: const TextStyle(
                       fontSize: 13,
-                      color: Color(0xffaaaaaa),
+                      color: AppColors.textMuted,
                     ),
                   ),
                   Text(
@@ -105,19 +106,19 @@ class TabunganCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 19,
-                      color: Color(0xff555555),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Divider(color: Color(0xffeeeeee), thickness: 1),
+                    child: Divider(color: AppColors.grey, thickness: 1),
                   ),
                   Center(
                     child: Text(
                       _hitungSisaHari(item),
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Color(0xffaaaaaa),
+                        color: AppColors.textMuted,
                       ),
                     ),
                   ),
