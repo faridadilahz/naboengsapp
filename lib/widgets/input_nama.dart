@@ -179,7 +179,10 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                     width: double.infinity,
                     height: 36,
                     child: TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        _namaController.clear();
+                        Navigator.pop(context, null);
+                      },
                       style: TextButton.styleFrom(
                         splashFactory: NoSplash.splashFactory,
                         overlayColor: Colors.transparent,

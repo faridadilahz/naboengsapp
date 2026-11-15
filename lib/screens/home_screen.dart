@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _bukaDialogEditNama({bool isFirstTime = false}) async {
     final result = await showDialog<String>(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) =>
           InputNamaDialog(currentName: namaPengguna, isFirstTime: isFirstTime),
     );
