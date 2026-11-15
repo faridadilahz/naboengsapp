@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:naboengs/utils/app_colors.dart';
 import '../utils/format_rupiah.dart';
 
 class PreviewRiwayatDialog extends StatelessWidget {
@@ -22,7 +23,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
 
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Stack(
         children: [
           Padding(
@@ -34,7 +35,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                 const Text(
                   "Detail Nominal",
                   style: TextStyle(
-                    color: Color(0xFF555555),
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                   ),
@@ -46,15 +47,15 @@ class PreviewRiwayatDialog extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: nominal < 0
-                        ? const Color(0xFFD35D5D)
-                        : const Color(0xFF1B6B5A),
+                        ? AppColors.danger
+                        : AppColors.primary,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   "Catatan: ${data['catatan'] != null && data['catatan'].toString().isNotEmpty ? data['catatan'] : '-'}",
                   style: const TextStyle(
-                    color: Color(0xFF777777),
+                    color: AppColors.textSecondary,
                     fontSize: 14,
                   ),
                 ),
@@ -62,7 +63,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                 Text(
                   "Tanggal: ${formatTanggal(data['tanggal'])}",
                   style: const TextStyle(
-                    color: Color(0xFF777777),
+                    color: AppColors.textSecondary,
                     fontSize: 14,
                   ),
                 ),
@@ -78,7 +79,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                       child: const Text(
                         "Edit",
                         style: TextStyle(
-                          color: Color(0xFF1B6B5A),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
                         ),
@@ -91,7 +92,7 @@ class PreviewRiwayatDialog extends StatelessWidget {
                       child: const Text(
                         "Hapus",
                         style: TextStyle(
-                          color: Color(0xFFD35D5D),
+                          color: AppColors.danger,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
                         ),
@@ -106,7 +107,11 @@ class PreviewRiwayatDialog extends StatelessWidget {
             right: 8,
             top: 8,
             child: IconButton(
-              icon: const Icon(Ionicons.close, color: Colors.grey, size: 20),
+              icon: const Icon(
+                Ionicons.close,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
           ),
