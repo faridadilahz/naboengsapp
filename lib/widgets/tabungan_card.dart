@@ -63,15 +63,17 @@ class TabunganCard extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               item.nama,
               style: const TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
+                height: 1.2, // 👈 Rapatkan line-height judul
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6), // 👈 Sedikit lebih rapat & konsisten
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -81,19 +83,24 @@ class TabunganCard extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     fontSize: 21,
                     color: AppColors.primary,
+                    height: 1.2, // 👈 Rapatkan line-height nominal target
                   ),
                 ),
-                const SizedBox(height: 4),
                 if (selectedTab == 1) ...[
+                  const SizedBox(
+                    height: 4,
+                  ),
                   const Text(
                     "Tercapai!",
                     style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.primary,
+                      height: 1.2,
                     ),
                   ),
                 ] else ...[
+                  const SizedBox(height: 4),
                   Text(
                     "Tabungan per ${item.tipe}",
                     style: const TextStyle(
