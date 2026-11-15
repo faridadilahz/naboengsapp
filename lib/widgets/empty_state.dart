@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:naboengs/utils/app_colors.dart';
 
 class EmptyState extends StatelessWidget {
   final VoidCallback onAddPressed;
-  final bool isTercapaiTab; // ⚡ Tambahkan flag tab
+  final bool isTercapaiTab;
 
   const EmptyState({
     super.key,
@@ -22,7 +23,7 @@ class EmptyState extends StatelessWidget {
             Icon(
               isTercapaiTab ? Ionicons.trophy : Ionicons.file_tray,
               size: 72,
-              color: const Color(0xffaaaaaa),
+              color: AppColors.textMuted,
             ),
             const SizedBox(height: 24),
             Text(
@@ -31,7 +32,7 @@ class EmptyState extends StatelessWidget {
                   : "Belum ada sesuatu yang mau ditabung nih, yuk tambah tabungan!",
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Color(0xffaaaaaa),
+                color: AppColors.textMuted,
                 fontSize: 16,
                 height: 1.2,
                 fontWeight: FontWeight.w500,
@@ -43,11 +44,11 @@ class EmptyState extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: onAddPressed,
-                icon: const Icon(Ionicons.add, color: Colors.white),
+                icon: const Icon(Ionicons.add, color: AppColors.onPrimary),
                 label: const Text(
                   "TAMBAH TABUNGAN",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.onPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                     letterSpacing: 0.5,
@@ -56,8 +57,8 @@ class EmptyState extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.transparent,
                   elevation: 0,
-                  foregroundColor: Colors.white,
-                  backgroundColor: const Color(0xFF1B6B5A),
+                  foregroundColor: AppColors.onPrimary,
+                  backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
