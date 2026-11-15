@@ -397,14 +397,14 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             // Foto Tabungan
             if (widget.item.imagePath != null)
               ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
                 child: Image.file(
                   File(widget.item.imagePath!),
-                  height: 160,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: 160,
+                    width: double.infinity,
                     color: AppColors.grey,
                     child: const Icon(Ionicons.help),
                   ),
@@ -429,7 +429,11 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                     ),
                     Text(
                       "${formatRupiah(widget.item.perHari)}/${widget.item.tipe}",
-                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: AppColors.textMuted),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: AppColors.textMuted,
+                      ),
                     ),
                   ],
                 ),
