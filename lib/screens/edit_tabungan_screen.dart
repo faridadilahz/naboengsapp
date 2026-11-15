@@ -4,12 +4,13 @@ import 'dart:io';
 import 'dart:ui';
 import '../models/tabungan_model.dart';
 import '../utils/rupiah_formatter.dart';
+import '../utils/app_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
 import '../widgets/selector.dart';
 
 class EditTabunganScreen extends StatefulWidget {
-  final Tabungan item; // Wajib ada karena mau edit data yang sudah ada
+  final Tabungan item;
 
   const EditTabunganScreen({super.key, required this.item});
 
@@ -59,7 +60,6 @@ class DashedBorderPainter extends CustomPainter {
 class _EditTabunganScreenState extends State<EditTabunganScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controller langsung diisi pake data dari widget.item
   late TextEditingController namaController;
   late TextEditingController targetController;
   late TextEditingController nominalController;
@@ -70,7 +70,6 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   @override
   void initState() {
     super.initState();
-    // Inisialisasi controller dengan data lama
     namaController = TextEditingController(text: widget.item.nama);
     targetController = TextEditingController(
       text: formatRupiahInitial(widget.item.target),
@@ -84,7 +83,6 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
     }
   }
 
-  // Helper opsional buat format titik angka awal pas load data
   String formatRupiahInitial(int number) {
     return number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
@@ -108,13 +106,13 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
 
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Ionicons.arrow_back, color: Color(0xff333333)),
+          icon: const Icon(Ionicons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "Edit Tabungan",
           style: TextStyle(
-            color: Color(0xff333333),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -134,7 +132,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               const Text(
                 "Foto tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -142,20 +140,16 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               const SizedBox(height: 8),
 
               CustomPaint(
-                painter: DashedBorderPainter(color: const Color(0xFFAAAAAA)),
+                painter: DashedBorderPainter(color: AppColors.textMuted),
                 child: Material(
-                  color: const Color(0xFFFAFAFA),
+                  color: AppColors.surfaceInput,
                   borderRadius: BorderRadius.circular(16),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: pickImage,
                     borderRadius: BorderRadius.circular(16),
-                    splashColor: const Color(
-                      0xFF1B6B5A,
-                    ).withValues(alpha: 0.12),
-                    highlightColor: const Color(
-                      0xFF1B6B5A,
-                    ).withValues(alpha: 0.08),
+                    splashColor: AppColors.primary.withValues(alpha: 0.12),
+                    highlightColor: AppColors.primary.withValues(alpha: 0.08),
                     child: SizedBox(
                       height: 120,
                       width: double.infinity,
@@ -165,14 +159,14 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                               children: [
                                 Icon(
                                   Ionicons.cloud_upload,
-                                  color: Color(0xFF777777),
+                                  color: AppColors.textSecondary,
                                   size: 32,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   "Klik untuk unggah foto",
                                   style: TextStyle(
-                                    color: Color(0xFF777777),
+                                    color: AppColors.textSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -193,7 +187,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               const Text(
                 "Nama tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -205,8 +199,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -223,7 +216,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               const Text(
                 "Target tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -240,8 +233,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -258,7 +250,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
               const Text(
                 "Nominal tabungan",
                 style: TextStyle(
-                  color: Color(0xff777777),
+                  color: AppColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -287,8 +279,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
-                    buttonItems: editableTextState
-                        .contextMenuButtonItems, // Gunakan contextMenuButtonItems
+                    buttonItems: editableTextState.contextMenuButtonItems,
                   );
                 },
                 validator: (value) {
@@ -308,7 +299,6 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Tetap pakai logika PUT/EDIT kamu (saldo & riwayat lama aman)
                       final data = Tabungan(
                         nama: namaController.text,
                         target: int.parse(
@@ -321,17 +311,16 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                         tanggalDibuat: widget.item.tanggalDibuat,
                         estimasiSelesai: widget.item.estimasiSelesai,
                         imagePath: imageFile?.path,
-                        terkumpul:
-                            widget.item.terkumpul, // Tetap pake saldo lama
-                        riwayat: widget.item.riwayat, // Tetap pake riwayat lama
+                        terkumpul: widget.item.terkumpul,
+                        riwayat: widget.item.riwayat,
                         isDone: widget.item.isDone,
                       );
                       Navigator.pop(context, data);
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1B6B5A),
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.onPrimary,
                     elevation: 0,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
@@ -341,7 +330,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                   child: const Text(
                     "SIMPAN PERUBAHAN",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.onPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
                       letterSpacing: 0.5,
@@ -359,10 +348,10 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   InputDecoration inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
+      hintStyle: const TextStyle(color: AppColors.textMuted),
+      errorStyle: const TextStyle(fontSize: 12, color: AppColors.danger),
       filled: true,
-      fillColor: const Color(0xFFFAFAFA),
+      fillColor: AppColors.surfaceInput,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -374,7 +363,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF1B6B5A), width: 1.5),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
     );
   }
