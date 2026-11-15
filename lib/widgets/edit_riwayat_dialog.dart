@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:naboengs/utils/app_colors.dart';
 import '../utils/format_rupiah.dart';
 import '../utils/rupiah_formatter.dart';
 
@@ -56,10 +57,10 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
   InputDecoration inputDecoration(String hint, {Widget? prefixIcon}) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFFAAAAAA)),
-      errorStyle: const TextStyle(fontSize: 12, color: Color(0xffC35555)),
+      hintStyle: const TextStyle(color: AppColors.textMuted),
+      errorStyle: const TextStyle(fontSize: 12, color: AppColors.danger),
       filled: true,
-      fillColor: const Color(0xFFFAFAFA),
+      fillColor: AppColors.surfaceInput,
       prefixIcon: prefixIcon,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
@@ -68,11 +69,11 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+        borderSide: const BorderSide(color: AppColors.grey, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF1B6B5A), width: 1.5),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
     );
   }
@@ -95,7 +96,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: 20,
-                  color: Color(0xFF333333),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -110,8 +111,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: isTambah
-                            ? const Color(0xFF1B6B5A)
-                            : const Color(0xFFE8F1EF),
+                            ? AppColors.primary
+                            : AppColors.primary.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
@@ -120,8 +121,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           style: TextStyle(
                             fontSize: 16,
                             color: isTambah
-                                ? Colors.white
-                                : const Color(0xFF1B6B5A),
+                                ? AppColors.onPrimary
+                                : AppColors.primary,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -138,8 +139,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: !isTambah
-                            ? const Color(0xFFD35D5D)
-                            : const Color(0xFFFAEBEB),
+                            ? AppColors.danger
+                            : AppColors.danger.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
@@ -148,8 +149,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           style: TextStyle(
                             fontSize: 16,
                             color: !isTambah
-                                ? Colors.white
-                                : const Color(0xFFD35D5D),
+                                ? AppColors.onDanger
+                                : AppColors.danger,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -165,12 +166,11 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
-                color: Color(0xFF333333),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
 
-            // TextField Nominal dengan inputDecoration
             TextField(
               controller: nominalController,
               keyboardType: TextInputType.number,
@@ -182,7 +182,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                 "Masukkan Nominal",
                 prefixIcon: const Icon(
                   Ionicons.cash,
-                  color: Color(0xFF777777),
+                  color: AppColors.textSecondary,
                   size: 20,
                 ),
               ),
@@ -215,13 +215,13 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? const Color(0xFF1B6B5A).withOpacity(0.1)
-                                : Colors.grey.shade100,
+                                ? AppColors.primary.withValues(alpha: 0.1)
+                                : AppColors.grey,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: isSelected
-                                  ? const Color(0xFF1B6B5A)
-                                  : Colors.grey.shade100,
+                                  ? AppColors.primary
+                                  : AppColors.grey,
                             ),
                           ),
                           child: Text(
@@ -232,8 +232,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                                   ? FontWeight.w800
                                   : FontWeight.w400,
                               color: isSelected
-                                  ? const Color(0xFF1B6B5A)
-                                  : const Color(0xFF555555),
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary,
                             ),
                           ),
                         ),
@@ -249,19 +249,18 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
-                color: Color(0xFF333333),
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
 
-            // TextField Catatan dengan inputDecoration
             TextField(
               controller: catatanController,
               decoration: inputDecoration(
                 "Contoh: Uang jajan",
                 prefixIcon: const Icon(
                   Ionicons.reader,
-                  color: Color(0xFF777777),
+                  color: AppColors.textSecondary,
                   size: 20,
                 ),
               ),
@@ -275,13 +274,13 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFFD35D5D),
+                      foregroundColor: AppColors.danger,
                       minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Color(0xFFD35D5D)),
+                        side: const BorderSide(color: AppColors.danger),
                       ),
                     ),
                     child: const Text(
@@ -315,8 +314,8 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1B6B5A),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
                       minimumSize: const Size(double.infinity, 52),
                       elevation: 0,
                       shadowColor: Colors.transparent,
