@@ -138,7 +138,7 @@ flutter_native_splash:
   android_12:
     # background color
     color: "#FFFFFF"
-    color_dark: "#1B6B5A"
+    color_dark: "#2EA98F"
 
     # center-logo
     # If this parameter is not specified, the app's launcher icon will be used instead. 
