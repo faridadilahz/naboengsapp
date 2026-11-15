@@ -7,6 +7,7 @@ import 'package:ionicons/ionicons.dart';
 import '../widgets/tabungan_list_view.dart';
 import '../widgets/tab_bar.dart';
 import '../widgets/input_nama.dart';
+import '../utils/app_colors.dart';
 import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
@@ -194,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffFDFFFF),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1B6B5A),
+        backgroundColor: AppColors.primary,
         elevation: 0,
         toolbarHeight: 96,
         flexibleSpace: Stack(
@@ -251,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sapaanHarian,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15, color: Color(0xFFDDDDDD)),
+              style: const TextStyle(fontSize: 15, color: AppColors.grey),
             ),
           ],
         ),
@@ -337,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   focusElevation: 0,
                   hoverElevation: 0,
                   highlightElevation: 0,
-                  backgroundColor: const Color(0xFF1B6B5A),
+                  backgroundColor: AppColors.primary,
                   onPressed: _bukaFormTambahTabungan,
                   child: const Icon(
                     Ionicons.add,
