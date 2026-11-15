@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
               sapaanHarian,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15, color: AppColors.grey),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.grey),
             ),
           ],
         ),
