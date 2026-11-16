@@ -11,6 +11,7 @@ import '../widgets/tambah_nominal_dialog.dart';
 import 'edit_tabungan_screen.dart';
 import '../widgets/preview_riwayat_dialog.dart';
 import '../widgets/celebration_dialog.dart';
+import '../widgets/tabungan_image.dart';
 
 class DetailTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -397,17 +398,10 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
             // Foto Tabungan
             if (widget.item.imagePath != null)
               ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Image.file(
-                  File(widget.item.imagePath!),
-                  width: double.infinity,
+                borderRadius: BorderRadius.circular(16),
+                child: TabunganImage(
+                  imageSource: widget.item.imagePath!,
                   fit: BoxFit.fitWidth,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 160,
-                    width: double.infinity,
-                    color: AppColors.grey,
-                    child: const Icon(Ionicons.help),
-                  ),
                 ),
               ),
             const SizedBox(height: 16),

@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'dart:convert';
 import 'dart:ui';
-import '../models/tabungan_model.dart';
-import '../utils/rupiah_formatter.dart';
-import '../utils/app_colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
+import '../models/tabungan_model.dart';
+import '../utils/app_colors.dart';
+import '../utils/rupiah_formatter.dart';
 import '../widgets/selector.dart';
+import '../widgets/tabungan_image.dart';
 
 class EditTabunganScreen extends StatefulWidget {
   final Tabungan item;
@@ -65,7 +66,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   late TextEditingController nominalController;
 
   String selectedType = "Harian";
-  File? imageFile;
+  String? imageBase64;
 
   @override
   void initState() {
@@ -78,9 +79,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
       text: formatRupiahInitial(widget.item.perHari),
     );
     selectedType = widget.item.tipe;
-    if (widget.item.imagePath != null) {
-      imageFile = File(widget.item.imagePath!);
-    }
+    imageBase64 = widget.item.imagePath;
   }
 
   String formatRupiahInitial(int number) {
@@ -91,10 +90,15 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
   }
 
   Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      imageQuality: 75,
+    );
     if (picked != null) {
+      final bytes = await picked.readAsBytes();
       setState(() {
-        imageFile = File(picked.path);
+        imageBase64 = base64Encode(bytes);
       });
     }
   }
@@ -153,7 +157,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                     child: SizedBox(
                       height: 120,
                       width: double.infinity,
-                      child: imageFile == null
+                      child: imageBase64 == null
                           ? const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -172,8 +176,9 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                                 ),
                               ],
                             )
-                          : Ink.image(
-                              image: FileImage(imageFile!),
+                          : TabunganImage(
+                              imageSource: imageBase64!,
+                              height: 120,
                               fit: BoxFit.cover,
                             ),
                     ),
@@ -310,7 +315,7 @@ class _EditTabunganScreenState extends State<EditTabunganScreen> {
                         tipe: selectedType,
                         tanggalDibuat: widget.item.tanggalDibuat,
                         estimasiSelesai: widget.item.estimasiSelesai,
-                        imagePath: imageFile?.path,
+                        imagePath: imageBase64,
                         terkumpul: widget.item.terkumpul,
                         riwayat: widget.item.riwayat,
                         isDone: widget.item.isDone,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:naboengs/utils/app_colors.dart';
 import '../models/tabungan_model.dart';
 import '../utils/format_rupiah.dart';
+import '../widgets/tabungan_image.dart';
 
 class TabunganCard extends StatelessWidget {
   final Tabungan item;
@@ -55,10 +56,9 @@ class TabunganCard extends StatelessWidget {
             if (item.imagePath != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  File(item.imagePath!),
+                child: TabunganImage(
+                  imageSource: item.imagePath!,
                   height: 144,
-                  width: double.infinity,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -87,9 +87,7 @@ class TabunganCard extends StatelessWidget {
                   ),
                 ),
                 if (selectedTab == 1) ...[
-                  const SizedBox(
-                    height: 4,
-                  ),
+                  const SizedBox(height: 4),
                   const Text(
                     "Tercapai!",
                     style: TextStyle(

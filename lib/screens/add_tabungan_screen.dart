@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'dart:convert';
 import 'dart:ui';
-import '../models/tabungan_model.dart';
-import '../utils/rupiah_formatter.dart';
-import '../utils/app_colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
+import '../models/tabungan_model.dart';
+import '../utils/app_colors.dart';
+import '../utils/rupiah_formatter.dart';
 import '../widgets/selector.dart';
+import '../widgets/tabungan_image.dart';
 
 class AddTabunganScreen extends StatefulWidget {
   const AddTabunganScreen({super.key});
@@ -63,14 +64,19 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
   final TextEditingController catatanController = TextEditingController();
 
   String selectedType = "Harian";
-  File? imageFile;
+  String? imageBase64;
 
   Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      imageQuality: 75,
+    );
 
     if (picked != null) {
+      final bytes = await picked.readAsBytes();
       setState(() {
-        imageFile = File(picked.path);
+        imageBase64 = base64Encode(bytes);
       });
     }
   }
@@ -129,7 +135,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                     child: SizedBox(
                       height: 120,
                       width: double.infinity,
-                      child: imageFile == null
+                      child: imageBase64 == null
                           ? const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -148,8 +154,9 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                                 ),
                               ],
                             )
-                          : Ink.image(
-                              image: FileImage(imageFile!),
+                          : TabunganImage(
+                              imageSource: imageBase64!,
+                              height: 120,
                               fit: BoxFit.cover,
                             ),
                     ),
@@ -172,7 +179,6 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               TextFormField(
                 controller: namaController,
                 decoration: inputDecoration("Masukkan nama tabungan disini"),
-
                 contextMenuBuilder: (context, editableTextState) {
                   return AdaptiveTextSelectionToolbar.buttonItems(
                     anchors: editableTextState.contextMenuAnchors,
@@ -313,7 +319,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                         terkumpul: 0,
                         tanggalDibuat: sekarang,
                         estimasiSelesai: tanggalEstimasi,
-                        imagePath: imageFile?.path,
+                        imagePath: imageBase64,
                       );
 
                       Navigator.pop(context, data);
