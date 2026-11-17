@@ -14,7 +14,7 @@ class TambahKurangSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 56,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: const Color(0xFFF2F4F5),
@@ -29,7 +29,7 @@ class TambahKurangSelector extends StatelessWidget {
             child: FractionallySizedBox(
               widthFactor: 1 / 2,
               child: Padding(
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(4),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOut,

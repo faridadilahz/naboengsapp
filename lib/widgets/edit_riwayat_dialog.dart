@@ -143,7 +143,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     String formatted = formatRupiah(amount);
                     bool isSelected = nominalController.text == formatted;
                     return Padding(
-                      padding: const EdgeInsets.only(right: 6),
+                      padding: const EdgeInsets.only(right: 8),
                       child: Material(
                         color: isSelected
                             ? AppColors.primary.withValues(alpha: 0.1)
