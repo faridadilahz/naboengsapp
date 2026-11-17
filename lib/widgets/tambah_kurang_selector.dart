@@ -14,8 +14,8 @@ class TambahKurangSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
-      padding: const EdgeInsets.all(4),
+      height: 52,
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         color: const Color(0xFFF2F4F5),
         borderRadius: BorderRadius.circular(16),
@@ -35,7 +35,7 @@ class TambahKurangSelector extends StatelessWidget {
                   curve: Curves.easeInOut,
                   decoration: BoxDecoration(
                     color: isTambah ? AppColors.primary : AppColors.danger,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.06),
