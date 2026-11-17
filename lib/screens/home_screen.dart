@@ -262,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // ⚡ 2. BUNGKUS HEADER & TAB BAR DENGAN PADDING SENDIRI ⚡
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -279,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 const Text(
                   "Tabunganmu",
                   style: TextStyle(
