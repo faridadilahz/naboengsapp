@@ -217,7 +217,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
               ),
             ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
@@ -226,7 +226,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.danger,
-                      minimumSize: const Size(double.infinity, 52),
+                      minimumSize: const Size(double.infinity, 48),
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
@@ -265,7 +265,7 @@ class _TambahNominalDialogState extends State<TambahNominalDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onPrimary,
-                      minimumSize: const Size(double.infinity, 52),
+                      minimumSize: const Size(double.infinity, 48),
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
