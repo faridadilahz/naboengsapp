@@ -52,7 +52,7 @@ class TabunganCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (item.imagePath != null)
+            if (item.imagePath != null && item.imagePath!.isNotEmpty) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: TabunganImage(
@@ -61,18 +61,18 @@ class TabunganCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-            const SizedBox(height: 8),
-            const SizedBox(height: 8),
+              const SizedBox(height: 8),
+            ],
             Text(
               item.nama,
               style: const TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
-                height: 1.2, // 👈 Rapatkan line-height judul
+                height: 1.2,
               ),
             ),
-            const SizedBox(height: 6), // 👈 Sedikit lebih rapat & konsisten
+            const SizedBox(height: 6),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -86,7 +86,7 @@ class TabunganCard extends StatelessWidget {
                   ),
                 ),
                 if (selectedTab == 1) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   const Text(
                     "Tercapai!",
                     style: TextStyle(
@@ -114,7 +114,7 @@ class TabunganCard extends StatelessWidget {
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(vertical: 4),
                     child: Divider(color: AppColors.grey, thickness: 1),
                   ),
                   Center(
