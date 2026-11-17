@@ -223,7 +223,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               ),
             ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
@@ -232,7 +232,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.danger,
-                      minimumSize: const Size(double.infinity, 52),
+                      minimumSize: const Size(double.infinity, 48),
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
@@ -273,7 +273,7 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onPrimary,
-                      minimumSize: const Size(double.infinity, 52),
+                      minimumSize: const Size(double.infinity, 48),
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
