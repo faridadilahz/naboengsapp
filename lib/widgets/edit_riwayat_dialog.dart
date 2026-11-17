@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:naboengs/utils/app_colors.dart';
+import 'package:naboengs/widgets/tambah_kurang_selector.dart';
 import '../utils/format_rupiah.dart';
 import '../utils/rupiah_formatter.dart';
 
@@ -101,64 +102,9 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => isTambah = true),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: isTambah
-                            ? AppColors.primary
-                            : AppColors.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "+ Tambah",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: isTambah
-                                ? AppColors.onPrimary
-                                : AppColors.primary,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => isTambah = false),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: !isTambah
-                            ? AppColors.danger
-                            : AppColors.danger.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "- Kurangi",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: !isTambah
-                                ? AppColors.onDanger
-                                : AppColors.danger,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            TambahKurangSelector(
+              isTambah: isTambah,
+              onChanged: (value) => setState(() => isTambah = value),
             ),
             const SizedBox(height: 20),
             const Text(
