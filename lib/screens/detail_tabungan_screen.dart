@@ -9,7 +9,7 @@ import '../utils/format_rupiah.dart';
 import '../widgets/edit_nominal_dialog.dart';
 import '../widgets/tambah_nominal_dialog.dart';
 import 'edit_tabungan_screen.dart';
-import '../widgets/preview_riwayat_dialog.dart';
+import '../widgets/preview_nominal_dialog.dart';
 import '../widgets/celebration_dialog.dart';
 import '../widgets/tabungan_image.dart';
 
