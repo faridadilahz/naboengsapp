@@ -1,11 +1,11 @@
 {
-    "name": "naboengs",
-    "short_name": "naboengs",
+    "name": "Naboengs",
+    "short_name": "Naboengs",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#2EC48F",
+    "theme_color": "#2EC48F",
+    "description": "Aplikasi pencatat tabungan impian yang simpel dan visual.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
