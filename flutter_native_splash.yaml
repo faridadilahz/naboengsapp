@@ -26,7 +26,7 @@ flutter_native_splash:
   # uncomment this if you want to disable this package for specific platform:
   # android: false
   # ios: false
-  web: false
+  web: true
   
   #======================================================================
 
