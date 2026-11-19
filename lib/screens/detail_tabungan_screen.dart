@@ -299,7 +299,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Ionicons.arrow_back, color: AppColors.textPrimary),
+          icon: const Icon(Ionicons.arrowBack, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [

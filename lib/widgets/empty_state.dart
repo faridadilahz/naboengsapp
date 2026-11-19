@@ -21,7 +21,7 @@ class EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              isTercapaiTab ? Ionicons.trophy : Ionicons.file_tray,
+              isTercapaiTab ? Ionicons.trophy : Ionicons.fileTray,
               size: 72,
               color: AppColors.textMuted,
             ),

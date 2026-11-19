@@ -88,7 +88,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
 
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Ionicons.arrow_back, color: AppColors.textPrimary),
+          icon: const Icon(Ionicons.arrowBack, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -140,7 +140,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Ionicons.cloud_upload,
+                                  Ionicons.cloudUpload,
                                   color: AppColors.textSecondary,
                                   size: 32,
                                 ),

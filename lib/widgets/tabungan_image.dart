@@ -38,7 +38,7 @@ class TabunganImage extends StatelessWidget {
       height: height ?? 160,
       width: width ?? double.infinity,
       color: AppColors.grey,
-      child: const Icon(Ionicons.image_outline, color: AppColors.textMuted),
+      child: const Icon(Ionicons.imageOutline, color: AppColors.textMuted),
     );
   }
 }
