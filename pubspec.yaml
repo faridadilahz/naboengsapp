@@ -69,6 +69,11 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icon/naboengslogo.png"
   remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icon/naboengslogo.png"
+    background_color: "#2EC48F"
+    theme_color: "#2EC48F"
 
 flutter_native_splash:
   color: "#FFFFFF"
