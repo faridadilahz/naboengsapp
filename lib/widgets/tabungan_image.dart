@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'package:material_ui/material_ui.dart';
 import 'package:ionicons/ionicons.dart';
 import '../utils/app_colors.dart';
 
@@ -9,6 +10,8 @@ class TabunganImage extends StatelessWidget {
   final double? width;
   final BoxFit fit;
 
+  static final Map<String, Uint8List> _memoryCache = {};
+
   const TabunganImage({
     super.key,
     required this.imageSource,
@@ -17,15 +20,29 @@ class TabunganImage extends StatelessWidget {
     this.fit = BoxFit.cover,
   });
 
+  Uint8List _getBytes(String raw) {
+    final String key =
+        '${raw.length}_${raw.substring(0, raw.length > 32 ? 32 : raw.length)}';
+    return _memoryCache.putIfAbsent(key, () {
+      final clean = raw.contains(',') ? raw.split(',').last : raw;
+      return base64Decode(clean);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (imageSource.trim().isEmpty) {
+      return _buildFallback();
+    }
+
     try {
-      final bytes = base64Decode(imageSource);
+      final bytes = _getBytes(imageSource);
       return Image.memory(
         bytes,
         height: height,
         width: width,
         fit: fit,
+        gaplessPlayback: true,
         errorBuilder: (context, error, stackTrace) => _buildFallback(),
       );
     } catch (_) {

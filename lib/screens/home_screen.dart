@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '../screens/add_tabungan_screen.dart';
 import '../models/tabungan_model.dart';
 import 'dart:convert';
@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Opacity(
                 opacity: 0.36,
                 child: Image.asset(
-                  'assets/images/headerpattern.png',
+                  'assets/images/headerpattern.png', gaplessPlayback: true,
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),
@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.18),
+                      color: Colors.white.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(

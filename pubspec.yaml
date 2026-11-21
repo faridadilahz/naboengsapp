@@ -35,6 +35,8 @@ dependencies:
   shared_preferences: ^2.5.5
   ionicons: ^0.2.3
   flutter_svg: ^2.3.2
+  material_ui: any
+  image_picker: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -46,7 +48,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  image_picker: ^1.0.4
   flutter_native_splash: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
