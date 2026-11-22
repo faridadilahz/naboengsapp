@@ -37,6 +37,11 @@ class TabunganListView extends StatelessWidget {
           item: item,
           selectedTab: selectedTab,
           onTap: () async {
+            final prevTerkumpul = item.terkumpul;
+            final prevRiwayatLen = item.riwayat.length;
+            final prevNama = item.nama;
+            final prevTarget = item.target;
+
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -47,6 +52,16 @@ class TabunganListView extends StatelessWidget {
             if (result == "delete") {
               onItemUpdated(item, "delete");
             } else {
+              // Cek apakah ada aktivitas baru (tambah/kurang nominal, riwayat baru, atau edit)
+              final hasActivity =
+                  item.terkumpul != prevTerkumpul ||
+                  item.riwayat.length != prevRiwayatLen ||
+                  item.nama != prevNama ||
+                  item.target != prevTarget;
+
+              if (hasActivity) {
+                item.updatedAt = DateTime.now();
+              }
               onItemUpdated(item, "update");
             }
           },

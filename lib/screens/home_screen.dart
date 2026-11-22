@@ -92,7 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     } else {
-      setState(() {});
+      setState(() {
+        tabunganList.remove(item);
+        tabunganList.insert(0, item);
+      });
       _saveDataTabungan();
     }
   }
@@ -192,6 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+    dalamProsesList.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    tercapaiList.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+
     return Scaffold(
       backgroundColor: const Color(0xffFDFFFF),
       appBar: AppBar(
@@ -204,7 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Opacity(
                 opacity: 0.36,
                 child: Image.asset(
-                  'assets/images/headerpattern.png', gaplessPlayback: true,
+                  'assets/images/headerpattern.png',
+                  gaplessPlayback: true,
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),
@@ -252,7 +259,11 @@ class _HomeScreenState extends State<HomeScreen> {
               sapaanHarian,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.grey),
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: AppColors.grey,
+              ),
             ),
           ],
         ),

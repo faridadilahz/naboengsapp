@@ -9,6 +9,7 @@ class Tabungan {
   List<Map<String, dynamic>> riwayat;
   final DateTime tanggalDibuat;
   DateTime estimasiSelesai;
+  DateTime updatedAt;
 
   Tabungan({
     required this.nama,
@@ -21,9 +22,12 @@ class Tabungan {
     this.isDone = false,
     this.terkumpul = 0,
     List<Map<String, dynamic>>? riwayat,
-  }) : riwayat = riwayat ?? [];
+    DateTime? updatedAt,
+  })  : riwayat = riwayat ?? [],
+        updatedAt = updatedAt ?? tanggalDibuat;
 
   factory Tabungan.fromJson(Map<String, dynamic> json) {
+    final dibuat = DateTime.parse(json['tanggalDibuat']);
     return Tabungan(
       nama: json['nama'],
       target: json['target'],
@@ -32,15 +36,15 @@ class Tabungan {
       imagePath: json['imagePath'],
       isDone: json['isDone'] ?? false,
       terkumpul: json['terkumpul'] ?? 0,
-      // Ubah dynamic list dari JSON jadi List<Map<String, dynamic>>
       riwayat: List<Map<String, dynamic>>.from(json['riwayat'] ?? []),
-      // Ubah teks ke DateTime
-      tanggalDibuat: DateTime.parse(json['tanggalDibuat']),
+      tanggalDibuat: dibuat,
       estimasiSelesai: DateTime.parse(json['estimasiSelesai']),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
+          : dibuat,
     );
   }
 
-  // 2. Fungsi buat ngubah Objek Tabungan ke JSON (Buat nge-Save Data)
   Map<String, dynamic> toJson() {
     return {
       'nama': nama,
@@ -51,9 +55,9 @@ class Tabungan {
       'isDone': isDone,
       'terkumpul': terkumpul,
       'riwayat': riwayat,
-      // Ubah DateTime ke teks biar bisa disimpen
       'tanggalDibuat': tanggalDibuat.toIso8601String(),
       'estimasiSelesai': estimasiSelesai.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }
