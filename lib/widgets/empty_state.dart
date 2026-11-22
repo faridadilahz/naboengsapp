@@ -51,7 +51,7 @@ class EmptyState extends StatelessWidget {
                     color: AppColors.onPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
-                    letterSpacing: 0.5,
+                    letterSpacing: 0.3,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(

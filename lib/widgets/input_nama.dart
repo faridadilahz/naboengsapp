@@ -167,7 +167,7 @@ class _InputNamaDialogState extends State<InputNamaDialog> {
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 15,
-                        letterSpacing: 0.5,
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ),

@@ -121,7 +121,7 @@ class _SelebrasiTercapaiDialogState extends State<SelebrasiTercapaiDialog> {
                         color: AppColors.onPrimary,
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
-                        letterSpacing: 0.5,
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ),

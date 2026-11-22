@@ -651,7 +651,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           style: TextStyle(
             color: AppColors.onPrimary,
             fontWeight: FontWeight.w800,
-            letterSpacing: 0.5,
+            letterSpacing: 0.3,
           ),
         ),
       ),
