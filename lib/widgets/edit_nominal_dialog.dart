@@ -58,7 +58,11 @@ class _EditRiwayatDialogState extends State<EditRiwayatDialog> {
   InputDecoration inputDecoration(String hint, {Widget? prefixIcon}) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.textMuted),
+      hintStyle: const TextStyle(
+        color: AppColors.textMuted,
+        fontWeight: FontWeight.w400,
+        fontSize: 15,
+      ),
       errorStyle: const TextStyle(fontSize: 12, color: AppColors.danger),
       filled: true,
       fillColor: AppColors.surfaceInput,
