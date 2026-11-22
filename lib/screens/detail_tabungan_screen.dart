@@ -286,7 +286,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
 
     int uangTerkumpul = totalSaldoMurni < 0 ? 0 : totalSaldoMurni;
 
-    int sisa = widget.item.target - totalSaldoMurni;
+    int sisa = (widget.item.target - uangTerkumpul).clamp(0, widget.item.target);
 
     double persen = (uangTerkumpul / widget.item.target).clamp(0.0, 1.0);
     int persenDisplay = (persen * 100).toInt();
