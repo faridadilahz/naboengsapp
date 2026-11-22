@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:naboengs/utils/app_colors.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -13,7 +14,27 @@ class NaboengsApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'naboengs',
-      theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'MPLUSRounded1c'),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+        ),
+        fontFamily: 'MPLUSRounded1c',
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: AppColors.textMuted,
+            fontWeight: FontWeight.w400,
+            fontSize: 15,
+          ),
+        ),
+      ),
       home: const HomeScreen(),
     );
   }
