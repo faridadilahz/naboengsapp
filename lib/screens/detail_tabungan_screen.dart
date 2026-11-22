@@ -109,7 +109,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
               child: const Text(
                 "Batal",
                 style: TextStyle(
-                  color: AppColors.textMuted,
+                  color: AppColors.textSecondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -351,7 +351,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
                       child: const Text(
                         "Batal",
                         style: TextStyle(
-                          color: AppColors.textMuted,
+                          color: AppColors.textSecondary,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
