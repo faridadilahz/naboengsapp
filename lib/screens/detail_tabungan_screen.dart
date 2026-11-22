@@ -679,7 +679,7 @@ class _DetailTabunganScreenState extends State<DetailTabunganScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w700,
-            fontFamily: 'Quicksand',
+            fontFamily: 'MPLUSRounded1c',
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
