@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../models/tabungan_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/rupiah_formatter.dart';
@@ -67,17 +69,55 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
   String? imageBase64;
 
   Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 800,
-      imageQuality: 75,
-    );
+    try {
+      bool isAllowed = true;
 
-    if (picked != null) {
-      final bytes = await picked.readAsBytes();
-      setState(() {
-        imageBase64 = base64Encode(bytes);
-      });
+      if (!kIsWeb) {
+        PermissionStatus status = await Permission.photos.request();
+
+        if (status.isDenied) {
+          status = await Permission.storage.request();
+        }
+
+        isAllowed = status.isGranted || status.isLimited;
+
+        if (status.isPermanentlyDenied) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Izin galeri ditolak. Aktifkan izin foto untuk naboengs di Pengaturan.',
+              ),
+              action: SnackBarAction(
+                label: 'Pengaturan',
+                onPressed: () => openAppSettings(),
+              ),
+            ),
+          );
+          return;
+        }
+      }
+
+      if (!isAllowed) return;
+
+      final picked = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 800,
+        imageQuality: 75,
+      );
+
+      if (picked != null) {
+        final bytes = await picked.readAsBytes();
+        if (!mounted) return;
+        setState(() {
+          imageBase64 = base64Encode(bytes);
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal membuka galeri: $e')));
     }
   }
 
