@@ -12,8 +12,8 @@ class NaboengsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Naboengs',
-      theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'Quicksand'),
+      title: 'naboengs',
+      theme: ThemeData(primarySwatch: Colors.green, fontFamily: 'MPLUSRounded1c'),
       home: const HomeScreen(),
     );
   }

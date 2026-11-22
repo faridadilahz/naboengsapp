@@ -64,7 +64,7 @@ class TambahKurangSelector extends StatelessWidget {
                         fontSize: 14,
                         fontWeight:
                             isTambah ? FontWeight.w800 : FontWeight.w600,
-                        fontFamily: 'Quicksand',
+                        fontFamily: 'MPLUSRounded1c',
                       ),
                       child: const Text("+ Tambah"),
                     ),
@@ -85,7 +85,7 @@ class TambahKurangSelector extends StatelessWidget {
                         fontSize: 14,
                         fontWeight:
                             !isTambah ? FontWeight.w800 : FontWeight.w600,
-                        fontFamily: 'Quicksand',
+                        fontFamily: 'MPLUSRounded1c',
                       ),
                       child: const Text("- Kurangi"),
                     ),

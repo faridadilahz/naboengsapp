@@ -61,9 +61,26 @@ flutter:
     - assets/icon/
   
   fonts:
-    - family: Quicksand
+    - family: MPLUSRounded1c
       fonts:
-        - asset: font/quicksand/Quicksand.ttf
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Thin.ttf
+          weight: 100
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Light.ttf
+          weight: 300
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Regular.ttf
+          weight: 400
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Medium.ttf
+          weight: 500
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Bold.ttf
+          weight: 700
+        - asset: font/mplusrounded1c/MPLUSRounded1c-ExtraBold.ttf
+          weight: 800
+        - asset: font/mplusrounded1c/MPLUSRounded1c-Black.ttf
+          weight: 900
+  # fonts:
+  #   - family: Quicksand
+  #     fonts:
+  #       - asset: font/quicksand/Quicksand.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"

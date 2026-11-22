@@ -79,7 +79,7 @@ class SegmentedSelector extends StatelessWidget {
                         fontSize: 14,
                         fontWeight:
                             isSelected ? FontWeight.w800 : FontWeight.w600,
-                        fontFamily: 'Quicksand',
+                        fontFamily: 'MPLUSRounded1c',
                       ),
                       child: Text(type),
                     ),

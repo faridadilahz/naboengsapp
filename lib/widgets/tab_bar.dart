@@ -74,7 +74,7 @@ class SegmentedTabBar extends StatelessWidget {
               color: isSelected ? AppColors.onPrimary : AppColors.textMuted,
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-              fontFamily: 'Quicksand',
+              fontFamily: 'MPLUSRounded1c',
             ),
             child: Text(title),
           ),
