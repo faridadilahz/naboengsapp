@@ -162,7 +162,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
               const SizedBox(height: 8),
 
               CustomPaint(
-                painter: DashedBorderPainter(color: Colors.grey.shade300),
+                painter: DashedBorderPainter(color: Colors.grey.shade400),
                 child: Material(
                   color: AppColors.surfaceInput,
                   borderRadius: BorderRadius.circular(16),
@@ -181,14 +181,14 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
                               children: [
                                 Icon(
                                   Ionicons.cloudUpload,
-                                  color: AppColors.textMuted,
+                                  color: AppColors.textSecondary,
                                   size: 32,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   "Klik untuk unggah foto",
                                   style: TextStyle(
-                                    color: AppColors.textMuted,
+                                    color: AppColors.textSecondary,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
