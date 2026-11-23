@@ -91,18 +91,18 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/icon/naboengslogo.png"
-    background_color: "#2EC48F"
-    theme_color: "#2EC48F"
+    background_color: "#2EA98F"
+    theme_color: "#2EA98F"
 
 flutter_native_splash:
   color: "#FFFFFF"
-  # color_dark: "#FFFFFF"
+  color_dark: "#2EA98F"
   image: "assets/icon/naboengslogotransparent.png"
   web: true
   image_web: "assets/icon/naboengslogotransparent.png"
   android_12:
     color: "#FFFFFF"
-    # color_dark: "#FFFFFF"
+    color_dark: "#2EA98F"
     image: "assets/icon/naboengslogotransparent.png"
   #   - family: Trajan Pro
   #     fonts:
