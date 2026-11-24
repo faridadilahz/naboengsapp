@@ -110,7 +110,7 @@ class _AddTabunganScreenState extends State<AddTabunganScreen> {
         final bytes = await picked.readAsBytes();
         if (!mounted) return;
         setState(() {
-          imageBase64 = base64Encode(bytes);
+          imageBase64 = "data:image/jpeg;base64,${base64Encode(bytes)}";
         });
       }
     } catch (e) {
