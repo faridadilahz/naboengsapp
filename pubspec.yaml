@@ -91,8 +91,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/icon/naboengslogo.png"
-    background_color: "#2EC48F"
-    theme_color: "#2EC48F"
+    background_color: "#2EA98F"
+    theme_color: "#2EA98F"
 
 flutter_native_splash:
   color: "#FFFFFF"
