@@ -9,6 +9,7 @@ import '../widgets/tab_bar.dart';
 import '../widgets/input_nama.dart';
 import '../utils/app_colors.dart';
 import 'dart:math';
+import '../services/notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,6 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _generateSapaan();
     _loadDataTabungan();
     _loadNamaPengguna();
+
+    NotificationService().showNotification(
+      title: "Waktunya Menabung! 💰",
+      body: "Yuk sisihkan uang hari ini biar target cepat tercapai!",
+    );
   }
 
   @override

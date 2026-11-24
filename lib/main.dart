@@ -1,8 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:naboengs/utils/app_colors.dart';
 import 'screens/home_screen.dart';
+import 'services/notification_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().initNotification();
+
   runApp(const NaboengsApp());
 }
 

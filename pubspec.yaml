@@ -38,6 +38,7 @@ dependencies:
   material_ui: any
   image_picker: any
   permission_handler: ^11.3.1
+  flutter_local_notifications: ^23.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
