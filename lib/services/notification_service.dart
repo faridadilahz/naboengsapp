@@ -1,8 +1,7 @@
-import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -13,17 +12,14 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-    tz.initializeTimeZones();
-
-    // Small icon default menggunakan naboengstransparent dari folder drawable
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/naboengslogo');
 
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
 
     const InitializationSettings initializationSettings = InitializationSettings(
@@ -34,41 +30,47 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
     );
-
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
   }
 
-  Future<void> showNotification({
-    int id = 0,
-    required String title,
-    required String body,
+  /// Meminta izin notifikasi (dipanggil setelah splash screen / input nama)
+  Future<void> requestPermission() async {
+    if (kIsWeb) return;
+    await Permission.notification.request();
+  }
+
+  /// Menampilkan notifikasi instan saat user berhasil tambah tabungan baru
+  Future<void> showTabunganBaruNotification({
+    required String namaUser,
+    required String namaTabungan,
   }) async {
-    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+    if (kIsWeb) return;
+    if (!await Permission.notification.isGranted) return;
+
+    final String sapaanNama =
+        namaUser.trim().isEmpty ? 'Sobat' : namaUser.trim();
+    final String bodyText =
+        'Mantap $sapaanNama! Tabungan pertama "$namaTabungan" kamu berhasil dibuat. Yuk mulai rutin nabung!';
+
+    final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
       'naboengs_channel_id',
-      'Naboengs Reminders',
-      channelDescription: 'Pengingat rutin menabung harian',
+      'Naboengs Notifications',
+      channelDescription: 'Notifikasi aktivitas tabungan naboengs',
       importance: Importance.max,
       priority: Priority.high,
-      // Cuma pakai small icon transparan, tanpa gambar gede di kanan
       icon: '@drawable/naboengslogo',
-      // (Opsional) Biar aksen ikon kecilnya berwarna hijau khas naboengs:
       color: const Color(0xFF2EA98F),
-      styleInformation: BigTextStyleInformation(body),
-      ticker: 'ticker',
+      styleInformation: BigTextStyleInformation(bodyText),
     );
 
-    final NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    final NotificationDetails notificationDetails =
+        NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
-      id: id,
-      title: title,
-      body: body,
-      notificationDetails: platformChannelSpecifics,
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: 'Tabungan Baru Ditambahkan! 🎯',
+      body: bodyText,
+      notificationDetails: notificationDetails,
     );
   }
 }

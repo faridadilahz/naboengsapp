@@ -32,11 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _generateSapaan();
     _loadDataTabungan();
     _loadNamaPengguna();
-
-    NotificationService().showNotification(
-      title: "Waktunya Menabung! 💰",
-      body: "Yuk sisihkan uang hari ini biar target cepat tercapai!",
-    );
   }
 
   @override
@@ -115,12 +110,23 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         namaPengguna = savedName;
       });
+      // User lama -> langsung minta/cek permission setelah splash screen selesai
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await NotificationService().requestPermission();
+      });
     } else if (!sudahDitanya) {
-      // Tandai sudah pernah ditanya agar tidak muncul berulang kali jika di-skip
+      // User baru pertama kali buka -> buka dialog input nama dulu
       await prefs.setBool('sudah_ditanya_nama', true);
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _bukaDialogEditNama(isFirstTime: true);
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _bukaDialogEditNama(isFirstTime: true);
+        // Setelah dialog input nama hilang, baru munculkan permission
+        await NotificationService().requestPermission();
+      });
+    } else {
+      // User lama yang pernah skip input nama -> langsung minta/cek permission
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await NotificationService().requestPermission();
       });
     }
   }
@@ -133,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
           InputNamaDialog(currentName: namaPengguna, isFirstTime: isFirstTime),
     );
 
-    // Jika user menekan tombol Simpan (result tidak null, meskipun kosong)
     if (result != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('nama_pengguna', result);
@@ -177,6 +182,12 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       await _saveDataTabungan();
+
+      // Munculkan notifikasi setiap kali user berhasil tambah tabungan baru
+      await NotificationService().showTabunganBaruNotification(
+        namaUser: namaPengguna,
+        namaTabungan: result.nama,
+      );
     }
   }
 
