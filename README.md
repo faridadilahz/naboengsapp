@@ -12,7 +12,7 @@ Aplikasi mengusung tampilan bersih dengan aksen warna hijau toska dan tipografi 
 
 * **Primary Green**: `#2EA98F`
 * **Background Light**: `#FDFFFF` / `#FFFFFF`
-* **Danger / Delete**: `#D35D5D`
+* **Danger / Delete**: `#D0505C`
 * **Native Splash Screen (Adaptive)**:
   * *Light Mode*: Background `#FFFFFF` dengan logo hijau (`logosplash.png`)
   * *Dark Mode*: Background `#2EA98F` dengan logo putih (`logosplashdark.png`)
