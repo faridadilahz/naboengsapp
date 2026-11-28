@@ -24,15 +24,16 @@ class NotificationService {
 
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
 
     await flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
@@ -66,7 +67,8 @@ class NotificationService {
     if (status.isGranted) {
       final androidPlugin = flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       await androidPlugin?.requestExactAlarmsPermission();
 
       await scheduleDailyReminders(currentName);
@@ -90,25 +92,34 @@ class NotificationService {
 
     await prefs.setBool('sudah_notif_tabungan_pertama', true);
 
-    final String sapaanNama =
-        namaUser.trim().isEmpty ? 'Sobat' : namaUser.trim();
+    final String sapaanNama = namaUser.trim().isEmpty
+        ? 'Sobat'
+        : namaUser.trim();
     final String bodyText =
         'Mantap $sapaanNama! Tabungan pertama "$namaTabungan" kamu berhasil dibuat. Yuk mulai rutin nabung!';
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'naboengs_channel_id',
-      'Naboengs Notifications',
-      channelDescription: 'Notifikasi aktivitas tabungan naboengs',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@drawable/naboengslogo',
-      color: const Color(0xFF2EA98F),
-      styleInformation: BigTextStyleInformation(bodyText),
+          'naboengs_channel_id',
+          'Naboengs Notifications',
+          channelDescription: 'Notifikasi aktivitas tabungan naboengs',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: '@drawable/naboengslogo',
+          color: const Color(0xFF2EA98F),
+          styleInformation: BigTextStyleInformation(bodyText),
+        );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
     );
 
-    final NotificationDetails notificationDetails =
-        NotificationDetails(android: androidDetails);
+    final NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
 
     await flutterLocalNotificationsPlugin.show(
       id: 100,
@@ -228,22 +239,31 @@ class NotificationService {
   }) async {
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'naboengs_daily_channel_v3',
-      'Pengingat Harian Naboengs',
-      channelDescription: 'Pengingat menabung jam 1 siang dan 7 malam',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: '@drawable/naboengslogo',
-      color: const Color(0xFF2EA98F),
-      styleInformation: BigTextStyleInformation(body),
+          'naboengs_daily_channel_v3',
+          'Pengingat Harian Naboengs',
+          channelDescription: 'Pengingat menabung jam 1 siang dan 7 malam',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: '@drawable/naboengslogo',
+          color: const Color(0xFF2EA98F),
+          styleInformation: BigTextStyleInformation(body),
+        );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
     );
 
-    final NotificationDetails notificationDetails =
-        NotificationDetails(android: androidDetails);
+    final NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
 
     final androidPlugin = flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     final bool canExact =
         await androidPlugin?.canScheduleExactNotifications() ?? false;
 
