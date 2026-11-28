@@ -109,6 +109,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _mintaIzinNotifikasiSekali(String currentName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final bool sudahPernahMinta =
+        prefs.getBool('sudah_minta_izin_notif_awal') ?? false;
+
+    if (sudahPernahMinta) return;
+
+    await prefs.setBool('sudah_minta_izin_notif_awal', true);
+    await NotificationService().requestPermissionAndSchedule(currentName);
+  }
+
   Future<void> _loadNamaPengguna() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedName = prefs.getString('nama_pengguna');
@@ -118,9 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         namaPengguna = savedName;
       });
-      // User lama -> langsung cek/minta permission setelah splash screen selesai
+      // Hanya minta izin 1x jika belum pernah diminta saat startup
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await NotificationService().requestPermissionAndSchedule(savedName);
+        await _mintaIzinNotifikasiSekali(savedName);
       });
     } else if (!sudahDitanya) {
       // User baru pertama kali buka -> munculkan dialog input nama dulu
@@ -128,13 +139,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await _bukaDialogEditNama(isFirstTime: true);
-        // Setelah dialog input nama hilang, baru munculkan permission
-        await NotificationService().requestPermissionAndSchedule(namaPengguna);
+        // Setelah dialog input nama hilang, baru munculkan permission (1x saja)
+        await _mintaIzinNotifikasiSekali(namaPengguna);
       });
     } else {
-      // User lama yang pernah skip input nama -> langsung cek/minta permission
+      // User lama yang pernah skip input nama -> cek izin 1x saja
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await NotificationService().requestPermissionAndSchedule(namaPengguna);
+        await _mintaIzinNotifikasiSekali(namaPengguna);
       });
     }
   }
