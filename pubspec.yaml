@@ -50,12 +50,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  flutter_native_splash: ^2.4.7
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
+  flutter_native_splash: ^2.4.8
 flutter:
   uses-material-design: true
   assets:
@@ -94,15 +89,6 @@ flutter_launcher_icons:
     image_path: "assets/icon/naboengslogo.png"
     background_color: "#2EA98F"
     theme_color: "#2EA98F"
-
-flutter_native_splash:
-  color: "#2EA98F"
-  # color_dark: "#FFFFFF"
-  image: "assets/icon/naboengslogotransparent.png"
-  android_12:
-    color: "#2EA98F"
-    # color_dark: "#FFFFFF"
-    image: "assets/icon/naboengslogotransparent.png"
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

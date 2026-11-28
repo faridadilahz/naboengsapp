@@ -37,8 +37,8 @@ flutter_native_splash:
   # remain optional. NOTE that if you specify the [required] color, then you cant 
   # use the [required] background_image in the next section. the reverse is true.
   # select one, they cant work together.
-  # color: "#FFFFFF"  ##====================================[REQUIRED]==========
-  # color_dark: "#FFFFFF"
+  color: "#FFFFFF"  ##====================================[REQUIRED]==========
+  color_dark: "#1B1B1B"
   # platform-specific color. will override general color if active:
   #color_android: "#42a5f5"
   #color_dark_android: "#042a49"
@@ -50,8 +50,8 @@ flutter_native_splash:
   # general background_image for all platform (except android 12+)
   # if you specify this [required] background_image, then you should comment the 
   # [required] color in previous section. select one, they cant work together.
-  background_image:      "assets/icon/background.png" #========[REQUIRED]============
-  background_image_dark: "assets/icon/backgrounddark.png"
+  # background_image:      "assets/icon/background.png" #========[REQUIRED]============
+  # background_image_dark: "assets/icon/backgrounddark.png"
   # platform-specific background_image. will override general background_image if active:
   #background_image_android:      "assets/background-android.png"
   #background_image_dark_android: "assets/dark-background-android.png"
@@ -138,7 +138,7 @@ flutter_native_splash:
   android_12:
     # background color
     color: "#FFFFFF"
-    color_dark: "#2EA98F"
+    color_dark: "#1B1B1B"
 
     # center-logo
     # If this parameter is not specified, the app's launcher icon will be used instead. 
