@@ -5,8 +5,11 @@ import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().initNotification();
-
+  try {
+    await NotificationService().initNotification();
+  } catch (e) {
+    debugPrint('Gagal inisialisasi notifikasi: $e');
+  }
   runApp(const NaboengsApp());
 }
 
