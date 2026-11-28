@@ -15,7 +15,7 @@ Aplikasi mengusung tampilan bersih dengan aksen warna hijau toska dan tipografi 
 * **Danger / Delete**: `#D0505C`
 * **Native Splash Screen (Adaptive)**:
   * *Light Mode*: Background `#FFFFFF` dengan logo hijau (`logosplash.png`)
-  * *Dark Mode*: Background `#2EA98F` dengan logo putih (`logosplashdark.png`)
+  * *Dark Mode*: Background `#1B1B1B` dengan logo putih (`logosplashdark.png`)
 
 ## 2. Fitur Utama
 
@@ -90,7 +90,7 @@ Data disimpan secara lokal dalam format JSON dan *key-value*:
 * **Media & UI**: `image_picker`, `confetti`, `ionicons`, `flutter_svg`, `material_ui`
 * **Asset Generator**: `flutter_native_splash`, `flutter_launcher_icons`
 
-## 5. Petunjuk Instalasi & Menjalankan Proyek
+## 5. Petunjuk Instalasi & Menjalankan Proyek (Developer)
 
 ### Kebutuhan Sistem:
 
@@ -116,7 +116,41 @@ dart run flutter_native_splash:create
 flutter run
 ```
 
-## 6. Catatan Teknis & Platform
+### Build Release APK (Ukuran Ramping):
+
+```bash
+flutter build apk --release --split-per-abi
+```
+
+## 6. Panduan Unduh & Instalasi Aplikasi (Pengguna Akhir)
+
+Aplikasi **Naboengs** didistribusikan melalui halaman web resmi (**naboengs-installation**) dengan langkah pemasangan yang berbeda sesuai sistem operasi perangkat:
+
+### Perangkat Android (via File `.apk`)
+
+1. Buka halaman unduhan **Naboengs** melalui browser di ponsel Android (Chrome / Samsung Internet).
+2. Ketuk tombol **Download APK** untuk mengunduh berkas `naboengs.apk`.
+3. Jika muncul peringatan browser *"File mungkin berbahaya"*, pilih **Tetap download** (*Download anyway*).
+4. Buka berkas `naboengs.apk` yang telah selesai diunduh melalui notifikasi atau folder **Download** di File Manager.
+5. Jika diminta izin pemasangan dari sumber tidak dikenal, ketuk **Setelan** (*Settings*) $\rightarrow$ aktifkan **Izinkan dari sumber ini** (*Allow from this source*), lalu kembali.
+6. Ketuk **Install** dan tunggu hingga proses pemasangan selesai.
+7. Buka aplikasi **Naboengs**, lalu pilih **Izinkan** (*Allow*) saat muncul pop-up izin notifikasi agar pengingat menabung harian aktif.
+
+### Perangkat iOS / iPhone
+
+Sistem operasi iOS tidak mendukung pemasangan berkas `.apk` secara langsung. Pengguna iPhone/iPad dapat memasang Naboengs melalui salah satu metode berikut:
+
+* **Metode 1 — Web App (*Add to Home Screen* via Safari):**
+  1. Buka tautan versi Web **Naboengs** menggunakan browser **Safari**.
+  2. Ketuk ikon **Share** (kotak dengan panah ke atas) di bilah navigasi bawah.
+  3. Gulir ke bawah dan pilih **Add to Home Screen** (*Tambah ke Layar Utama*).
+  4. Ketuk **Add** (*Tambah*) di pojok kanan atas agar ikon Naboengs terpasang di layar utama.
+
+* **Metode 2 — Build Native iOS (TestFlight / Sideload `.ipa`):**
+  1. **Via TestFlight**: Unduh aplikasi **TestFlight** dari App Store, buka tautan undangan Naboengs, lalu ketuk **Install**.
+  2. **Via Sideloading (`naboengs.ipa`)**: Pasang berkas `.ipa` menggunakan AltStore atau Sideloadly, kemudian buka **Settings $\rightarrow$ General $\rightarrow$ VPN & Device Management** di iPhone dan ketuk **Trust** pada profil pengembang sebelum membuka aplikasi.
+
+## 7. Catatan Teknis & Platform
 
 1. **Android 12+ & 13+**:
    * Konfigurasi splash screen Android 12+ diatur terpisah di blok `android_12` pada `flutter_native_splash.yaml`.
