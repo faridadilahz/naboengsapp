@@ -10,6 +10,8 @@ import '../widgets/input_nama.dart';
 import '../utils/app_colors.dart';
 import 'dart:math';
 import '../services/notification_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -79,13 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
     sapaanHarian = daftarSapaan[random.nextInt(daftarSapaan.length)];
   }
 
-  void _handleItemUpdate(Tabungan item, String action) {
+  void _handleItemUpdate(Tabungan item, String action) async {
     if (action == "delete") {
       setState(() {
         tabunganList.remove(item);
       });
-      _saveDataTabungan();
+      await _saveDataTabungan();
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Tabungan '${item.nama}' berhasil dihapus!"),
@@ -97,7 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
         tabunganList.remove(item);
         tabunganList.insert(0, item);
       });
-      _saveDataTabungan();
+      await _saveDataTabungan();
+
+      // Jika aksi bukan sekadar edit info tabungan dan saldo terisi, hilangkan pengingat hari ini
+      if (action != "edit" && item.terkumpul > 0) {
+        await NotificationService().onNominalTabunganDitambahkan(namaPengguna);
+      }
     }
   }
 
@@ -110,23 +118,23 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         namaPengguna = savedName;
       });
-      // User lama -> langsung minta/cek permission setelah splash screen selesai
+      // User lama -> langsung cek/minta permission setelah splash screen selesai
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await NotificationService().requestPermission();
+        await NotificationService().requestPermissionAndSchedule(savedName);
       });
     } else if (!sudahDitanya) {
-      // User baru pertama kali buka -> buka dialog input nama dulu
+      // User baru pertama kali buka -> munculkan dialog input nama dulu
       await prefs.setBool('sudah_ditanya_nama', true);
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await _bukaDialogEditNama(isFirstTime: true);
         // Setelah dialog input nama hilang, baru munculkan permission
-        await NotificationService().requestPermission();
+        await NotificationService().requestPermissionAndSchedule(namaPengguna);
       });
     } else {
-      // User lama yang pernah skip input nama -> langsung minta/cek permission
+      // User lama yang pernah skip input nama -> langsung cek/minta permission
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await NotificationService().requestPermission();
+        await NotificationService().requestPermissionAndSchedule(namaPengguna);
       });
     }
   }
@@ -146,6 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         namaPengguna = result;
       });
+
+      // Sinkronkan nama terbaru ke jadwal notifikasi 08:00, 13:00, & 19:00
+      await NotificationService().scheduleDailyReminders(result);
     }
   }
 
@@ -183,10 +194,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
       await _saveDataTabungan();
 
-      // Munculkan notifikasi setiap kali user berhasil tambah tabungan baru
-      await NotificationService().showTabunganBaruNotification(
+      // Jalankan logika kelipatan 3 (jika izin dicuekin) & notif tabungan pertama
+      await _tanganiNotifikasiSetelahTambahTabungan(result.nama);
+    }
+  }
+
+  Future<void> _tanganiNotifikasiSetelahTambahTabungan(
+    String namaTabungan,
+  ) async {
+    if (kIsWeb) return;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // Hitung total tabungan yang pernah dibuat user (kumulatif)
+    int totalDibuat = (prefs.getInt('total_tabungan_dibuat') ?? 0) + 1;
+    await prefs.setInt('total_tabungan_dibuat', totalDibuat);
+
+    // 1. Jika izin masih dicuekin/belum diizinkan, minta lagi di ke-3, 6, 9, dst.
+    if (!await Permission.notification.isGranted) {
+      if (totalDibuat % 3 == 0) {
+        // Beri jeda 400ms agar transisi kembali ke HomeScreen selesai dulu
+        await Future.delayed(const Duration(milliseconds: 400));
+        if (!mounted) return;
+
+        final status = await NotificationService().requestPermissionAndSchedule(
+          namaPengguna,
+        );
+
+        // Jika Android memblokir pop-up permanen (ditolak >2x), arahkan ke pengaturan app
+        if (status.isPermanentlyDenied) {
+          await openAppSettings();
+        }
+      }
+    }
+
+    // 2. Munculkan notifikasi KHUSUS tabungan pertama kali user (jika izin aktif)
+    if (totalDibuat == 1 && await Permission.notification.isGranted) {
+      await NotificationService().showFirstTabunganNotification(
         namaUser: namaPengguna,
-        namaTabungan: result.nama,
+        namaTabungan: namaTabungan,
       );
     }
   }
